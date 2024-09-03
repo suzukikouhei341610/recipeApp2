@@ -16,6 +16,8 @@ namespace FunctionAPIApp
     public static class Function1
     {
         //èºñ{
+        //aiueo
+
 
 
 
@@ -24,11 +26,12 @@ namespace FunctionAPIApp
 
 
         //íÙ
+        //Ç†Ç¢Ç§Ç¶Ç®
 
 
 
         //êÖíJ
-
+        //mochimochi
 
 
         //Ç±Ç±Ç‹Ç≈
