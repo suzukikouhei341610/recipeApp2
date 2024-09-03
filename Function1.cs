@@ -22,7 +22,7 @@ namespace FunctionAPIApp
 
 
         //óÈñÿ
-
+        //Ç±ÇÒÇ…ÇøÇÕ
 
 
         //íÙ
@@ -90,7 +90,7 @@ namespace FunctionAPIApp
 
 
         //êÖíJ
-
+        //mochimochi
 
 
         //Ç±Ç±Ç‹Ç≈
