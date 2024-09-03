@@ -16,8 +16,56 @@ namespace FunctionAPIApp
     public static class Function1
     {
         //松本
-        //aiueo
+        [FunctionName("USERLOGIN")]
+        public static async Task<IActionResult> UserLogin(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
 
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    String sql = "SELECT id, user_passward FROM user_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            Task_NewTableList resultList = new Task_NewTableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new Task_NewTableRow
+                                {
+                                    TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
+                                    Title = reader.GetString(1),  // "title" カラムのインデックス
+                                    Status = reader.GetString(2),  // "status" カラムのインデックス
+                                    DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
 
 
 
