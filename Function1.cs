@@ -26,7 +26,66 @@ namespace FunctionAPIApp
 
 
         //’ô
-        //‚ ‚¢‚¤‚¦‚¨
+        [FunctionName("RECIPESELECTSELECT")]
+        public static async Task<IActionResult> RecipeSelect(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+       ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    String sql = "SELECT recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
+                        "recipe_time, recipe_scene1, recipe_scene2, recipe_scene3, " +
+                        "recipe_item1, recipe_item2,recipe_item3 FROM recipe_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            recipe_tableList resultList = new recipe_tableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new recipe_tableRow
+                                {
+                                    recipe_name = reader.GetInt32("recipe_name"),
+                                    recipe_category1 = reader.GetString("recipe_category1"),
+                                    recipe_category2 = reader.GetString("recipe_category2"),
+                                    recipe_category3 = reader.GetString("recipe_category3"),
+                                     recipe_category1 = reader.GetString("recipe_category1"),
+                                    recipe_time = reader.GetInt32("recipe_time"),
+                                    recipe_scene1 = reader.GetString("recipe_scene1"),
+                                    recipe_scene2 = reader.GetString("recipe_scene2"),
+                                    recipe_scene3 = reader.GetString("recipe_scene3"),
+                                    recipe_item1 = reader.GetString("recipe_item1"),
+                                    recipe_item2 = reader.GetString("recipe_item2"),
+                                    recipe_item3 = reader.GetString("recipe_item3")
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
 
 
 
