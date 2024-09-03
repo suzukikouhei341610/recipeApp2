@@ -31,7 +31,62 @@ namespace FunctionAPIApp
 
 
         //水谷
-        //mochimochi
+        [FunctionName("USERINSERT")]
+        public static async Task<IActionResult> UserInsert(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string responseMessage = "INSERT RESULT:";
+            string id = req.Query["id"];
+            string user_name = req.Query["user_name"];
+            string user_password = req.Query["user_password"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            id = id ?? data?.id;
+            user_name = user_name ?? data?.user_name;
+            user_password = user_password ?? data?.user_password;
+
+            if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(user_name) && !string.IsNullOrWhiteSpace(user_password))
+            {
+                try
+                {
+                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                    builder.DataSource = "m3hkouhei2010.database.windows.net";
+                    builder.UserID = "kouhei0726";
+                    builder.Password = "Battlefield341610";
+                    builder.InitialCatalog = "m3h-kouhei-0726";
+
+                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                    {
+                        String sql = "INSERT INTO user_table(id, user_name, user_password) Values(@id, @user_name, @user_password)";
+
+                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        {
+                            command.Parameters.AddWithValue("@id", id);
+                            command.Parameters.AddWithValue("@user_name", user_name);
+                            command.Parameters.AddWithValue("@user_password", DateTime.Parse(user_password));
+
+                            connection.Open();
+
+                            int result = command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (SqlException e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+            else
+            {
+                responseMessage = "パラメーターが設定されていません";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
 
 
         //ここまで

@@ -4,20 +4,22 @@ using System.Collections.Generic;
 
 namespace FunctionAPIApp
 {
+
+    //水谷
     [JsonObject]
-    public class Task_NewTableList
+    public class user_tableList
     {
         [JsonProperty("List")]
-        public List<Task_NewTableRow> List { get; set; } = new List<Task_NewTableRow>();
+        public List<user_tableRow> List { get; set; } = new List<user_tableRow>();
     }
 
     [JsonObject]
-    public class Task_NewTableRow
+    public class user_tableRow
     {
-        [JsonProperty("TaskID")]
-        public int TaskID { get; set; }
+        [JsonProperty("id")]
+        public int id { get; set; }
 
-        [JsonProperty("Title")]
+        [JsonProperty("user_password")]
         public string Title { get; set; }
 
         [JsonProperty("Status")]
