@@ -70,15 +70,16 @@ namespace FunctionAPIApp
 
 
         //óÈñÿ
-
+        //Ç±ÇÒÇ…ÇøÇÕ
 
 
         //íÙ
+        //Ç†Ç¢Ç§Ç¶Ç®
 
 
 
         //êÖíJ
-
+        //mochimochi
 
 
         //Ç±Ç±Ç‹Ç≈
