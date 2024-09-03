@@ -15,6 +15,24 @@ namespace FunctionAPIApp
 {
     public static class Function1
     {
+        //èºñ{
+
+
+
+        //óÈñÿ
+
+
+
+        //íÙ
+
+
+
+        //êÖíJ
+
+
+
+        //Ç±Ç±Ç‹Ç≈
+
         [FunctionName("SELECT")]
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
