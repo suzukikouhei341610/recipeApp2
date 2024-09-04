@@ -11,205 +11,153 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Collections.Generic;
+using recipeApp2;
 
 namespace FunctionAPIApp
 {
     public static class Function1
     {
         //松本
-        //aiueo
-
-
-
-
-        //鈴木
-        //こんにちは
-
-
-        //碇
-        //あいうえお
-
-
-
-        //水谷
-        //mochimochi
-
-
-        //ここまで
-
-        
-
-        [FunctionName("INSERT")]
-        public static async Task<IActionResult> RunInsert(
+        [FunctionName("USERLOGIN")]
+        public static async Task<IActionResult> UserLogin(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            //HTTPレスポンスで返す文字列を定義
+            string responseMessage = "SQL RESULT:";
 
-            string responseMessage = "INSERT RESULT:";
-            string title = req.Query["title"];
-            string status = req.Query["status"];
-            string dueDate = req.Query["due_date"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            title = title ?? data?.title;
-            status = status ?? data?.status;
-            dueDate = dueDate ?? data?.due_date;
-
-            if (!string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(status) && !string.IsNullOrWhiteSpace(dueDate))
+            try
             {
-                try
+                string user_name = req.Query["user_name"];
+                string user_password = req.Query["user_password"];
+
+                if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(user_password))
                 {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
+                    return new BadRequestObjectResult("Please pass a user_name and user_password in the query string");
+                }
 
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // SQLクエリの定義（パラメータ化されたクエリ）
+                    string sql = "SELECT user_name FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        String sql = "INSERT INTO Task_NewTable(title, status, due_date) Values(@title, @status, @due_date)";
+                        // パラメータの追加
+                        command.Parameters.AddWithValue("@user_name", user_name);
+                        command.Parameters.AddWithValue("@user_password", user_password);
 
-                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        // 接続を開く
+                        connection.Open();
+
+                        // SQLクエリを実行し、結果を取得
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            command.Parameters.AddWithValue("@title", title);
-                            command.Parameters.AddWithValue("@status", status);
-                            command.Parameters.AddWithValue("@due_date", DateTime.Parse(dueDate));
-
-                            connection.Open();
-
-                            int result = command.ExecuteNonQuery();
+                            if (reader.HasRows)
+                            {
+                                // 認証成功
+                                responseMessage = "Login successful";
+                            }
+                            else
+                            {
+                                // 認証失敗
+                                responseMessage = "Invalid user_name or user_password";
+                            }
                         }
                     }
                 }
-                catch (SqlException e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
             }
-            else
+            catch (SqlException e)
             {
-                responseMessage = "パラメーターが設定されていません";
+                log.LogError($"SQL error: {e.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"General error: {ex.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
             return new OkObjectResult(responseMessage);
         }
-        [FunctionName("DELETE")]
-        public static async Task<IActionResult> RunDelete(
-       [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-       ILogger log)
+
+        [FunctionName("EMPLOYEELOGIN")]
+        public static async Task<IActionResult> EmployeeLogin(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            //HTTPレスポンスで返す文字列を定義
+            string responseMessage = "SQL RESULT:";
 
-            string responseMessage = "DELETE RESULT:";
-            string taskId = req.Query["taskID"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            taskId = taskId ?? data?.taskID;
-
-            if (int.TryParse(taskId, out int id))
+            try
             {
-                try
+                string employee_id = req.Query["employee_id"];
+                string employee_password = req.Query["employee_password"];
+
+                if (string.IsNullOrEmpty(employee_id) || string.IsNullOrEmpty(employee_password))
                 {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
+                    return new BadRequestObjectResult("Please pass a employee_id and employee_password in the query string");
+                }
 
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // SQLクエリの定義（パラメータ化されたクエリ）
+                    string sql = "SELECT employee_id FROM employee_table WHERE employee_id = @employee_id AND employee_password = @employee_password";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        string sql = "DELETE FROM Task_NewTable WHERE id = @taskID";
+                        // パラメータの追加
+                        command.Parameters.AddWithValue("@employee_id", employee_id);
+                        command.Parameters.AddWithValue("@employee_password", employee_password);
 
-                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        // 接続を開く
+                        connection.Open();
+
+                        // SQLクエリを実行し、結果を取得
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            command.Parameters.AddWithValue("@taskID", id);
-
-                            connection.Open();
-
-                            int result = command.ExecuteNonQuery();
-
-                            responseMessage = result > 0 ? "タスクが削除されました。" : "タスクが見つかりません。";
+                            if (reader.HasRows)
+                            {
+                                // 認証成功
+                                responseMessage = "Login successful";
+                            }
+                            else
+                            {
+                                // 認証失敗
+                                responseMessage = "Invalid employee_id or employee_password";
+                            }
                         }
                     }
                 }
-                catch (SqlException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    responseMessage = "エラーが発生しました。";
-                }
             }
-            else
+            catch (SqlException e)
             {
-                responseMessage = "有効なタスクIDが提供されていません。";
+                log.LogError($"SQL error: {e.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"General error: {ex.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
             return new OkObjectResult(responseMessage);
         }
-        [FunctionName("UPDATE")]
-        public static async Task<IActionResult> RunUpdate(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed an update request.");
 
-            string responseMessage = "UPDATE RESULT:";
-            string taskId = req.Query["taskID"];
-            string title = req.Query["title"];
-            string status = req.Query["status"];
-            string dueDate = req.Query["due_date"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            taskId = taskId ?? data?.taskID;
-            title = title ?? data?.title;
-            status = status ?? data?.status;
-            dueDate = dueDate ?? data?.due_date;
-
-            if (int.TryParse(taskId, out int id) && !string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(status) && !string.IsNullOrWhiteSpace(dueDate))
-            {
-                try
-                {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
-
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                    {
-                        string sql = "UPDATE Task_NewTable SET title = @title, status = @status, due_date = @due_date WHERE id = @taskID";
-
-                        using (SqlCommand command = new SqlCommand(sql, connection))
-                        {
-                            command.Parameters.AddWithValue("@taskID", id);
-                            command.Parameters.AddWithValue("@title", title);
-                            command.Parameters.AddWithValue("@status", status);
-                            command.Parameters.AddWithValue("@due_date", DateTime.Parse(dueDate));
-
-                            connection.Open();
-
-                            int result = command.ExecuteNonQuery();
-
-                            responseMessage = result > 0 ? "タスクが更新されました。" : "タスクが見つかりません。";
-                        }
-                    }
-                }
-                catch (SqlException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    responseMessage = "エラーが発生しました。";
-                }
-            }
-            else
-            {
-                responseMessage = "有効なパラメーターが提供されていません。";
-            }
-
-            return new OkObjectResult(responseMessage);
-        }
+        //鈴木
         [FunctionName("SEARCH")]
         public static async Task<IActionResult> Search(
      [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -222,9 +170,6 @@ namespace FunctionAPIApp
             string recipeTime = req.Query["recipe_time"];
             string recipeScene = req.Query["recipe_scene"];
 
-            // 1. 受け取ったパラメータをログに記録
-           // log.LogInformation("Received parameters - recipeCategory: {recipeCategory}, recipeTime: {recipeTime}, recipeScene: {recipeScene}",
-                              // recipeCategory, recipeTime, recipeScene);
 
             try
             {
@@ -312,6 +257,18 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+
+
+        //碇
+        //あいうえお
+
+
+
+//水谷
+//mochimochi
+
+
+//ここまで
 
     }
 }
