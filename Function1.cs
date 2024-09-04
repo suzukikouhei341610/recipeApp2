@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;//DB接続用ライブラリ
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using recipeApp2;
 
 namespace FunctionAPIApp
 {
@@ -26,26 +27,86 @@ namespace FunctionAPIApp
 
 
         //碇
-        [FunctionName("RECIPESELECTSELECT")]
-        public static async Task<IActionResult> RecipeSelect(
-       [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-       ILogger log)
+        [FunctionName("FAVORITESELECT")]
+        public static async Task<IActionResult> FavoriteSelect(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
         {
             string responseMessage = "SQL RESULT:";
 
             try
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = "m3hkouhei2010.database.windows.net";
-                builder.UserID = "kouhei0726";
-                builder.Password = "Battlefield341610";
-                builder.InitialCatalog = "m3h-kouhei-0726";
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    String sql = "SELECT recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
+                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            favorite_tableList resultList = new favorite_tableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new favorite_tableRow
+                                {
+                                    favorite_id = reader.GetInt32(0), //("favorite_id"),
+                                    user_id = reader.GetInt32(1), //("user_id"),
+                                    recipe_id = reader.GetInt32(2), //("recipe_id"),
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
+        [FunctionName("RECIPESELECT")]
+        public static async Task<IActionResult> RecipeSelect(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
                         "recipe_time, recipe_scene1, recipe_scene2, recipe_scene3, " +
-                        "recipe_item1, recipe_item2,recipe_item3 FROM recipe_table";
+                        "recipe_item1, recipe_item2, recipe_item3 FROM recipe_table";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -59,18 +120,17 @@ namespace FunctionAPIApp
                             {
                                 resultList.List.Add(new recipe_tableRow
                                 {
-                                    recipe_name = reader.GetInt32("recipe_name"),
-                                    recipe_category1 = reader.GetString("recipe_category1"),
-                                    recipe_category2 = reader.GetString("recipe_category2"),
-                                    recipe_category3 = reader.GetString("recipe_category3"),
-                                     recipe_category1 = reader.GetString("recipe_category1"),
-                                    recipe_time = reader.GetInt32("recipe_time"),
-                                    recipe_scene1 = reader.GetString("recipe_scene1"),
-                                    recipe_scene2 = reader.GetString("recipe_scene2"),
-                                    recipe_scene3 = reader.GetString("recipe_scene3"),
-                                    recipe_item1 = reader.GetString("recipe_item1"),
-                                    recipe_item2 = reader.GetString("recipe_item2"),
-                                    recipe_item3 = reader.GetString("recipe_item3")
+                                    recipe_name = reader.IsDBNull(0) ? null : reader.GetString(0),
+                                    recipe_category1 = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    recipe_category2 = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    recipe_category3 = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                    recipe_time = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
+                                    recipe_scene1 = reader.IsDBNull(5) ? null : reader.GetString(5),
+                                    recipe_scene2 = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                    recipe_scene3 = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                    recipe_item1 = reader.IsDBNull(8) ? null : reader.GetString(8),
+                                    recipe_item2 = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                    recipe_item3 = reader.IsDBNull(10) ? null : reader.GetString(10)
                                 });
                             }
 
@@ -82,117 +142,81 @@ namespace FunctionAPIApp
             catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
             }
-
-            return new OkObjectResult(responseMessage);
-        }
-
-
-
-        //水谷
-        //mochimochi
-
-
-        //ここまで
-
-        [FunctionName("SELECT")]
-        public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
-        {
-            string responseMessage = "SQL RESULT:";
-
-            try
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = "m3hkouhei2010.database.windows.net";
-                builder.UserID = "kouhei0726";
-                builder.Password = "Battlefield341610";
-                builder.InitialCatalog = "m3h-kouhei-0726";
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    String sql = "SELECT id, title, status, due_date FROM Task_NewTable";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        connection.Open();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            Task_NewTableList resultList = new Task_NewTableList();
-
-                            while (reader.Read())
-                            {
-                                resultList.List.Add(new Task_NewTableRow
-                                {
-                                    TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
-                                    Title = reader.GetString(1),  // "title" カラムのインデックス
-                                    Status = reader.GetString(2),  // "status" カラムのインデックス
-                                    DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
-                                });
-                            }
-
-                            responseMessage = JsonConvert.SerializeObject(resultList);
-                        }
-                    }
-                }
-            }
-            catch (SqlException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
             }
 
             return new OkObjectResult(responseMessage);
         }
 
-        [FunctionName("INSERT")]
-        public static async Task<IActionResult> RunInsert(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
+
+        [FunctionName("FAVORITEINSERT")]
+        public static async Task<IActionResult> FavoriteInsert(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string responseMessage = "INSERT RESULT:";
-            string title = req.Query["title"];
-            string status = req.Query["status"];
-            string dueDate = req.Query["due_date"];
+            string responseMessage = "FAVORITE RESULT: ";
+            string favorite_id = req.Query["favorite_id"];
+            string user_id = req.Query["user_id"];
+            string recipe_id = req.Query["recipe_id"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            title = title ?? data?.title;
-            status = status ?? data?.status;
-            dueDate = dueDate ?? data?.due_date;
+            favorite_id = favorite_id ?? data?.favorite_id;
+            user_id = user_id ?? data?.user_id;
+            recipe_id = recipe_id ?? data?.recipe_id;
 
-            if (!string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(status) && !string.IsNullOrWhiteSpace(dueDate))
+            if (!string.IsNullOrWhiteSpace(user_id) && !string.IsNullOrWhiteSpace(recipe_id))
             {
                 try
                 {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
+                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                    {
+                        DataSource = "m3hkouhei2010.database.windows.net",
+                        UserID = "kouhei0726",
+                        Password = "Battlefield341610",
+                        InitialCatalog = "m3h-kouhei-0726"
+                    };
 
                     using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                     {
-                        String sql = "INSERT INTO Task_NewTable(title, status, due_date) Values(@title, @status, @due_date)";
+                        string sql = "INSERT INTO favorite_table (favorite_id, user_id, recipe_id) VALUES (@favorite_id, @user_id, @recipe_id)";
 
                         using (SqlCommand command = new SqlCommand(sql, connection))
                         {
-                            command.Parameters.AddWithValue("@title", title);
-                            command.Parameters.AddWithValue("@status", status);
-                            command.Parameters.AddWithValue("@due_date", DateTime.Parse(dueDate));
+                            // 文字列から整数への変換
+                            int favoriteIdValue = int.Parse(favorite_id);
+                            int userIdValue = int.Parse(user_id);
+                            int recipeIdValue = int.Parse(recipe_id);
+
+                            command.Parameters.AddWithValue("@favorite_id", favoriteIdValue);
+                            command.Parameters.AddWithValue("@user_id", userIdValue);
+                            command.Parameters.AddWithValue("@recipe_id", recipeIdValue);
 
                             connection.Open();
+                            int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                            int result = command.ExecuteNonQuery();
+                            responseMessage = rowsAffected > 0
+                                ? "レシピがお気に入りに登録されました。"
+                                : "お気に入り登録に失敗しました。";
                         }
                     }
                 }
                 catch (SqlException e)
                 {
-                    Console.WriteLine(e.ToString());
+                    log.LogError(e.ToString());
+                    responseMessage = "エラーが発生しました。";
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.ToString());
+                    responseMessage = "予期しないエラーが発生しました。";
                 }
             }
             else
@@ -202,122 +226,18 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
-        [FunctionName("DELETE")]
-        public static async Task<IActionResult> RunDelete(
-       [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-       ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string responseMessage = "DELETE RESULT:";
-            string taskId = req.Query["taskID"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            taskId = taskId ?? data?.taskID;
-
-            if (int.TryParse(taskId, out int id))
-            {
-                try
-                {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
-
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                    {
-                        string sql = "DELETE FROM Task_NewTable WHERE id = @taskID";
-
-                        using (SqlCommand command = new SqlCommand(sql, connection))
-                        {
-                            command.Parameters.AddWithValue("@taskID", id);
-
-                            connection.Open();
-
-                            int result = command.ExecuteNonQuery();
-
-                            responseMessage = result > 0 ? "タスクが削除されました。" : "タスクが見つかりません。";
-                        }
-                    }
-                }
-                catch (SqlException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    responseMessage = "エラーが発生しました。";
-                }
-            }
-            else
-            {
-                responseMessage = "有効なタスクIDが提供されていません。";
-            }
-
-            return new OkObjectResult(responseMessage);
-        }
-        [FunctionName("UPDATE")]
-        public static async Task<IActionResult> RunUpdate(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed an update request.");
-
-            string responseMessage = "UPDATE RESULT:";
-            string taskId = req.Query["taskID"];
-            string title = req.Query["title"];
-            string status = req.Query["status"];
-            string dueDate = req.Query["due_date"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            taskId = taskId ?? data?.taskID;
-            title = title ?? data?.title;
-            status = status ?? data?.status;
-            dueDate = dueDate ?? data?.due_date;
-
-            if (int.TryParse(taskId, out int id) && !string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(status) && !string.IsNullOrWhiteSpace(dueDate))
-            {
-                try
-                {
-                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = "m3hkouhei2010.database.windows.net";
-                    builder.UserID = "kouhei0726";
-                    builder.Password = "Battlefield341610";
-                    builder.InitialCatalog = "m3h-kouhei-0726";
-
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                    {
-                        string sql = "UPDATE Task_NewTable SET title = @title, status = @status, due_date = @due_date WHERE id = @taskID";
-
-                        using (SqlCommand command = new SqlCommand(sql, connection))
-                        {
-                            command.Parameters.AddWithValue("@taskID", id);
-                            command.Parameters.AddWithValue("@title", title);
-                            command.Parameters.AddWithValue("@status", status);
-                            command.Parameters.AddWithValue("@due_date", DateTime.Parse(dueDate));
-
-                            connection.Open();
-
-                            int result = command.ExecuteNonQuery();
-
-                            responseMessage = result > 0 ? "タスクが更新されました。" : "タスクが見つかりません。";
-                        }
-                    }
-                }
-                catch (SqlException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    responseMessage = "エラーが発生しました。";
-                }
-            }
-            else
-            {
-                responseMessage = "有効なパラメーターが提供されていません。";
-            }
-
-            return new OkObjectResult(responseMessage);
-        }
-
     }
 }
+
+
+
+
+
+
+//水谷
+//mochimochi
+
+
+//ここまで
+
 
