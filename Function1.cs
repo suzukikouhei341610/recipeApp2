@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;//DB接続用ライブラリ
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using System.Collections.Generic;
 
 namespace FunctionAPIApp
 {
@@ -36,56 +37,7 @@ namespace FunctionAPIApp
 
         //ここまで
 
-        [FunctionName("SELECT")]
-        public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
-        {
-            string responseMessage = "SQL RESULT:";
-
-            try
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = "m3hkouhei2010.database.windows.net";
-                builder.UserID = "kouhei0726";
-                builder.Password = "Battlefield341610";
-                builder.InitialCatalog = "m3h-kouhei-0726";
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    String sql = "SELECT id, title, status, due_date FROM Task_NewTable";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        connection.Open();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            Task_NewTableList resultList = new Task_NewTableList();
-
-                            while (reader.Read())
-                            {
-                                resultList.List.Add(new Task_NewTableRow
-                                {
-                                    TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
-                                    Title = reader.GetString(1),  // "title" カラムのインデックス
-                                    Status = reader.GetString(2),  // "status" カラムのインデックス
-                                    DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
-                                });
-                            }
-
-                            responseMessage = JsonConvert.SerializeObject(resultList);
-                        }
-                    }
-                }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-            return new OkObjectResult(responseMessage);
-        }
+        
 
         [FunctionName("INSERT")]
         public static async Task<IActionResult> RunInsert(
@@ -258,7 +210,109 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+        [FunctionName("SEARCH")]
+        public static async Task<IActionResult> Search(
+     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+     ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a search request.");
+
+            string responseMessage = "SQL RESULT:";
+            string recipeCategory = req.Query["recipe_category"];
+            string recipeTime = req.Query["recipe_time"];
+            string recipeScene = req.Query["recipe_scene"];
+
+            // 1. 受け取ったパラメータをログに記録
+           // log.LogInformation("Received parameters - recipeCategory: {recipeCategory}, recipeTime: {recipeTime}, recipeScene: {recipeScene}",
+                              // recipeCategory, recipeTime, recipeScene);
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_time, recipe_scene1 " +
+                                 "FROM recipe_table WHERE 1=1";
+
+                    if (!string.IsNullOrEmpty(recipeCategory))
+                    {
+                        sql += " AND (recipe_category1 = @recipeCategory OR recipe_category2 = @recipeCategory OR recipe_category3 = @recipeCategory)";
+                        log.LogInformation("Added recipeCategory to query: {sql}", sql);
+                    }
+
+                    if (!string.IsNullOrEmpty(recipeTime))
+                    {
+                        sql += " AND recipe_time = @recipeTime";
+                        log.LogInformation("Added recipeTime to query: {sql}", sql);
+                    }
+
+                    if (!string.IsNullOrEmpty(recipeScene))
+                    {
+                        sql += " AND (recipe_scene1 = @recipeScene OR recipe_scene2 = @recipeScene OR recipe_scene3 = @recipeScene)";
+                        log.LogInformation("Added recipeScene to query: {sql}", sql);
+                    }
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        if (!string.IsNullOrEmpty(recipeCategory))
+                        {
+                            command.Parameters.AddWithValue("@recipeCategory", recipeCategory);
+                            log.LogInformation("Set recipeCategory parameter: {recipeCategory}", recipeCategory);
+                        }
+
+                        if (!string.IsNullOrEmpty(recipeTime))
+                        {
+                            command.Parameters.AddWithValue("@recipeTime", recipeTime);
+                            log.LogInformation("Set recipeTime parameter: {recipeTime}", recipeTime);
+                        }
+
+                        if (!string.IsNullOrEmpty(recipeScene))
+                        {
+                            command.Parameters.AddWithValue("@recipeScene", recipeScene);
+                            log.LogInformation("Set recipeScene parameter: {recipeScene}", recipeScene);
+                        }
+
+                        connection.Open();
+                        log.LogInformation("Database connection opened.");
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            var resultList = new List<object>();
+
+                            while (reader.Read())
+                            {
+                                var recipe = new
+                                {
+                                    RecipeID = reader.GetInt32(0),
+                                    RecipeName = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    RecipeCategory1 = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    RecipeTime = reader.IsDBNull(3) ? null : reader.GetInt32(3).ToString(),
+                                    RecipeScene1 = reader.IsDBNull(4) ? null : reader.GetString(4)
+                                };
+
+                                resultList.Add(recipe);
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                            log.LogInformation("Query executed successfully. Number of records: {count}", resultList.Count);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                //log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                responseMessage = "エラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
 
     }
 }
-
+  
