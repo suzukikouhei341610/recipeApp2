@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;//DB接続用ライブラリ
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using recipeApp2;
 
 namespace FunctionAPIApp
 {
@@ -21,10 +22,19 @@ namespace FunctionAPIApp
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
         {
+            //HTTPレスポンスで返す文字列を定義
             string responseMessage = "SQL RESULT:";
 
             try
             {
+                string user_name = req.Query["user_name"];
+                string user_password = req.Query["user_password"];
+
+                if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(user_password))
+                {
+                    return new BadRequestObjectResult("Please pass a user_name and user_password in the query string");
+                }
+
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "m3hkouhei2010.database.windows.net";
                 builder.UserID = "kouhei0726";
@@ -33,39 +43,121 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    String sql = "SELECT id, user_passward FROM user_table";
+                    // SQLクエリの定義（パラメータ化されたクエリ）
+                    string sql = "SELECT user_name FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
+                        // パラメータの追加
+                        command.Parameters.AddWithValue("@user_name", user_name);
+                        command.Parameters.AddWithValue("@user_password", user_password);
+
+                        // 接続を開く
                         connection.Open();
 
+                        // SQLクエリを実行し、結果を取得
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            Task_NewTableList resultList = new Task_NewTableList();
-
-                            while (reader.Read())
+                            if (reader.HasRows)
                             {
-                                resultList.List.Add(new Task_NewTableRow
-                                {
-                                    TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
-                                    Title = reader.GetString(1),  // "title" カラムのインデックス
-                                    Status = reader.GetString(2),  // "status" カラムのインデックス
-                                    DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
-                                });
+                                // 認証成功
+                                responseMessage = "Login successful";
                             }
-
-                            responseMessage = JsonConvert.SerializeObject(resultList);
+                            else
+                            {
+                                // 認証失敗
+                                responseMessage = "Invalid user_name or user_password";
+                            }
                         }
                     }
                 }
             }
             catch (SqlException e)
             {
-                Console.WriteLine(e.ToString());
+                log.LogError($"SQL error: {e.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"General error: {ex.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
             return new OkObjectResult(responseMessage);
         }
+
+        [FunctionName("EMPLOYEELOGIN")]
+        public static async Task<IActionResult> EmployeeLogin(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            //HTTPレスポンスで返す文字列を定義
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                string employee_id = req.Query["employee_id"];
+                string employee_password = req.Query["employee_password"];
+
+                if (string.IsNullOrEmpty(employee_id) || string.IsNullOrEmpty(employee_password))
+                {
+                    return new BadRequestObjectResult("Please pass a employee_id and employee_password in the query string");
+                }
+
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "m3hkouhei2010.database.windows.net";
+                builder.UserID = "kouhei0726";
+                builder.Password = "Battlefield341610";
+                builder.InitialCatalog = "m3h-kouhei-0726";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // SQLクエリの定義（パラメータ化されたクエリ）
+                    string sql = "SELECT employee_id FROM employee_table WHERE employee_id = @employee_id AND employee_password = @employee_password";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        // パラメータの追加
+                        command.Parameters.AddWithValue("@employee_id", employee_id);
+                        command.Parameters.AddWithValue("@employee_password", employee_password);
+
+                        // 接続を開く
+                        connection.Open();
+
+                        // SQLクエリを実行し、結果を取得
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                // 認証成功
+                                responseMessage = "Login successful";
+                            }
+                            else
+                            {
+                                // 認証失敗
+                                responseMessage = "Invalid employee_id or employee_password";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                log.LogError($"SQL error: {e.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"General error: {ex.ToString()}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
+
+
+      
 
 
 
@@ -107,22 +199,22 @@ namespace FunctionAPIApp
                     {
                         connection.Open();
 
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            Task_NewTableList resultList = new Task_NewTableList();
+                            //Task_NewTableList resultList = new Task_NewTableList();
 
-                            while (reader.Read())
-                            {
-                                resultList.List.Add(new Task_NewTableRow
-                                {
-                                    TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
-                                    Title = reader.GetString(1),  // "title" カラムのインデックス
-                                    Status = reader.GetString(2),  // "status" カラムのインデックス
-                                    DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
-                                });
-                            }
+                            //while (reader.Read())
+                            //{
+                                //resultList.List.Add(new Task_NewTableRow
+                                //{
+                                    //TaskID = reader.GetInt32(0),  // "id" カラムのインデックス
+                                    //Title = reader.GetString(1),  // "title" カラムのインデックス
+                                    //Status = reader.GetString(2),  // "status" カラムのインデックス
+                                    //DueDate = reader.GetDateTime(3)  // "due_date" カラムのインデックス
+                                //});
+                            //}
 
-                            responseMessage = JsonConvert.SerializeObject(resultList);
+                            //responseMessage = JsonConvert.SerializeObject(resultList);
                         }
                     }
                 }
