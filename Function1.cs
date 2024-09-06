@@ -476,7 +476,9 @@ namespace FunctionAPIApp
                 string query = @"
                  SELECT
                     recipe_table.recipe_name,
-                    recipe_table.recipe_time
+                    recipe_table.recipe_time,
+                    recipe_table.recipe_photo
+                        
                 FROM 
                     recipe_table
                 JOIN 
@@ -492,7 +494,8 @@ namespace FunctionAPIApp
                             var data = new YourDataModel
                             {
                                 recipe_name = reader.GetString(0),
-                                recipe_time = reader.GetInt32(1)
+                                recipe_time = reader.GetInt32(1),
+                                recipe_photo = reader.GetString(2)
                             };
                             result.Add(data);
                         }
@@ -507,6 +510,7 @@ namespace FunctionAPIApp
         {
             public string recipe_name { get; set; }
             public int recipe_time { get; set; }
+            public string recipe_photo { get; set; }
         }
 
 
