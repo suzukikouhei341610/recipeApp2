@@ -643,6 +643,66 @@ namespace FunctionAPIApp
         }
 
 
+        [FunctionName("USERCHECK")]
+        public static async Task<IActionResult> UserCheck(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+            bool userExists = false;
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // クライアントから送信された user_name を取得
+                    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                    dynamic data = JsonConvert.DeserializeObject(requestBody);
+                    string userName = data?.user_name;
+
+                    if (string.IsNullOrEmpty(userName))
+                    {
+                        return new BadRequestObjectResult("ユーザー名が入力されていません。");
+                    }
+
+                    string sql = "SELECT COUNT(*) FROM user_table WHERE user_name = @user_name";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        // SQLパラメータの設定
+                        command.Parameters.AddWithValue("@user_name", userName);
+                        connection.Open();
+
+                        int count = (int)await command.ExecuteScalarAsync();
+                        userExists = count > 0;
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            // ユーザー名が既に存在するかどうかの結果をJSONで返す
+            return new OkObjectResult(new { exists = userExists });
+        }
+
 
         [FunctionName("RECIPEDELETE")]
         public static async Task<IActionResult> RecipeDelete(
