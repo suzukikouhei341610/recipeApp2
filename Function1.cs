@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -715,5 +714,3 @@ namespace FunctionAPIApp
         }
     }
 }
-=======
->>>>>>> ab1ae020a3ddd7ff6233610c48173846fcb051be
