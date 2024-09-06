@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <meta charset="UTF-8">
+        <title>User Login</title>
+    </head>
+    
+    <body>
+        <div id="app">
+            <v-app>
+                <v-main>
+                    <v-container>
+                        <v-form ref="form">
+                            <v-text-field 
+                            v-model="user_name"
+                            label="Username"
+                            required>
+                            </v-text-field>
+                            <v-text-field
+                            v-model="user_password"
+                            label="Password"
+                            type="password"
+                            required>    
+                            </v-text-field>
+                            <v-btn
+                            @click="login"
+                            >
+                                ログイン
+                            </v-btn>
+                        </v-form>
+                    </v-container>
+                    <v-container>
+                        <v-btn @click="navigate">新規会員登録はこちら</v-btn>
+                    </v-container>
+                </v-main>
+            </v-app>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            new Vue({
+                el: '#app',
+                vuetify: new Vuetify(),
+                data(){
+                    return{
+                        user_name: '',
+                        user_password: '',
+                    }
+                },
+                methods: {
+                    async login(){ 
+                            const user_name = this.user_name;
+                            const user_password = this.user_password;
+                            const loginData = {
+                                user_name: user_name,
+                                user_password: user_password,
+                            };
+                            try {
+                                const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERLOGIN', loginData, {
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+                                const token = response.data.token; // サーバーから返されたトークン
+                                sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
+                                console.log('Login successful:', this.user_name, this.user_password);
+                                window.location.href = '/home.html';
+                            }catch(error){
+                                console.error('Login failed:', error);
+                                this.errorMessage = 'ログインに失敗しました。';
+                            };
+                        
+                    },
+                    navigate(){
+                        window.location.href = '/userregist.html';
+                    }                    
+                }
+            })
+        </script>
+    </body>
+</html>

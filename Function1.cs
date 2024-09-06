@@ -28,6 +28,10 @@ namespace FunctionAPIApp
 
             try
             {
+                // リクエストボディからJSONデータを読み取る
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+
                 string user_name = req.Query["user_name"];
                 string user_password = req.Query["user_password"];
 
@@ -61,6 +65,10 @@ namespace FunctionAPIApp
                         {
                             if (reader.HasRows)
                             {
+                                // 認証成功時にトークンを生成
+                                //string token = GenerateToken(user_name); // トークン生成のロジックを実装
+                                //return new OkObjectResult(new { token = token });
+
                                 // 認証成功
                                 responseMessage = "Login successful";
                             }
@@ -263,6 +271,7 @@ namespace FunctionAPIApp
         public static async Task<IActionResult> FavoriteSelect(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
+
         {
             string responseMessage = "SQL RESULT:";
 
@@ -514,11 +523,13 @@ namespace FunctionAPIApp
         }
 
 
+
         //水谷
         [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
+
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -588,6 +599,7 @@ namespace FunctionAPIApp
         }
 
 
+
         [FunctionName("USERSELECT")]
         public static async Task<IActionResult> UserSelect(
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -644,6 +656,65 @@ namespace FunctionAPIApp
             }
 
             return new OkObjectResult(responseMessage);
+        }
+
+
+        [FunctionName("USERCHECK")]
+        public static async Task<IActionResult> UserCheck(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+            bool userExists = false;
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // クエリパラメータから user_name を取得
+                    string userName = req.Query["user_name"];
+
+                    if (string.IsNullOrEmpty(userName))
+                    {
+                        return new BadRequestObjectResult("ユーザー名が入力されていません。");
+                    }
+
+                    string sql = "SELECT COUNT(*) FROM user_table WHERE user_name = @user_name";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        // SQLパラメータの設定
+                        command.Parameters.AddWithValue("@user_name", userName);
+                        connection.Open();
+
+                        int count = (int)await command.ExecuteScalarAsync();
+                        userExists = count > 0;
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                log.LogError(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            // ユーザー名が既に存在するかどうかの結果をJSONで返す
+            return new OkObjectResult(new { exists = userExists });
         }
 
 
@@ -764,6 +835,5 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
-
     }
 }
