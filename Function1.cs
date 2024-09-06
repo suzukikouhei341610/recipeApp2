@@ -28,10 +28,13 @@ namespace FunctionAPIApp
 
             try
             {
+<<<<<<< HEAD
                 // リクエストボディからJSONデータを読み取る
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject(requestBody);
 
+=======
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
                 string user_name = req.Query["user_name"];
                 string user_password = req.Query["user_password"];
 
@@ -65,10 +68,13 @@ namespace FunctionAPIApp
                         {
                             if (reader.HasRows)
                             {
+<<<<<<< HEAD
                                 // 認証成功時にトークンを生成
                                 string token = GenerateToken(user_name); // トークン生成のロジックを実装
                                 return new OkObjectResult(new { token = token });
 
+=======
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
                                 // 認証成功
                                 responseMessage = "Login successful";
                             }
@@ -269,8 +275,13 @@ namespace FunctionAPIApp
         //碇
         [FunctionName("FAVORITESELECT")]
         public static async Task<IActionResult> FavoriteSelect(
+<<<<<<< HEAD
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
     ILogger log)
+=======
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
         {
             string responseMessage = "SQL RESULT:";
 
@@ -468,13 +479,69 @@ namespace FunctionAPIApp
         }
 
 
+<<<<<<< HEAD
+=======
+        [FunctionName("RECIPEJOIN")]
+        public static async Task<IActionResult> RecipeJoin(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
+            ILogger log)
+        {
+
+            string connectionString = "Server=tcp:m3hkouhei2010.database.windows.net,1433;Initial Catalog=m3h-kouhei-0726;Persist Security Info=False;User ID=kouhei0726;Password=Battlefield341610;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            List<YourDataModel> result = new List<YourDataModel>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = @"
+                 SELECT
+                    recipe_table.recipe_name,
+                    recipe_table.recipe_time
+                FROM 
+                    recipe_table
+                JOIN 
+                    favorite_table
+                ON recipe_table.recipe_id=favorite_table.recipe_id;";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var data = new YourDataModel
+                            {
+                                recipe_name = reader.GetString(0),
+                                recipe_time = reader.GetInt32(1)
+                            };
+                            result.Add(data);
+                        }
+                    }
+                }
+            }
+
+            return new OkObjectResult(result);
+        }
+
+        public class YourDataModel
+        {
+            public string recipe_name { get; set; }
+            public int recipe_time { get; set; }
+        }
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
 
 
         //水谷
         [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
+<<<<<<< HEAD
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
     ILogger log)
+=======
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -544,6 +611,68 @@ namespace FunctionAPIApp
         }
 
 
+<<<<<<< HEAD
+=======
+        [FunctionName("USERSELECT")]
+        public static async Task<IActionResult> UserSelect(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT user_id, user_name, user_password FROM user_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            user_tableList resultList = new user_tableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new user_tableRow
+                                {
+                                    user_id = reader.GetInt32(0), 
+                                    user_name = reader.GetString(1), 
+                                    user_password = reader.GetString(2), 
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
+
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
 
         [FunctionName("RECIPEDELETE")]
         public static async Task<IActionResult> RecipeDelete(
@@ -661,6 +790,12 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+<<<<<<< HEAD
     }
 }
 
+=======
+
+    }
+}
+>>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
