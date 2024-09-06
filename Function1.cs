@@ -28,13 +28,10 @@ namespace FunctionAPIApp
 
             try
             {
-<<<<<<< HEAD
                 // リクエストボディからJSONデータを読み取る
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject(requestBody);
 
-=======
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
                 string user_name = req.Query["user_name"];
                 string user_password = req.Query["user_password"];
 
@@ -68,13 +65,10 @@ namespace FunctionAPIApp
                         {
                             if (reader.HasRows)
                             {
-<<<<<<< HEAD
                                 // 認証成功時にトークンを生成
-                                string token = GenerateToken(user_name); // トークン生成のロジックを実装
-                                return new OkObjectResult(new { token = token });
+                                //string token = GenerateToken(user_name); // トークン生成のロジックを実装
+                                //return new OkObjectResult(new { token = token });
 
-=======
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
                                 // 認証成功
                                 responseMessage = "Login successful";
                             }
@@ -275,12 +269,9 @@ namespace FunctionAPIApp
         //碇
         [FunctionName("FAVORITESELECT")]
         public static async Task<IActionResult> FavoriteSelect(
-<<<<<<< HEAD
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
-=======
-       
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+
         {
             string responseMessage = "SQL RESULT:";
 
@@ -478,8 +469,6 @@ namespace FunctionAPIApp
         }
 
 
-<<<<<<< HEAD
-=======
         [FunctionName("RECIPEJOIN")]
         public static async Task<IActionResult> RecipeJoin(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
@@ -528,18 +517,15 @@ namespace FunctionAPIApp
             public string recipe_name { get; set; }
             public int recipe_time { get; set; }
         }
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
+
 
 
         //水谷
         [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
-<<<<<<< HEAD
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
-=======
-       
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -609,8 +595,7 @@ namespace FunctionAPIApp
         }
 
 
-<<<<<<< HEAD
-=======
+
         [FunctionName("USERSELECT")]
         public static async Task<IActionResult> UserSelect(
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -670,9 +655,6 @@ namespace FunctionAPIApp
         }
 
 
-<<<<<<< HEAD
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
-=======
         [FunctionName("USERCHECK")]
         public static async Task<IActionResult> UserCheck(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -733,7 +715,7 @@ namespace FunctionAPIApp
             return new OkObjectResult(new { exists = userExists });
         }
 
->>>>>>> 5a2451f3a3dfe243497ac891183750eb00c1c841
+
 
         [FunctionName("RECIPEDELETE")]
         public static async Task<IActionResult> RecipeDelete(
@@ -851,10 +833,5 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
-<<<<<<< HEAD
     }
 }
-
-=======
-
->>>>>>> 64f2b26345148bfa8777bcc8977a57de43b2c9a1
