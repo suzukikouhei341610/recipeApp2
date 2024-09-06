@@ -261,8 +261,8 @@ namespace FunctionAPIApp
         //íÙ
         [FunctionName("FAVORITESELECT")]
         public static async Task<IActionResult> FavoriteSelect(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
         {
             string responseMessage = "SQL RESULT:";
 
@@ -460,13 +460,61 @@ namespace FunctionAPIApp
         }
 
 
+        [FunctionName("RECIPEJOIN")]
+        public static async Task<IActionResult> RecipeJoin(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
+            ILogger log)
+        {
+
+            string connectionString = "Server=tcp:m3hkouhei2010.database.windows.net,1433;Initial Catalog=m3h-kouhei-0726;Persist Security Info=False;User ID=kouhei0726;Password=Battlefield341610;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            List<YourDataModel> result = new List<YourDataModel>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = @"
+                 SELECT
+                    recipe_table.recipe_name,
+                    recipe_table.recipe_time
+                FROM 
+                    recipe_table
+                JOIN 
+                    favorite_table
+                ON recipe_table.recipe_id=favorite_table.recipe_id;";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var data = new YourDataModel
+                            {
+                                recipe_name = reader.GetString(0),
+                                recipe_time = reader.GetInt32(1)
+                            };
+                            result.Add(data);
+                        }
+                    }
+                }
+            }
+
+            return new OkObjectResult(result);
+        }
+
+        public class YourDataModel
+        {
+            public string recipe_name { get; set; }
+            public int recipe_time { get; set; }
+        }
 
 
         //êÖíJ
         [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-    ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -534,7 +582,6 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
-
 
 
         [FunctionName("RECIPEDELETE")]
@@ -653,5 +700,7 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+
     }
 }
+
