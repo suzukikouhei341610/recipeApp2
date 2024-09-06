@@ -28,6 +28,10 @@ namespace FunctionAPIApp
 
             try
             {
+                // リクエストボディからJSONデータを読み取る
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+
                 string user_name = req.Query["user_name"];
                 string user_password = req.Query["user_password"];
 
@@ -61,6 +65,10 @@ namespace FunctionAPIApp
                         {
                             if (reader.HasRows)
                             {
+                                // 認証成功時にトークンを生成
+                                //string token = GenerateToken(user_name); // トークン生成のロジックを実装
+                                //return new OkObjectResult(new { token = token });
+
                                 // 認証成功
                                 responseMessage = "Login successful";
                             }
@@ -263,6 +271,7 @@ namespace FunctionAPIApp
         public static async Task<IActionResult> FavoriteSelect(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
+
         {
             string responseMessage = "SQL RESULT:";
 
@@ -510,11 +519,13 @@ namespace FunctionAPIApp
         }
 
 
+
         //水谷
         [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
+
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -582,6 +593,7 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+
 
 
         [FunctionName("USERSELECT")]
@@ -819,6 +831,5 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
-
     }
 }
