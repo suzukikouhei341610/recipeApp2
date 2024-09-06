@@ -584,6 +584,66 @@ namespace FunctionAPIApp
         }
 
 
+        [FunctionName("USERSELECT")]
+        public static async Task<IActionResult> UserSelect(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT user_id, user_name, user_password FROM user_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            user_tableList resultList = new user_tableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new user_tableRow
+                                {
+                                    user_id = reader.GetInt32(0), 
+                                    user_name = reader.GetString(1), 
+                                    user_password = reader.GetString(2), 
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
+
+
         [FunctionName("RECIPEDELETE")]
         public static async Task<IActionResult> RecipeDelete(
        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -703,4 +763,3 @@ namespace FunctionAPIApp
 
     }
 }
-
