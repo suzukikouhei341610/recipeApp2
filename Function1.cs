@@ -13,6 +13,7 @@ using System.Data;
 using System.Collections.Generic;
 using recipeApp2;
 
+
 namespace FunctionAPIApp
 {
     public static class Function1
@@ -75,11 +76,14 @@ namespace FunctionAPIApp
                                 //if (reader.HasRows)
                             {
                                 // 認証成功時にトークンを生成
+                                var tokenService = new TokenService();
+                                string token = tokenService.GenerateToken(user_name);
+                                return new OkObjectResult(new { token = token });
                                 //string token = GenerateToken(user_name); // トークン生成のロジックを実装
                                 //return new OkObjectResult(new { token = token });
 
                                 // 認証成功
-                                responseMessage = "Login successful";
+                                //responseMessage = "Login successful";
                             }
                             else
                             {

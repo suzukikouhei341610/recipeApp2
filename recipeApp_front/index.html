@@ -20,12 +20,13 @@
                         <v-carousel></v-carousel>
                         <v-btn @click="navigate">ログインページへ</v-btn>
                 </v-main>
+            
                 <v-footer>
                     <v-col
                         class="text-center"
                         cols="12"
                         >
-                        フッター
+                        <a href="/employeelogin.html" class="link-button">従業員用</a>
                     </v-col>
                 </v-footer>
             </v-app>
@@ -46,7 +47,7 @@
             methods: {
                 navigate(){
                     window.location.href = '/userlogin.html';
-                }                    
+                }                           
             }
             })
         </script>
