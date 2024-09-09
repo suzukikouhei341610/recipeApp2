@@ -106,7 +106,8 @@ namespace FunctionAPIApp
 
         [FunctionName("EMPLOYEELOGIN")]
         public static async Task<IActionResult> EmployeeLogin(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+        //[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
         {
             //HTTPレスポンスで返す文字列を定義
@@ -114,12 +115,21 @@ namespace FunctionAPIApp
 
             try
             {
-                string employee_id = req.Query["employee_id"];
-                string employee_password = req.Query["employee_password"];
+                // リクエストボディからJSONデータを読み取る
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+                //リクエストボディから受け取る
+                string employee_id = data?.employee_id;
+                string employee_password = data?.employee_password;
+
+                //クエリから受け取る
+                //string user_name = req.Query["user_name"];
+                //string user_password = req.Query["user_password"];
 
                 if (string.IsNullOrEmpty(employee_id) || string.IsNullOrEmpty(employee_password))
                 {
-                    return new BadRequestObjectResult("Please pass a employee_id and employee_password in the query string");
+                    return new BadRequestObjectResult("Please pass a user_name and user_password in the query string");
                 }
 
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -131,7 +141,8 @@ namespace FunctionAPIApp
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
                     // SQLクエリの定義（パラメータ化されたクエリ）
-                    string sql = "SELECT employee_id FROM employee_table WHERE employee_id = @employee_id AND employee_password = @employee_password";
+                    string sql = "SELECT COUNT(*) FROM employee_table WHERE employee_id = @employee_id AND employee_password = @employee_password";
+                    //string sql = "SELECT user_name FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -143,17 +154,23 @@ namespace FunctionAPIApp
                         connection.Open();
 
                         // SQLクエリを実行し、結果を取得
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.HasRows)
+                            int userCount = (int)command.ExecuteScalar();
+                            if (userCount > 0)
+                            //if (reader.HasRows)
                             {
+                                // 認証成功時にトークンを生成
+                                //string token = GenerateToken(user_name); // トークン生成のロジックを実装
+                                //return new OkObjectResult(new { token = token });
+
                                 // 認証成功
                                 responseMessage = "Login successful";
                             }
                             else
                             {
                                 // 認証失敗
-                                responseMessage = "Invalid employee_id or employee_password";
+                                responseMessage = "Invalid user_name or user_password";
                             }
                         }
                     }
