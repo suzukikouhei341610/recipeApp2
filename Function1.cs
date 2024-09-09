@@ -20,7 +20,8 @@ namespace FunctionAPIApp
         //松本
         [FunctionName("USERLOGIN")]
         public static async Task<IActionResult> UserLogin(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous,"post", Route = null)] HttpRequest req,
+        //[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
         {
             //HTTPレスポンスで返す文字列を定義
@@ -32,8 +33,13 @@ namespace FunctionAPIApp
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject(requestBody);
 
-                string user_name = req.Query["user_name"];
-                string user_password = req.Query["user_password"];
+                //リクエストボディから受け取る
+                string user_name = data?.user_name;
+                string user_password = data?.user_password;
+
+                //クエリから受け取る
+                //string user_name = req.Query["user_name"];
+                //string user_password = req.Query["user_password"];
 
                 if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(user_password))
                 {

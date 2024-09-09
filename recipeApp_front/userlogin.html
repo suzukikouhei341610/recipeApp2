@@ -68,8 +68,10 @@
                                         'Content-Type': 'application/json'
                                     }
                                 });
+                                
                                 const token = response.data.token; // サーバーから返されたトークン
                                 sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
+                                
                                 console.log('Login successful:', this.user_name, this.user_password);
                                 window.location.href = '/home.html';
                             }catch(error){
