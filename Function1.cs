@@ -55,7 +55,8 @@ namespace FunctionAPIApp
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
                     // SQLクエリの定義（パラメータ化されたクエリ）
-                    string sql = "SELECT user_name FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
+                    string sql = "SELECT COUNT(*) FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
+                    //string sql = "SELECT user_name FROM user_table WHERE user_name = @user_name AND user_password = @user_password";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -67,9 +68,11 @@ namespace FunctionAPIApp
                         connection.Open();
 
                         // SQLクエリを実行し、結果を取得
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.HasRows)
+                            int userCount = (int)command.ExecuteScalar();
+                            if (userCount > 0)
+                                //if (reader.HasRows)
                             {
                                 // 認証成功時にトークンを生成
                                 //string token = GenerateToken(user_name); // トークン生成のロジックを実装

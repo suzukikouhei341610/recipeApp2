@@ -62,20 +62,25 @@
                                 user_name: user_name,
                                 user_password: user_password,
                             };
+
+                            console.log('Sending login data:', loginData); // 送信データの確認デバック用
+                            
                             try {
                                 const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERLOGIN', loginData, {
                                     headers: {
                                         'Content-Type': 'application/json'
                                     }
                                 });
-                                
+
+                                console.log('Login response:', response.data); // レスポンスデータの確認デバック用
+
                                 const token = response.data.token; // サーバーから返されたトークン
                                 sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
-                                
+
                                 console.log('Login successful:', this.user_name, this.user_password);
-                                window.location.href = '/home.html';
+                                //window.location.href = '/home.html';
                             }catch(error){
-                                console.error('Login failed:', error);
+                                console.error('Login failed:', error.response ? error.response.data : error.message); // エラーメッセージの詳細確認デバック用
                                 this.errorMessage = 'ログインに失敗しました。';
                             };
                         
