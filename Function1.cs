@@ -491,7 +491,9 @@ namespace FunctionAPIApp
                 string query = @"
                  SELECT
                     recipe_table.recipe_name,
-                    recipe_table.recipe_time
+                    recipe_table.recipe_time,
+                    recipe_table.recipe_photo
+                        
                 FROM 
                     recipe_table
                 JOIN 
@@ -507,7 +509,8 @@ namespace FunctionAPIApp
                             var data = new YourDataModel
                             {
                                 recipe_name = reader.GetString(0),
-                                recipe_time = reader.GetInt32(1)
+                                recipe_time = reader.GetInt32(1),
+                                recipe_photo = reader.GetString(2)
                             };
                             result.Add(data);
                         }
@@ -522,6 +525,7 @@ namespace FunctionAPIApp
         {
             public string recipe_name { get; set; }
             public int recipe_time { get; set; }
+            public string recipe_photo { get; set; }
         }
 
 
@@ -663,8 +667,8 @@ namespace FunctionAPIApp
 
         [FunctionName("USERCHECK")]
         public static async Task<IActionResult> UserCheck(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
         {
             string responseMessage = "SQL RESULT:";
             bool userExists = false;
@@ -681,10 +685,8 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    // クライアントから送信された user_name を取得
-                    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                    dynamic data = JsonConvert.DeserializeObject(requestBody);
-                    string userName = data?.user_name;
+                    // クエリパラメータから user_name を取得
+                    string userName = req.Query["user_name"];
 
                     if (string.IsNullOrEmpty(userName))
                     {
@@ -706,13 +708,13 @@ namespace FunctionAPIApp
             }
             catch (SqlException e)
             {
-                Console.WriteLine(e.ToString());
+                log.LogError(e.ToString());
                 responseMessage = "データベース接続エラーが発生しました。";
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                log.LogError(e.ToString());
                 responseMessage = "予期しないエラーが発生しました。";
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
