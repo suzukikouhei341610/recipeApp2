@@ -50,7 +50,10 @@ namespace recipeApp2
         [JsonProperty("recipe_item3")]
         public string recipe_item3 { get; set; }
 
-       
+        [JsonProperty("recipe_photo")]
+        public string recipe_photo { get; set; }
+
+
 
     }
 }

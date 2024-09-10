@@ -345,9 +345,9 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
+                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
                         "recipe_time, recipe_scene1, recipe_scene2, recipe_scene3, " +
-                        "recipe_item1, recipe_item2, recipe_item3 FROM recipe_table";
+                        "recipe_item1, recipe_item2, recipe_item3, recipe_photo FROM recipe_table";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -361,17 +361,19 @@ namespace FunctionAPIApp
                             {
                                 resultList.List.Add(new recipe_tableRow
                                 {
-                                    recipe_name = reader.IsDBNull(0) ? null : reader.GetString(0),
-                                    recipe_category1 = reader.IsDBNull(1) ? null : reader.GetString(1),
-                                    recipe_category2 = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    recipe_category3 = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                    recipe_time = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
-                                    recipe_scene1 = reader.IsDBNull(5) ? null : reader.GetString(5),
-                                    recipe_scene2 = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                    recipe_scene3 = reader.IsDBNull(7) ? null : reader.GetString(7),
-                                    recipe_item1 = reader.IsDBNull(8) ? null : reader.GetString(8),
-                                    recipe_item2 = reader.IsDBNull(9) ? null : reader.GetString(9),
-                                    recipe_item3 = reader.IsDBNull(10) ? null : reader.GetString(10)
+                                    recipe_id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                                    recipe_name = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    recipe_category1 = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    recipe_category2 = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                    recipe_category3 = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                    recipe_time = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    recipe_scene1 = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                    recipe_scene2 = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                    recipe_scene3 = reader.IsDBNull(8) ? null : reader.GetString(8),
+                                    recipe_item1 = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                    recipe_item2 = reader.IsDBNull(10) ? null : reader.GetString(10),
+                                    recipe_item3 = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                    recipe_photo = reader.IsDBNull(12) ? null : reader.GetString(12)
                                 });
                             }
 
@@ -475,7 +477,7 @@ namespace FunctionAPIApp
             ILogger log)
         {
 
-            string connectionString = "Server=tcp:m3hkouhei2010.database.windows.net,1433;Initial Catalog=m3h-kouhei-0726;Persist Security Info=False;User ID=kouhei0726;Password=Battlefield341610;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string connectionString = "Server=tcp:m3hkouhei2010.database.windows.net,1433;Initial Catalog=m3h-kouhei-0726;Persist Security Info=False;User ID=kouhei0726;Password=Battlefield341610;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=100;";
 
             List<YourDataModel> result = new List<YourDataModel>();
 
