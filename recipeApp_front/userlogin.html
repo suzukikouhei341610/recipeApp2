@@ -81,16 +81,20 @@
                                         'Content-Type': 'application/json'
                                     }
                                 });
-                                const token = response.data.token; // サーバーから返されたトークン
-                                sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
+
+                                //トークン
+                                //const token = response.data.token; // サーバーから返されたトークン
+                                //sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
+
+                                sessionStorage.setItem('user_name', user_name); // ユーザー名をセッションストレージに保存
 
                                 //デバック用ログ
                                 console.log('Login response:', response.data);
                                 console.log('Type of message:', typeof response.data.message);
                                 console.log('Response status:', response.status);
 
-                                //if (response.status === 200 && response.data === 'Login successful') {
-                                if (response.status === 200 && token) {
+                                if (response.status === 200 && response.data === 'Login successful') {
+                                //if (response.status === 200 && token) {
                                     console.log('Login successful:', user_name, user_password);
                                     window.location.href = '/home.html';
                                 } else {
