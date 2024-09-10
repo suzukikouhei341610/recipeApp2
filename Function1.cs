@@ -76,10 +76,10 @@ namespace FunctionAPIApp
                                 //if (reader.HasRows)
                             {
                                 // 認証成功時にトークンを生成
-                                //var tokenService = new TokenService();
-                                //string token = tokenService.GenerateToken(user_name);
-                                //log.LogInformation($"Generated token: {token}");
-                                //return new OkObjectResult(new { token = token });
+                                var tokenService = new TokenService();
+                                string token = tokenService.GenerateToken(user_name);
+                                log.LogInformation($"Generated token: {token}");
+                                return new OkObjectResult(new { token = token });
 
 
                                 //string token = GenerateToken(user_name); // トークン生成のロジックを実装
@@ -201,6 +201,7 @@ namespace FunctionAPIApp
 
             return new OkObjectResult(responseMessage);
         }
+
 
         //鈴木
         [FunctionName("SEARCH")]

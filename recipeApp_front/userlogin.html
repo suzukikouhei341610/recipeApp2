@@ -89,8 +89,8 @@
                                 console.log('Type of message:', typeof response.data.message);
                                 console.log('Response status:', response.status);
 
-                                if (response.status === 200 && response.data === 'Login successful') {
-                                //if (response.status === 200 && token) {
+                                //if (response.status === 200 && response.data === 'Login successful') {
+                                if (response.status === 200 && token) {
                                     console.log('Login successful:', user_name, user_password);
                                     window.location.href = '/home.html';
                                 } else {
