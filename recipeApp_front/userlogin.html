@@ -86,7 +86,7 @@
                                 //const token = response.data.token; // サーバーから返されたトークン
                                 //sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
 
-                                sessionStorage.setItem('user_name', user_name); // ユーザー名をセッションストレージに保存
+                                
 
                                 //デバック用ログ
                                 console.log('Login response:', response.data);
@@ -96,6 +96,8 @@
                                 if (response.status === 200 && response.data === 'Login successful') {
                                 //if (response.status === 200 && token) {
                                     console.log('Login successful:', user_name, user_password);
+                                    sessionStorage.setItem('user_name', user_name); // ユーザー名をセッションストレージに保存
+                                    console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
                                     window.location.href = '/home.html';
                                 } else {
                                     console.error('Login failed:', response.data);

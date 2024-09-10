@@ -202,6 +202,75 @@ namespace FunctionAPIApp
             return new OkObjectResult(responseMessage);
         }
 
+        [FunctionName("LOGINIDSELECT")]
+        public static async Task<IActionResult> LoginIdSelect(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+
+        {
+            string responseMessage = "SQL RESULT:";
+            string user_name = null;
+
+            // クエリパラメータからuser_nameを取得
+            if (req.Query.ContainsKey("user_name"))
+            {
+                user_name = req.Query["user_name"];
+            }
+            else
+            {
+                // リクエストボディからuser_nameを取得（POSTメソッドの場合）
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                user_name = data?.user_name;
+            }
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT user_id FROM user_table WHERE user_name = @user_name;";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@user_name", user_name);
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            var resultList = new List<int>();
+
+                            while (reader.Read())
+                            {
+                                resultList.Add(reader.GetInt32(0));
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
 
         //鈴木
         [FunctionName("SEARCH")]
