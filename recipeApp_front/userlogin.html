@@ -14,18 +14,23 @@
         <div id="app">
             <v-app>
                 <v-main>
+                    <h3>ログインページ</h3>
                     <v-container>
                         <v-form ref="form">
                             <v-text-field 
                             v-model="user_name"
-                            label="Username"
-                            required>
+                            label="ユーザ名"
+                            :rules="[rules.required]"
+                            required
+                            >
                             </v-text-field>
                             <v-text-field
                             v-model="user_password"
-                            label="Password"
+                            label="パスワード"
                             type="password"
-                            required>    
+                            :rules="[rules.required]"
+                            required
+                            >    
                             </v-text-field>
                             <v-btn
                             @click="login"
@@ -37,6 +42,7 @@
                     <v-container>
                         <v-btn @click="navigate">新規会員登録はこちら</v-btn>
                     </v-container>
+                    <v-alert v-if="errorMessage" type="error">{{ errorMessage }}エラーコード:{{errorCode}}</v-alert>
                 </v-main>
             </v-app>
         </div>
@@ -52,16 +58,23 @@
                     return{
                         user_name: '',
                         user_password: '',
+                        errorMessage: '',
+                        errorCode: '',
+                        rules: {
+                            required: value => !!value || '必須項目です。',
+                        }
                     }
                 },
                 methods: {
                     async login(){ 
-                            const user_name = this.user_name;
-                            const user_password = this.user_password;
-                            const loginData = {
-                                user_name: user_name,
-                                user_password: user_password,
-                            };
+                        const user_name = this.user_name;
+                        const user_password = this.user_password;
+                        const loginData = {
+                            user_name: user_name,
+                            user_password: user_password,
+                        };
+
+                        if (this.$refs.form.validate()) {
                             try {
                                 const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERLOGIN', loginData, {
                                     headers: {
@@ -70,14 +83,43 @@
                                 });
                                 const token = response.data.token; // サーバーから返されたトークン
                                 sessionStorage.setItem('authToken', token);//トークンをsessionStorageに保存
-                                console.log('Login successful:', this.user_name, this.user_password);
-                                window.location.href = '/home.html';
-                            }catch(error){
-                                console.error('Login failed:', error);
-                                this.errorMessage = 'ログインに失敗しました。';
-                            };
-                        
+
+                                //デバック用ログ
+                                console.log('Login response:', response.data);
+                                console.log('Type of message:', typeof response.data.message);
+                                console.log('Response status:', response.status);
+
+                                if (response.status === 200 && response.data === 'Login successful') {
+                                //if (response.status === 200 && token) {
+                                    console.log('Login successful:', user_name, user_password);
+                                    window.location.href = '/home.html';
+                                } else {
+                                    console.error('Login failed:', response.data);
+                                    this.errorMessage = 'ユーザ名もしくはパスワードが間違っています。';
+                                }
+
+                            } catch (error) {
+                                if (error.response) {
+                                    console.error('Login failed with status code:', error.response.status);
+                                    console.error('Error response data:', error.response);
+                                    this.errorMessage = 'サーバーエラーが発生しました。';
+                                    this.errorCode = error.response.status;
+                                } else if (error.request) {
+                                    console.error('No response received:', error.request);
+                                    this.errorMessage = 'サーバーからの応答がありません。ネットワーク接続を確認してください。';
+                                    this.errorCode = error.response.status;
+                                } else {
+                                    console.error('Error setting up request:', error.message);
+                                    this.errorMessage = 'リクエストの設定中にエラーが発生しました。再度試してください。';
+                                    this.errorCode = error.response.status;
+                                }
+                            }
+
+                        } else {
+                            console.error('Form validation failed');
+                        }                    
                     },
+
                     navigate(){
                         window.location.href = '/userregist.html';
                     }                    
