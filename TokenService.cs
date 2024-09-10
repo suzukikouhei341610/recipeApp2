@@ -5,16 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 
 public class TokenService
 {
-    private const string SecretKey = "your_secret_key_here"; // このキーは適切な方法で管理してください
+    private const string SecretKey = "secretkey";
 
-    public string GenerateToken(string userName)
+    public string GenerateToken(string user_name)
     {
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
+            new Claim(JwtRegisteredClaimNames.Sub, user_name),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

@@ -102,7 +102,7 @@
                                 if (error.response) {
                                     console.error('Login failed with status code:', error.response.status);
                                     console.error('Error response data:', error.response);
-                                    this.errorMessage = 'サーバーエラーが発生しました。後ほど再試行してください。';
+                                    this.errorMessage = 'サーバーエラーが発生しました。';
                                     this.errorCode = error.response.status;
                                 } else if (error.request) {
                                     console.error('No response received:', error.request);
