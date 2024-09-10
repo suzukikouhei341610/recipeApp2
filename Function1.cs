@@ -313,6 +313,9 @@ namespace FunctionAPIApp
         {
             string responseMessage = "SQL RESULT:";
 
+            // クエリパラメータの取得
+            string userIdParam = req.Query["user_id"];
+
             try
             {
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
@@ -325,10 +328,15 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table";
+                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table WHERE user_id = @userId";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
+                        if (!string.IsNullOrEmpty(userIdParam))
+                        {
+                            command.Parameters.AddWithValue("@userId", userIdParam);
+                        }
+
                         connection.Open();
 
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -352,12 +360,12 @@ namespace FunctionAPIApp
             }
             catch (SqlException e)
             {
-                Console.WriteLine(e.ToString());
+                log.LogError(e.ToString());
                 responseMessage = "データベース接続エラーが発生しました。";
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                log.LogError(e.ToString());
                 responseMessage = "予期しないエラーが発生しました。";
             }
 
