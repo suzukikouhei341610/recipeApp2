@@ -101,8 +101,13 @@ namespace FunctionAPIApp
             }
             catch (Exception ex)
             {
-                log.LogError($"General error: {ex.ToString()}");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                //log.LogError($"General error: {ex.ToString()}");
+                //return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                log.LogError($"General error: {ex.ToString()}"); // エラー詳細をログに記録
+                return new ObjectResult($"An error occurred: {ex.Message}")
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
 
             return new OkObjectResult(responseMessage);
