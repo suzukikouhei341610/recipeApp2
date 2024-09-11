@@ -369,7 +369,9 @@ namespace FunctionAPIApp
             }
             catch (SqlException e)
             {
-                //log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                log.LogError("General Exception: {Message}", e.Message);
+                log.LogError("Stack Trace: {StackTrace}", e.StackTrace);
                 responseMessage = "エラーが発生しました。";
             }
 
