@@ -281,9 +281,10 @@ namespace FunctionAPIApp
             log.LogInformation("C# HTTP trigger function processed a search request.");
 
             string responseMessage = "SQL RESULT:";
-            string recipeCategory = req.Query["recipe_category"];
-            string recipeTime = req.Query["recipe_time"];
-            string recipeScene = req.Query["recipe_scene"];
+            string recipe_category = req.Query["recipe_category"];
+            string recipe_time = req.Query["recipe_time"];
+            string recipe_scene = req.Query["recipe_scene"];
+            string recipe_photo = req.Query["recipe_photo"];
 
 
             try
@@ -296,22 +297,23 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_time, recipe_scene1 " +
-                                 "FROM recipe_table WHERE 1=1";
+                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
+                        "recipe_time, recipe_scene1, recipe_scene2, recipe_scene3, " +
+                        "recipe_item1, recipe_item2, recipe_item3, recipe_photo FROM recipe_table WHERE 1=1";
 
-                    if (!string.IsNullOrEmpty(recipeCategory))
+                    if (!string.IsNullOrEmpty(recipe_category))
                     {
                         sql += " AND (recipe_category1 = @recipeCategory OR recipe_category2 = @recipeCategory OR recipe_category3 = @recipeCategory)";
                         log.LogInformation("Added recipeCategory to query: {sql}", sql);
                     }
 
-                    if (!string.IsNullOrEmpty(recipeTime))
+                    if (!string.IsNullOrEmpty(recipe_time))
                     {
                         sql += " AND recipe_time = @recipeTime";
                         log.LogInformation("Added recipeTime to query: {sql}", sql);
                     }
 
-                    if (!string.IsNullOrEmpty(recipeScene))
+                    if (!string.IsNullOrEmpty(recipe_scene))
                     {
                         sql += " AND (recipe_scene1 = @recipeScene OR recipe_scene2 = @recipeScene OR recipe_scene3 = @recipeScene)";
                         log.LogInformation("Added recipeScene to query: {sql}", sql);
@@ -319,22 +321,22 @@ namespace FunctionAPIApp
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        if (!string.IsNullOrEmpty(recipeCategory))
+                        if (!string.IsNullOrEmpty(recipe_category))
                         {
-                            command.Parameters.AddWithValue("@recipeCategory", recipeCategory);
-                            log.LogInformation("Set recipeCategory parameter: {recipeCategory}", recipeCategory);
+                            command.Parameters.AddWithValue("@recipeCategory", recipe_category);
+                            log.LogInformation("Set recipeCategory parameter: {recipeCategory}", recipe_category);
                         }
 
-                        if (!string.IsNullOrEmpty(recipeTime))
+                        if (!string.IsNullOrEmpty(recipe_time))
                         {
-                            command.Parameters.AddWithValue("@recipeTime", recipeTime);
-                            log.LogInformation("Set recipeTime parameter: {recipeTime}", recipeTime);
+                            command.Parameters.AddWithValue("@recipeTime", recipe_time);
+                            log.LogInformation("Set recipeTime parameter: {recipeTime}", recipe_time);
                         }
 
-                        if (!string.IsNullOrEmpty(recipeScene))
+                        if (!string.IsNullOrEmpty(recipe_scene))
                         {
-                            command.Parameters.AddWithValue("@recipeScene", recipeScene);
-                            log.LogInformation("Set recipeScene parameter: {recipeScene}", recipeScene);
+                            command.Parameters.AddWithValue("@recipeScene", recipe_scene);
+                            log.LogInformation("Set recipeScene parameter: {recipeScene}", recipe_scene);
                         }
 
                         connection.Open();
@@ -348,11 +350,12 @@ namespace FunctionAPIApp
                             {
                                 var recipe = new
                                 {
-                                    RecipeID = reader.GetInt32(0),
-                                    RecipeName = reader.IsDBNull(1) ? null : reader.GetString(1),
-                                    RecipeCategory1 = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    RecipeTime = reader.IsDBNull(3) ? null : reader.GetInt32(3).ToString(),
-                                    RecipeScene1 = reader.IsDBNull(4) ? null : reader.GetString(4)
+                                    recipe_id = reader.GetInt32(0),
+                                    recipe_name = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    recipe_category1 = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    recipe_time = reader.GetInt32(3),
+                                    recipe_scene1 = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                    recipe_photo = reader.IsDBNull(5) ? null : reader.GetString(5)
                                 };
 
                                 resultList.Add(recipe);
@@ -366,7 +369,9 @@ namespace FunctionAPIApp
             }
             catch (SqlException e)
             {
-                //log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                log.LogError("General Exception: {Message}", e.Message);
+                log.LogError("Stack Trace: {StackTrace}", e.StackTrace);
                 responseMessage = "エラーが発生しました。";
             }
 
