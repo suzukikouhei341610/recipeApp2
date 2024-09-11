@@ -353,7 +353,7 @@ namespace FunctionAPIApp
                                     recipe_id = reader.GetInt32(0),
                                     recipe_name = reader.IsDBNull(1) ? null : reader.GetString(1),
                                     recipe_category1 = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    recipe_time =  reader.GetInt32(3),
+                                    recipe_time = reader.GetInt32(3),
                                     recipe_scene1 = reader.IsDBNull(4) ? null : reader.GetString(4),
                                     recipe_photo = reader.IsDBNull(5) ? null : reader.GetString(5)
                                 };
