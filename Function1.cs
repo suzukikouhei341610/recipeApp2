@@ -296,7 +296,7 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_time, recipe_scene1 " +
+                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_time, recipe_scene1, recipe_photo " +
                                  "FROM recipe_table WHERE 1=1";
 
                     if (!string.IsNullOrEmpty(recipeCategory))

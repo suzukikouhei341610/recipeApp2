@@ -17,7 +17,14 @@
                     <h1>株式会社おちゃらけ</h1>
                 </v-app-bar>
                 <v-main>
-                        <v-carousel></v-carousel>
+                        <v-carousel>
+                            <!-- <v-carousel-item
+                            v-for="(image, i) in images"
+                            :key="i"
+                            >
+                                <v-img :src="image"></v-img>
+                            </v-carousel-item> -->
+                        </v-carousel>
                         <v-btn @click="navigate">ログインページへ</v-btn>
                 </v-main>
             
