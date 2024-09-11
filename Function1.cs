@@ -282,9 +282,9 @@ namespace FunctionAPIApp
 
             string responseMessage = "SQL RESULT:";
             string recipe_category = req.Query["recipe_category"];
-            string recipe_time = req.Query["recipe_time"];
+            //string recipe_time = req.Query["recipe_time"];
             string recipe_scene = req.Query["recipe_scene"];
-            string recipe_photo = req.Query["recipe_photo"];
+            
 
 
             try
@@ -297,9 +297,7 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT recipe_id, recipe_name, recipe_category1, recipe_category2, recipe_category3, " +
-                        "recipe_time, recipe_scene1, recipe_scene2, recipe_scene3, " +
-                        "recipe_item1, recipe_item2, recipe_item3, recipe_photo FROM recipe_table WHERE 1=1";
+                    string sql = "SELECT * FROM recipe_table WHERE 1=1";
 
                     if (!string.IsNullOrEmpty(recipe_category))
                     {
@@ -307,11 +305,11 @@ namespace FunctionAPIApp
                         log.LogInformation("Added recipeCategory to query: {sql}", sql);
                     }
 
-                    if (!string.IsNullOrEmpty(recipe_time))
-                    {
-                        sql += " AND recipe_time = @recipeTime";
-                        log.LogInformation("Added recipeTime to query: {sql}", sql);
-                    }
+                    //if (!string.IsNullOrEmpty(recipe_time))
+                    //{
+                        //sql += " AND recipe_time = @recipeTime";
+                        //log.LogInformation("Added recipeTime to query: {sql}", sql);
+                    //}
 
                     if (!string.IsNullOrEmpty(recipe_scene))
                     {
@@ -327,11 +325,11 @@ namespace FunctionAPIApp
                             log.LogInformation("Set recipeCategory parameter: {recipeCategory}", recipe_category);
                         }
 
-                        if (!string.IsNullOrEmpty(recipe_time))
-                        {
-                            command.Parameters.AddWithValue("@recipeTime", recipe_time);
-                            log.LogInformation("Set recipeTime parameter: {recipeTime}", recipe_time);
-                        }
+                        //if (!string.IsNullOrEmpty(recipe_time))
+                        //{
+                            //command.Parameters.AddWithValue("@recipeTime", recipe_time);
+                            //log.LogInformation("Set recipeTime parameter: {recipeTime}", recipe_time);
+                        //}
 
                         if (!string.IsNullOrEmpty(recipe_scene))
                         {
@@ -350,12 +348,19 @@ namespace FunctionAPIApp
                             {
                                 var recipe = new
                                 {
-                                    recipe_id = reader.GetInt32(0),
+                                    recipe_id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
                                     recipe_name = reader.IsDBNull(1) ? null : reader.GetString(1),
                                     recipe_category1 = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    recipe_time = reader.GetInt32(3),
-                                    recipe_scene1 = reader.IsDBNull(4) ? null : reader.GetString(4),
-                                    recipe_photo = reader.IsDBNull(5) ? null : reader.GetString(5)
+                                    recipe_category2 = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                    recipe_category3 = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                    recipe_time = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    recipe_scene1 = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                    recipe_scene2 = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                    recipe_scene3 = reader.IsDBNull(8) ? null : reader.GetString(8),
+                                    recipe_item1 = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                    recipe_item2 = reader.IsDBNull(10) ? null : reader.GetString(10),
+                                    recipe_item3 = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                    recipe_photo = reader.IsDBNull(12) ? null : reader.GetString(12)
                                 };
 
                                 resultList.Add(recipe);
@@ -369,7 +374,7 @@ namespace FunctionAPIApp
             }
             catch (SqlException e)
             {
-                log.LogError("SQL Exception: {message}", e.Message);  // エラーログの出力
+                log.LogError("SQL Exception: {message}", e.Message);  
                 log.LogError("General Exception: {Message}", e.Message);
                 log.LogError("Stack Trace: {StackTrace}", e.StackTrace);
                 responseMessage = "エラーが発生しました。";
