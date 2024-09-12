@@ -573,31 +573,45 @@ namespace FunctionAPIApp
                             connection.Open();
                             int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                            responseMessage = rowsAffected > 0
-                                ? "レシピがお気に入りに登録されました。"
-                                : "お気に入り登録に失敗しました。";
+                            var response = new
+                            {
+                                Message = rowsAffected > 0
+                                                        ? "レシピがお気に入りに登録されました。"
+                                                        : "お気に入り登録に失敗しました。"
+                            };
+
+                            return new OkObjectResult(response);
                         }
                     }
                 }
                 catch (SqlException e)
                 {
                     log.LogError(e.ToString());
-                    responseMessage = "エラーが発生しました。";
+                    var errorResponse = new
+                    {
+                        Message = "エラーが発生しました。"
+                    };
+                    return new OkObjectResult(errorResponse);
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.ToString());
-                    responseMessage = "予期しないエラーが発生しました。";
+                    var errorResponse = new
+                    {
+                        Message = "予期しないエラーが発生しました。"
+                    };
+                    return new OkObjectResult(errorResponse);
                 }
             }
             else
             {
-                responseMessage = "パラメーターが設定されていません";
+                var errorResponse = new
+                {
+                    Message = "パラメーターが設定されていません"
+                };
+                return new OkObjectResult(errorResponse);
             }
-
-            return new OkObjectResult(responseMessage);
         }
-
 
         [FunctionName("RECIPEJOIN")]
         public static async Task<IActionResult> RecipeJoin(
