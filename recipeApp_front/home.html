@@ -12,103 +12,109 @@
 
         </style>
     </head>
+    
     <body>
-        <div id="app">
-            <v-app>
+        <v-app>
+            <div id="app">
                 <v-app-bar>
-                
-                <v-toolbar-title>recipe app</v-toolbar-title>
-                <v-spacer></v-spacer>
-                    <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> | -->
-                    <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
-                    <v-btn @click="logout()">logout</v-btn>
-                    <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
+                    <v-toolbar-title>recipe app</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                        <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> | -->
+                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
+                        <v-btn @click="logout()">logout</v-btn>
+                        <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
                 </v-app-bar>
-                
 
                 <div class="search-app">
                     <h1>レシピ検索</h1>
-            
-                    <form @submit.prevent="searchRecipes">
-                    <div>
-                        <label for="recipe_category">レシピカテゴリー:</label>
-                        <input type="text" id="recipe_category" v-model="recipeCategory" />
-                    </div>
-                    <!-- <div>
-                        <label for="recipe_time">調理時間:</label>
-                        <input type="text" id="recipe_time" v-model="recipeTime" />
-                    </div> -->
-                    <div>
-                        <label for="recipe_scene">シーン:</label>
-                        <input type="text" id="recipe_scene" v-model="recipeScene" />
-                    </div>
-                    <button type="submit" class="btn-search">検索</button> <!-- 検索ボタンのスタイリング -->
-                    </form>
-            
-                    <div v-if="recipes.length > 0">
-                    <h2>検索結果</h2>
-                    <table class="result-table"> <!-- テーブルのスタイリング -->
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>レシピ名</th>
-                                <th>カテゴリー</th>
-                                <th>調理時間</th>
-                                <th>シーン</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="recipe in recipes" :key="recipe.RecipeID">
-                                <td>{{ recipe.RecipeID }}</td>
-                                <td>
-                                <a @click="goToDetail(recipe.RecipeID)">{{ recipe.RecipeName }}</a>
-                                </td>
-                                <td>{{ recipe.RecipeCategory1 }}</td>
-                                <td>{{ recipe.RecipeTime }} 分</td>
-                                <td>{{ recipe.RecipeScene1 }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                    <div v-else>
-                        <p>検索結果がありません。</p>
-                    </div>
+                    <v-form @submit.prevent="searchRecipes">
+                        <v-container>
+                            <!-- <v-row>
+                                <v-col cols="12" md="6"> -->
+                                    <v-col cols="12">
+                                        <h3>レシピカテゴリーを選択</h3>
+                                            <v-row class="d-flex flex-row">
+                                                <v-checkbox
+                                                v-for="(category, index) in categories"
+                                                :key="index"
+                                                :label="category"
+                                                :value="category"
+                                                v-model="selectedCategories"
+                                                class="mr-4"
+                                                ></v-checkbox>
+                                            </v-row>
+                                    </v-col>
+
+                                    <v-col cols="12"></v-col>
+                                        <h3>シーンを選択</h3>
+                                            <v-row class="d-flex flex-row">
+                                                <v-checkbox
+                                                v-for="(scene, index) in scenes"
+                                                :key="index"
+                                                :label="scene"
+                                                :value="scene"
+                                                v-model="selectedScenes"
+                                                class="mr-4"
+                                                ></v-checkbox>
+                                            </v-row>
+                                    </v-col>
+                                <!-- <v-text-field
+                                    label="レシピカテゴリー"
+                                    v-model="recipe_category"
+                                ></v-text-field> -->
+                                <!-- </v-col> -->
+
+
+
+
+
+                                <v-col cols="12" md="6">
+                                <!-- <v-text-field
+                                    label="シーン"
+                                    v-model="recipe_scene"
+                                ></v-text-field> -->
+                                </v-col>
+                            </v-row>
+                            <v-btn type="submit" class="btn-search">
+                                検索
+                            </v-btn>
+                        </v-container>    
+                    </v-form>
                 </div>
 
-            <v-row>
-                <v-col v-for="(item,index) in dataList" :key="index" cols="12" sm="6" md="4">
-                    <v-card
-                    class="mx-auto"
-                    max-width="400"
-                    outlined>
-
-                    <v-img
-                        class="white--text align-end"
-                        height="200px"
-                        :src="encodeURI(item.recipe_photo) || 'recipeApp2\recipeApp_front\images\no image.jpg'"
-                        alt="Recipe Image">
-                    <v-card-title>
-                        <span class="headline"></span>
-                    </v-card-title>
-                    </v-img>
-
+                <div v-if="recipes.length > 0">
+                <!-- <h2>検索結果</h2> -->
+                    <v-row>
+                        <v-col v-for="recipe in recipes" :key="recipe.recipe_id" cols="12" sm="6" md="4">
+                            <v-card class="mx-auto" max-width="400" outlined>
+                                <v-img
+                                class="white--text align-end"
+                                height="200px"
+                                :src="encodeURI(recipe.recipe_photo) || 'recipeApp2\\recipeApp_front\\images\\no image.jpg'"
+                                alt="Recipe Image"
+                                >
+                                </v-img>
                 
-                    <v-card-subtitle class="card-subtitle">
-                        {{ item.recipe_name }}
-                    </v-card-subtitle>
+                                <v-card-subtitle class="card-subtitle">
+                                {{ recipe.recipe_name }}
+                                </v-card-subtitle>
                 
-                    <v-card-text class="card-recipe-time">                          
-                        <div>調理時間: {{ item.recipe_time }}分</div>
-                    </v-card-text>
-                
-                    <!-- <v-card-actions>
-                        <v-btn color="orange" text>favorite</v-btn>
-                    </v-card-actions> -->
-                    </v-card>
-                </v-col>
-            </v-row>
-            </v-app>
-        </div>
+                                <v-card-text class="card-recipe-time">
+                                <div>調理時間: {{ recipe.recipe_time }} 分</div>
+                                </v-card-text>
+                                
+                                <v-card-actions>
+                                    <v-btn text @click="goToDetail(recipe.recipe_id)">詳細を見る</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </div>
+                <div v-else>
+                <p>検索結果がありません。</p>
+                </div>
+            </div>
+        </v-app>
         
         <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -116,62 +122,73 @@
         
         <script>
             new Vue({
-            el: '#app',
-            vuetify: new Vuetify(),
-            data() {
-                return {
-                recipeCategory: "",
-                recipeTime: "",
-                recipeScene: "",
-                recipes: [],
-                dataList: []//一覧用
-                };
-            },
-            methods: {
-                async searchRecipes() {
-                try {
-                    const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
-                    params: {
-                        recipe_category: this.recipeCategory,
-                        recipe_time: this.recipeTime,
-                        recipe_scene: this.recipeScene
-                    }
-                    });
-                    this.recipes = response.data;
-                } catch (error) {
-                    console.error("検索中にエラーが発生しました:", error);
-                    alert("検索中にエラーが発生しました。");
-                }
-                },
-                
-                goToDetail(RecipeID){
-                const url = `recipe_${RecipeID}.html`;
-                window.location.href = url;
+                el: '#app',
+                vuetify: new Vuetify(),
+                data() {
+                    return {
+                    recipe_category: "",
+                    recipe_scene: "",
+                    recipes: [],
+                    filteredRecipes: [],
+                    dataList: [],
+                    categories: ['チョコ', 'クッキー', 'キャンディ', 'キャラメル', 'ホットケーキミックス', 'はちみつ'], // カテゴリーの選択肢
+                    scenes: ['ハロウィン', 'クリスマス', 'お祝い', 'パーティー', 'おしゃれ', '親子で作る', 'カフェ気分', '時短レシピ'],
+                    selectedCategories: [],// チェックボックスで選択したカテゴリーを格納する配列
+                    selectedScenes: [],// チェックボックスで選択したシーンを格納する配列
+                    };
                 },
 
-                logout(){
-                    //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                    sessionStorage.removeItem('user_name');
-                    //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                    window.location.href = 'index.html';
-                }
-            },
-            mounted() {
-            axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT')
-                .then(response => {
-                    this.dataList = response.data.List;
-                    // `recipe_id` の重複をチェック
-                    const ids = this.dataList.map(item => item.recipe_id);
-                    const uniqueIds = new Set(ids);
-                    if (ids.length !== uniqueIds.size) {
-                        console.warn('Duplicate recipe_id detected:', ids);
+                mounted() {
+                    this.allRecipes();
+                },
+
+                methods: {
+                    //レシピ全表示
+                    async allRecipes(){
+                        try {
+                            const response = await fetch('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
+                            const data = await response.json();
+                            this.recipes = data.List; 
+                        } catch (error) {
+                            console.error('エラーが発生しました:', error);
+                        }
+                    },
+
+                    //レシピ検索
+                    async searchRecipes() {
+                        this.recipes = [];
+                        try {
+                            const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
+                                params: {
+                                    // recipe_category: this.recipe_category,
+                                    // recipe_scene: this.recipe_scene
+                                    recipe_category: this.selectedCategories.join(','), 
+                                    recipe_scene: this.selectedScenes.join(',')  
+                                }
+                            });
+                            //console.log('API Response:', response.data);//デバック用
+                            //console.log('First Recipe Data:', response.data[0]);//デバック用
+                            this.recipes = response.data;
+                        } catch (error) {
+                            console.error("検索中にエラーが発生しました:", error);
+                            alert("検索中にエラーが発生しました。");
+                        }
+                    },
+                    
+                    //詳細ページへ
+                    goToDetail(recipe_id){
+                        const url = `recipe_${recipe_id}.html`;
+                        window.location.href = url;
+                    },
+
+                    logout(){
+                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                        sessionStorage.removeItem('user_name');
+                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                        window.location.href = 'index.html';
                     }
-                })
-                .catch(error => {
-                console.error('Error:', error);
-                });
-            }
-            });
+                },
+            })
         </script>
     </body>
 </html>
