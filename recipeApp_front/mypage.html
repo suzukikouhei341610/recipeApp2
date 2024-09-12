@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta charset="UTF-8">
+  <title>recipe app mypage</title>
+
+    <!-- <v-toolbar-title>recipe app</v-toolbar-title>
+    <v-spacer></v-spacer>    
+    <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
+    <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
+    <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
+
+  </head>
+    
+  <body>
+  <div id="app">
+      <v-app>
+        <v-app-bar>
+                
+          <v-toolbar-title>recipe app</v-toolbar-title>
+          <v-spacer></v-spacer>
+              <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
+              <!-- <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> | -->
+              <v-btn onclick="logout">logout</v-btn>
+              <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
+          </v-app-bar>
+          <v-main>
+              <v-container>
+                  <div>こんにちは、</div>
+
+                  <v-tabs v-model="tab">
+                    <v-tab>お気に入り一覧</v-tab>
+                    <v-tab>検索履歴</v-tab>
+                  </v-tabs>
+              
+                  <v-tabs-items v-model="tab">
+                    <!-- お気に入り一覧 -->
+                    <v-tab-item>
+                      <v-row>
+                          <v-col v-for="item in dataList" :key="item.recipe_id" cols="12" sm="6" md="4">
+                            <v-card 
+                            class="mx-auto" 
+                            max-width="400" 
+                            outlined>
+
+                              <v-img
+                                class="white--text align-end"
+                                height="200px"
+                                :src="encodeURI(item.recipe_photo)"
+                                alt="Recipe Image">
+                                
+                              <v-card-title>
+                                <span class="headline">{{ item.recipe_name }}</span>
+                              </v-card-title>
+                              </v-img>
+                        
+                              <v-card-subtitle class="card-subtitle">
+                                sub-title
+                              </v-card-subtitle>
+                        
+                              <v-card-text class="card-recipe-time">                          
+                                <div>調理時間: {{ item.recipe_time }}</div>
+                              </v-card-text>
+                        
+                              <v-card-actions>
+                                <v-btn @click="saveToSessionStorage('recipe_id', 'user_id')"
+                                  color="orange"
+                                  text
+                                >
+                                  favorite
+                                </v-btn>
+                              </v-card-actions>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-tab-item>
+              
+                    <!-- 検索履歴 -->
+                    <v-tab-item>
+                      <v-card flat>
+                        <v-card-title>検索履歴</v-card-title>
+                        <v-card-text>
+                          <!-- 検索履歴のコンテンツをここに追加 -->
+                        </v-card-text>
+                      </v-card>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </v-container>
+              
+
+
+          </v-main>
+      </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          tab: 0, // 初期タブのインデックス
+          dataList: [], // データ表示用配列
+          searchHistory: ['検索履歴1', '検索履歴2', '検索履歴3'], // サンプルデータ
+        };
+      },
+
+      mounted() {
+        this.fetchFavorites();        
+      },
+      
+      methods: {
+        //セッションのuser_nameからuser_idをとってくる
+        async getUserId() {
+          const user_name = sessionStorage.getItem('user_name');
+          if (user_name) {
+            try {
+                const loginResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT?user_name=${user_name}`);
+                const userIds = await loginResponse.json();
+              // user_idが取得できたか確認
+              if (userIds.length === 0) {
+                  console.error('ユーザーが見つかりませんでした。');
+                  return null;
+              }
+
+              const user_id = userIds[0]; // 最初のuser_idを取得
+              return user_id;
+
+            } catch (error) {
+                console.error('エラーが発生しました:', error);
+                return null; // または適切なエラーハンドリングを行う
+            }
+          } else {
+              console.error('セッションにuser_nameが保存されていません。');
+              return null; // または適切なエラーハンドリングを行う
+          }
+        },
+
+        //お気に入り一覧を表示する
+        async fetchFavorites() {   
+          try {
+            // getUserId メソッドを呼び出して user_id を取得
+            const user_id = await this.getUserId(); 
+
+            if (user_id) {
+                // user_id をクエリパラメータとして API にリクエスト
+                const favoriteResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITESELECT?user_id=${user_id}`);
+                
+                // レスポンスから JSON データを取得
+                const favorites = await favoriteResponse.json();
+                
+                // JSON データの List プロパティを dataList に設定
+                this.dataList = favorites.List;
+            } else {
+                console.error('ユーザーIDが取得できませんでした。');
+            }
+          } catch (error) {
+              console.error('エラーが発生しました:', error);
+          }
+        },
+        
+        //お気に入り登録
+        // async saveToSessionStorage(key, value) {
+        //     sessionStorage.setItem('recipe_id', 'user_id');
+        // }
+      }
+    }
+  )
+  </script>
+  </body>
+</html>
+
+
+
