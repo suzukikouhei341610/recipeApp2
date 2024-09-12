@@ -281,10 +281,12 @@ namespace FunctionAPIApp
             log.LogInformation("C# HTTP trigger function processed a search request.");
 
             string responseMessage = "SQL RESULT:";
-            string recipe_category = req.Query["recipe_category"];
+            string[] categories = req.Query["recipe_category"].ToString().Split(',');
+            string[] scenes = req.Query["recipe_scene"].ToString().Split(',');
+            //string recipe_category = req.Query["recipe_category"];
+            //string recipe_scene = req.Query["recipe_scene"];
             //string recipe_time = req.Query["recipe_time"];
-            string recipe_scene = req.Query["recipe_scene"];
-            
+
 
 
             try
