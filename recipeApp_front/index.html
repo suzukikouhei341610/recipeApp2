@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <meta charset="UTF-8">
+        <title>Toppage</title>
+    </head>
+        
+    <body>
+        <div id="app">
+            <v-app>
+                <v-app-bar>
+                    <h1>株式会社おちゃらけ</h1>
+                </v-app-bar>
+                <v-main>
+                        <v-carousel>
+                            <!-- <v-carousel-item
+                            v-for="(image, i) in images"
+                            :key="i"
+                            >
+                                <v-img :src="image"></v-img>
+                            </v-carousel-item> -->
+                        </v-carousel>
+                        <v-btn @click="navigate">ログインページへ</v-btn>
+                </v-main>
+            
+                <v-footer>
+                    <v-col
+                        class="text-center"
+                        cols="12"
+                        >
+                        <a href="/employeelogin.html" class="link-button">従業員用</a>
+                    </v-col>
+                </v-footer>
+            </v-app>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data(){
+                return{
+
+                }
+            },
+            methods: {
+                navigate(){
+                    window.location.href = '/userlogin.html';
+                }                           
+            }
+            })
+        </script>
+    </body>
+</html>

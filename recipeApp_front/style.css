@@ -1,0 +1,10 @@
+.recipe_photo {
+    width: 600px; /* 横幅を300pxに統一 */
+    height: 400px; /* 縦幅を200pxに統一 */
+    object-fit: cover; /* 画像の比率を保ちながら、枠に収まるように表示 */
+<<<<<<< HEAD
+  }
+  
+=======
+}
+>>>>>>> 3a0e4e34c9b72067228f64fef7eae47e1e40dd4c
