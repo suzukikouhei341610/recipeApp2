@@ -21,14 +21,13 @@
   <div id="app">
       <v-app>
         <v-app-bar>
-                
           <v-toolbar-title>recipe app</v-toolbar-title>
           <v-spacer></v-spacer>
               <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
-              <!-- <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> | -->
-              <v-btn onclick="logout">logout</v-btn>
+              <!-- <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> -->
+              <v-btn @click="logout()">logout</v-btn>
               <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
-          </v-app-bar>
+        </v-app-bar>
           <v-main>
               <v-container>
                   <div>こんにちは、</div>
@@ -48,33 +47,29 @@
                             max-width="400" 
                             outlined>
 
-                              <v-img
+                              <!-- <v-img
                                 class="white--text align-end"
                                 height="200px"
-                                :src="encodeURI(item.recipe_photo)"
+                                :src="encodeURI(recipe.recipe_photo) || 'recipeApp2\\recipeApp_front\\images\\no image.jpg'"
                                 alt="Recipe Image">
-                                
-                              <v-card-title>
-                                <span class="headline">{{ item.recipe_name }}</span>
-                              </v-card-title>
-                              </v-img>
+                              </v-img> -->
                         
                               <v-card-subtitle class="card-subtitle">
-                                sub-title
+                                {{ item.recipe_name }}
                               </v-card-subtitle>
                         
                               <v-card-text class="card-recipe-time">                          
                                 <div>調理時間: {{ item.recipe_time }}</div>
                               </v-card-text>
                         
-                              <v-card-actions>
+                              <!-- <v-card-actions>
                                 <v-btn @click="saveToSessionStorage('recipe_id', 'user_id')"
                                   color="orange"
                                   text
                                 >
                                   favorite
                                 </v-btn>
-                              </v-card-actions>
+                              </v-card-actions> -->
                           </v-card>
                         </v-col>
                       </v-row>
@@ -85,7 +80,7 @@
                       <v-card flat>
                         <v-card-title>検索履歴</v-card-title>
                         <v-card-text>
-                          <!-- 検索履歴のコンテンツをここに追加 -->
+                          検索履歴のコンテンツをここに追加
                         </v-card-text>
                       </v-card>
                     </v-tab-item>
@@ -109,12 +104,14 @@
         return {
           tab: 0, // 初期タブのインデックス
           dataList: [], // データ表示用配列
-          searchHistory: ['検索履歴1', '検索履歴2', '検索履歴3'], // サンプルデータ
+          // searchHistory: ['', '', ''], // サンプルデータ
+          recipe: ''
         };
       },
 
       mounted() {
-        this.fetchFavorites();        
+        this.fetchFavorites();   
+        const user_name = sessionStorage.getItem('user_name');
       },
       
       methods: {
@@ -149,16 +146,22 @@
           try {
             // getUserId メソッドを呼び出して user_id を取得
             const user_id = await this.getUserId(); 
+            console.log(user_id);
 
             if (user_id) {
-                // user_id をクエリパラメータとして API にリクエスト
+                // user_idを指定してfavorite_table内のrecipe_idを取得
                 const favoriteResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITESELECT?user_id=${user_id}`);
-                
-                // レスポンスから JSON データを取得
                 const favorites = await favoriteResponse.json();
-                
-                // JSON データの List プロパティを dataList に設定
                 this.dataList = favorites.List;
+                console.log(favorites.List);
+                console.log(typeof favorites.List);
+                const recipeIds = Object.values(favorites.List).map(favorite => favorite.recipe_id);
+                console.log(recipeIds);
+
+                //recipe_id
+                
+                const recipeIdsParam = recipeIds.join(",");
+                const favoriteRecipes = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
             } else {
                 console.error('ユーザーIDが取得できませんでした。');
             }
@@ -166,9 +169,15 @@
               console.error('エラーが発生しました:', error);
           }
         },
-        
+
+        logout(){
+                  //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                  sessionStorage.removeItem('user_name');
+                  //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                  window.location.href = 'index.html';
+                    }
         //お気に入り登録
-        // async saveToSessionStorage(key, value) {
+        // async saveToSessionStorafavorites.Listge(key, value) {
         //     sessionStorage.setItem('recipe_id', 'user_id');
         // }
       }

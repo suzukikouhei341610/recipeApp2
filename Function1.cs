@@ -282,9 +282,11 @@ namespace FunctionAPIApp
 
             string responseMessage = "SQL RESULT:";
             string recipe_category = req.Query["recipe_category"];
-            //string recipe_time = req.Query["recipe_time"];
             string recipe_scene = req.Query["recipe_scene"];
+            //string recipe_time = req.Query["recipe_time"];
+
             
+
 
 
             try
@@ -307,8 +309,8 @@ namespace FunctionAPIApp
 
                     //if (!string.IsNullOrEmpty(recipe_time))
                     //{
-                        //sql += " AND recipe_time = @recipeTime";
-                        //log.LogInformation("Added recipeTime to query: {sql}", sql);
+                    //sql += " AND recipe_time = @recipeTime";
+                    //log.LogInformation("Added recipeTime to query: {sql}", sql);
                     //}
 
                     if (!string.IsNullOrEmpty(recipe_scene))
