@@ -9,7 +9,9 @@
         <meta charset="UTF-8">
         <title>Home</title>
         <style>
-
+            .search-card{
+                margin: 50px;
+            }
         </style>
     </head>
     
@@ -20,70 +22,57 @@
                     <v-toolbar-title>recipe app</v-toolbar-title>
                     <v-spacer></v-spacer>
                         <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> | -->
-                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
+                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn>
                         <v-btn @click="logout()">logout</v-btn>
                         <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
                 </v-app-bar>
 
                 <div class="search-app">
-                    <h1>レシピ検索</h1>
+                    <v-card
+                    class="mx-auto search-card"
+                    outlined
+                    elevation="2"
+                    tile>
                     <v-form @submit.prevent="searchRecipes">
                         <v-container>
-                            <!-- <v-row>
-                                <v-col cols="12" md="6"> -->
-                                    <v-col cols="12">
-                                        <h3>レシピカテゴリーを選択</h3>
-                                            <v-row class="d-flex flex-row">
-                                                <v-checkbox
-                                                v-for="(category, index) in categories"
-                                                :key="index"
-                                                :label="category"
-                                                :value="category"
-                                                v-model="selectedCategories"
-                                                class="mr-4"
-                                                ></v-checkbox>
-                                            </v-row>
-                                    </v-col>
+                            <v-col cols="12">
+                                <h3>レシピカテゴリーを選択</h3>
+                                <v-radio-group v-model="recipe_category" row>
+                                    <v-radio
+                                    v-for="(category, index) in categories"
+                                    :key="index"
+                                    :label="category"
+                                    :value="category"
+                                    ></v-radio>
+                                </v-radio-group>
+                                <v-btn @click="clearCategory">選択をクリア</v-btn>
+                            </v-col>
 
-                                    <v-col cols="12"></v-col>
-                                        <h3>シーンを選択</h3>
-                                            <v-row class="d-flex flex-row">
-                                                <v-checkbox
-                                                v-for="(scene, index) in scenes"
-                                                :key="index"
-                                                :label="scene"
-                                                :value="scene"
-                                                v-model="selectedScenes"
-                                                class="mr-4"
-                                                ></v-checkbox>
-                                            </v-row>
-                                    </v-col>
-                                <!-- <v-text-field
-                                    label="レシピカテゴリー"
-                                    v-model="recipe_category"
-                                ></v-text-field> -->
-                                <!-- </v-col> -->
+                            <v-col cols="12">
+                                <h3>シーンを選択</h3>
+                                    <v-radio-group v-model="recipe_scene" row>
+                                        <v-radio
+                                        v-for="(scene, index) in scenes"
+                                        :key="index"
+                                        :label="scene"
+                                        :value="scene"
+                                        ></v-radio>
+                                </v-radio-group>
+                                <v-btn @click="clearScene">選択をクリア</v-btn>
+                            </v-col>
 
-
-
-
-
-                                <v-col cols="12" md="6">
-                                <!-- <v-text-field
-                                    label="シーン"
-                                    v-model="recipe_scene"
-                                ></v-text-field> -->
-                                </v-col>
-                            </v-row>
-                            <v-btn type="submit" class="btn-search">
-                                検索
-                            </v-btn>
+                            <v-col>
+                                <v-btn type="submit" class="btn-search">
+                                    検索
+                                </v-btn>
+                            </v-col>
                         </v-container>    
                     </v-form>
+                    </v-card>
                 </div>
 
                 <div v-if="recipes.length > 0">
-                <!-- <h2>検索結果</h2> -->
+                <h2>レシピ一覧</h2>
                     <v-row>
                         <v-col v-for="recipe in recipes" :key="recipe.recipe_id" cols="12" sm="6" md="4">
                             <v-card class="mx-auto" max-width="400" outlined>
@@ -160,10 +149,10 @@
                         try {
                             const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
                                 params: {
-                                    // recipe_category: this.recipe_category,
-                                    // recipe_scene: this.recipe_scene
-                                    recipe_category: this.selectedCategories.join(','), 
-                                    recipe_scene: this.selectedScenes.join(',')  
+                                    recipe_category: this.recipe_category,
+                                    recipe_scene: this.recipe_scene
+                                    // recipe_category: this.selectedCategories.join(','), 
+                                    // recipe_scene: this.selectedScenes.join(',')  
                                 }
                             });
                             //console.log('API Response:', response.data);//デバック用
@@ -179,6 +168,14 @@
                     goToDetail(recipe_id){
                         const url = `recipe_${recipe_id}.html`;
                         window.location.href = url;
+                    },
+
+                    clearCategory(){
+                        this.recipe_category = '';
+                    },
+
+                    clearScene(){
+                        this.recipe_scene = '';
                     },
 
                     logout(){
