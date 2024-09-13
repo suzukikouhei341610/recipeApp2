@@ -664,6 +664,126 @@ namespace FunctionAPIApp
             public string recipe_photo { get; set; }
         }
 
+        [FunctionName("CHECKIFFAVORITE")]
+        public static async Task<IActionResult> CheckIfFavorite(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            string responseMessage = "チェック結果: ";
+
+            try
+            {
+                // クエリパラメータからuser_idとrecipe_idを取得
+                int userId = int.Parse(req.Query["user_id"]);
+                int recipeId = int.Parse(req.Query["recipe_id"]);
+
+                if (userId <= 0 || recipeId <= 0)
+                {
+                    return new BadRequestObjectResult("無効な user_id または recipe_id が指定されました。");
+                }
+
+                // データベース接続の設定
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT COUNT(*) FROM favorite_table WHERE user_id = @userId AND recipe_id = @recipeId";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        // パラメータの追加
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@recipeId", recipeId);
+
+                        connection.Open();
+
+                        // クエリを実行し、結果を取得
+                        int count = (int)await command.ExecuteScalarAsync();
+
+                        bool isFavorite = count > 0;
+
+                        responseMessage = JsonConvert.SerializeObject(new { isFavorite });
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                log.LogError(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
+
+
+        [FunctionName("FAVORITEALLSELECT")]
+        public static async Task<IActionResult> FavoriteAllSelect(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        ILogger log)
+        {
+            string responseMessage = "SQL RESULT:";
+
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "m3hkouhei2010.database.windows.net",
+                    UserID = "kouhei0726",
+                    Password = "Battlefield341610",
+                    InitialCatalog = "m3h-kouhei-0726"
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            favoriteif_tableList resultList = new favoriteif_tableList();
+
+                            while (reader.Read())
+                            {
+                                resultList.List.Add(new favoriteif_tableRow
+                                {
+                                    favorite_id = reader.GetInt32(0), //("favorite_id"),
+                                    user_id = reader.GetInt32(1), //("user_id"),
+                                    recipe_id = reader.GetInt32(2), //("recipe_id"),
+                                });
+                            }
+
+                            responseMessage = JsonConvert.SerializeObject(resultList);
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "データベース接続エラーが発生しました。";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                responseMessage = "予期しないエラーが発生しました。";
+            }
+
+            return new OkObjectResult(responseMessage);
+        }
 
 
         //水谷
@@ -944,38 +1064,64 @@ namespace FunctionAPIApp
 
                     using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                     {
-                        string sql = "DELETE FROM favorite_table WHERE user_id = @user_id AND recipe_id = @recipe_id";
+                        await connection.OpenAsync();
 
-                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        // favorite_idをすべて取得するクエリ
+                        string selectSql = "SELECT favorite_id FROM favorite_table WHERE user_id = @user_id AND recipe_id = @recipe_id";
+                        List<int> favoriteIds = new List<int>();
+
+                        using (SqlCommand selectCommand = new SqlCommand(selectSql, connection))
                         {
-                            command.Parameters.AddWithValue("@user_id", userId);
-                            command.Parameters.AddWithValue("@recipe_id", recipeId);
+                            selectCommand.Parameters.AddWithValue("@user_id", userId);
+                            selectCommand.Parameters.AddWithValue("@recipe_id", recipeId);
 
-                            connection.Open();
+                            using (SqlDataReader reader = await selectCommand.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    favoriteIds.Add(reader.GetInt32(0)); // favorite_idをリストに追加
+                                }
+                            }
+                        }
 
-                            int result = command.ExecuteNonQuery();
+                        if (favoriteIds.Count > 0)
+                        {
+                            // 取得したすべてのfavorite_idを削除
+                            foreach (int favoriteId in favoriteIds)
+                            {
+                                string deleteSql = "DELETE FROM favorite_table WHERE favorite_id = @favorite_id";
 
-                            responseMessage = result > 0 ? "お気に入りが解除されました。" : "該当のお気に入りが見つかりません。";
+                                using (SqlCommand deleteCommand = new SqlCommand(deleteSql, connection))
+                                {
+                                    deleteCommand.Parameters.AddWithValue("@favorite_id", favoriteId);
+                                    await deleteCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            return new OkObjectResult("お気に入りがすべて解除されました。");
+                        }
+                        else
+                        {
+                            return new OkObjectResult("該当のお気に入りが見つかりません。");
                         }
                     }
                 }
                 catch (SqlException e)
                 {
                     log.LogError($"SQL Exception: {e.Message}");
-                    responseMessage = $"エラーが発生しました: {e.Message}";
+                    return new OkObjectResult($"エラーが発生しました: {e.Message}");
                 }
                 catch (Exception e)
                 {
                     log.LogError($"Exception: {e.Message}");
-                    responseMessage = $"予期しないエラーが発生しました: {e.Message}";
+                    return new OkObjectResult($"予期しないエラーが発生しました: {e.Message}");
                 }
             }
             else
             {
-                responseMessage = "有効なユーザーIDまたはレシピIDが提供されていません。";
+                return new OkObjectResult("有効なユーザーIDまたはレシピIDが提供されていません。");
             }
-
-            return new OkObjectResult(responseMessage);
         }
+
     }
 }
