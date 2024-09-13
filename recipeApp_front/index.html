@@ -9,92 +9,85 @@
     <meta charset="UTF-8">
     <title>Toppage</title>
     <style>
-
         .v-app-bar {
-            position: relative; /* 相対位置を設定 */
+            position: relative;
         }
         .v-app-bar h1 {
-            margin: 0; /* デフォルトのマージンを削除 */
+            margin: 0;
         }
         .login-btn {  
             color: #777 !important;
             background-color: #bfe1bf !important;
-            position: absolute; /* 絶対位置を設定 */
-            right: 16px; /* 右端からの距離を設定 */
+            position: absolute;
+            right: 16px;
         }
-        /* 画像のサイズを元に戻す */
+        .message h2 {
+            font-weight: normal;
+            text-align: center;
+            height: 100px;
+        }
         .v-carousel {
-            margin: 15px;
-            width: 600px;
+            width: 50vw; /* カルーセルの幅を画面幅の50%に設定 */
+            height: 50vh; /* カルーセルの高さを50vhに設定 */
+            position: relative; /* 矢印とのバランスを保つために相対位置を設定 */
         }
+        .v-carousel-item {
+            display: flex;
+            justify-content: center; /* 横方向に中央揃え */
+            align-items: center; /* 縦方向に中央揃え */
+        }
+        .v-carousel .v-carousel__prev,
+        .v-carousel .v-carousel__next {
+            top: 50%; /* 高さの50%に位置 */
+            transform: translateY(-50%); /* 矢印を縦中央に揃える */
+        }
+
         .carousel-image {
-            max-height: 400px; /* 高さを制限 */
-            object-fit: contain;
-            margin: 0 auto; /* 画像を中央に寄せる */
+            max-width: 80%; /* 画像の幅を小さめに設定 */
+            max-height: 70%; /* 画像の高さを調整 */
+            object-fit: contain; /* 画像を中央に収め、縦横比を維持 */
+            margin: 0 auto; /* 画像を中央揃え */
             cursor: pointer;
         }
-        .thumbnails {
-            display: none; /* サムネイルを非表示に */
-        }
-        /* .custom-card {
-            max-width: 300px; 
-            margin: 0 auto; 
-        }
-        .headline {
-            text-align: center; 
-        }
-
-        .v-card-actions {
-            display: flex;
-            justify-content: center; 
-            align-items: center; 
-            padding: 16px;
-        } */
-
         footer {
             background-color: #bfe1bf !important;
         }
-
         .footer-row {
             display: flex;
-            justify-content: flex-end; /* 要素を右寄せにする */
-            align-items: center; /* 垂直方向に中央揃え */
-            padding: 16px; /* フッター内の余白を追加 */
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
         }
-
         .copyright-text {
-            font-size: 14px; /* フォントサイズを調整 */
-            color: #777; /* 色を設定（必要に応じて調整） */
-            margin-right: 400px; /* 従業員用リンクとの間にスペースを追加 */
+            font-size: 14px;
+            color: #777;
+            margin-right: 400px;
         }
-
         .link-button {
-            font-size: 14px; /* フォントサイズを調整 */
-            color: #007BFF; /* リンクの色を設定 */
-            text-decoration: none; /* 下線を削除 */
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
         }
-
         .link-button:hover {
-            text-decoration: underline; /* ホバー時の下線追加 */
+            text-decoration: underline;
         }
-
-
-
-
     </style>
 </head>
 <body>
     <div id="app">
         <v-app>
             <header>
-            <v-app-bar>
-                <h1>😊おちゃらけ😊</h1>
-                <v-btn @click="navigate" class="login-btn">ログイン</v-btn>
-            </v-app-bar>
+                <v-app-bar>
+                    <h1>😊おちゃらけ😊</h1>
+                    <v-btn @click="navigate" class="login-btn">ログイン</v-btn>
+                </v-app-bar>
             </header>
 
             <v-main>
-                <v-carousel v-model="active" :interval="4000" cycle hide-delimiters height="400px">
+                <div class="message">
+                <h2>期間限定 季節のレシピ大公開😊💕</h2>
+                </div>
+                <v-carousel v-model="active" :interval="4000" cycle hide-delimiters>
                     <v-carousel-item
                         v-for="(image, i) in images"
                         :key="i"
@@ -104,17 +97,6 @@
                         </div>
                     </v-carousel-item>
                 </v-carousel>
-
-                <!-- クリック後に表示されるダイアログ -->
-                <!-- <v-dialog v-model="dialog" max-width="500">
-                    <v-card class="custom-card">
-                        <v-card-title class="headline">詳しいレシピはこちら↓</v-card-title>
-                        <v-card-actions>
-                            <v-btn color="primary" @click="navigate" class="bottom-login-btn">ログイン</v-btn>
-                            <v-btn @click="dialog = false">閉じる</v-btn>
-                        </v-card-actions>
-                    </v-card>                       
-                </v-dialog> -->
             </v-main>
             <v-footer>
                 <v-row class="footer-row">
@@ -134,10 +116,9 @@
         new Vue({
             el: '#app',
             vuetify: new Vuetify(),
-            data(){
+            data() {
                 return {
                     active: 0,
-                    dialog: false,  // ダイアログの表示/非表示を管理
                     images: [
                         {id: 0, img: 'images/image000.jpg', url: 'recipe_20.html'},
                         {id: 1, img: 'images/image001.jpg', url: 'recipe_21.html'},
@@ -152,9 +133,6 @@
                 navigateTo(url) {
                     window.location.href = url;
                 },
-                // openDialog() {
-                //     this.dialog = true;
-                // },
                 navigate() {
                     window.location.href = 'userlogin.html';
                 }
