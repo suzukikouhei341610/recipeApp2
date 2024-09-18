@@ -1,176 +1,275 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>チョコレートムース | お菓子メーカー</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f8f5; /* 全体の背景色 */
-      color: #333;
-    }
-
-    header {
-  background-color: #fddbb0; /* よりはっきりした肌色 */
-  padding: 20px;
-  text-align: left; /* テキストを左寄せにする */
-  font-size: 30px;
-  font-weight: bold;
-  color: #6d4c41; /* ダークブラウンの文字色 */
-  width: 100%; /* ヘッダーを横幅いっぱいに広げる */
-  margin: 0; /* マージンをリセット */
-  box-sizing: border-box; /* パディングを含めた幅の計算 */
-}
-
-
-
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      margin: 20px;
-    }
-
-    .recipe-photo {
-      width: 600px; /* 横幅を600pxに統一 */
-      height: 400px; /* 縦幅を400pxに統一 */
-      object-fit: cover; /* 画像の比率を保ちながら、枠に収まるように表示 */
-      margin-right: 20px; /* 右側のマージンを追加 */
-      border-radius: 10px; /* 角丸にする */
-    }
-
-    .recipe-info {
-      flex: 1;
-      max-width: 400px;
-      padding: 20px;
-
-      border-radius: 10px;
-    }
-
-    .recipe-info p {
-      font-size: 20px; /* 文字サイズを大きく */
-      margin: 10px 0;
-    }
-
-    .details {
-      display: flex;
-      justify-content: space-between; /* 材料と手順を均等にスペースを空けて配置 */
-      max-width: 900px; /* 中央に寄せるために最大幅を指定 */
-      margin: 0 auto; /* 中央に配置 */
-      margin-top: 20px;
-      gap: 60px; /* 材料と手順の間にスペースを追加 */
-    }
-
-    .ingredients {
-      width: 30%; /* 材料の幅を小さく設定 */
-      padding: 10px;
-    }
-
-    .steps {
-      width: 65%; /* 手順の幅を広く設定 */
-    }
-
-    .ingredients h2, .steps h2 {
-      font-size: 24px; /* タイトルの文字サイズを大きく */
-      color: #2e7d32; /* 深緑 */
-    }
-
-    .ingredients ul {
-      list-style-type: disc;
-      padding-left: 20px;
-    }
-
-    .steps ol {
-      padding-left: 0;
-      counter-reset: step-counter; /* ステップ番号のカウンターをリセット */
-    }
-
-    .steps ol ul {
-      position: relative;
-      font-size: 18px; /* 文字サイズを大きく */
-      margin-bottom: 10px;
-      padding-left: 50px; /* 番号と文字の間隔を広く */
-    }
-
-    .steps ol ul::before {
-      content: counter(step-counter); /* ステップ番号をカウンターから取得 */
-      counter-increment: step-counter; /* ステップ番号のカウントアップ */
-      position: absolute;
-      left: 0;
-      top: 0;
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      background-color: #2e7d32; /* 深緑 */
-      color: white;
-      font-weight: bold;
-      border-radius: 50%; /* 円形のボタン風に */
-    }
-
-    .ingredients, .steps {
-      margin-bottom: 20px; /* 材料と手順の間隔を追加 */
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 30px; /* 戻るボタンの上マージンを追加 */
-      padding: 10px 20px;
-      background-color: #2e7d32; /* 深緑 */
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    a:hover {
-      background-color: #1b5e20; /* ホバー時の色 */
-    }
-  </style>
+ 
 </head>
 <body>
-  <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
-
-  <h1 style="margin-bottom: 20px; text-align: center;">チョコレートムース</h1>
-
-  <div class="container">
-    <img class="recipe-photo" src="https://images.pexels.com/photos/17343142/pexels-photo-17343142.jpeg" alt="チョコレートムースの画像">
-
-    <div class="recipe-info">
-      <p><strong>カテゴリー:</strong> チョコ</p>
-      <p><strong>調理時間:</strong> 25分</p>
-      <p><strong>使用商品:</strong> おちゃらけチョコ</p>
-    </div>
+  <div id="app">
+    <v-app>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+ 
+      <div class="title-container">
+        <h1>チョコレートムース</h1>
+      </div>
+ 
+      <!-- <div class="container"> -->
+        <v-row class="outline">
+          <v-col cols="7" class="recipe-photo">
+            <img class="recipe-photo" src="https://images.pexels.com/photos/17343142/pexels-photo-17343142.jpeg" alt="チョコレートムースの画像">
+          </v-col>
+          <v-col cols="5">
+            <div class="recipe-info">
+             
+                <v-btn
+                v-if="!isFavorite"
+                color="amber accent-3"
+                @click="addToFavorite"
+                class="favorite-btn">
+                  <v-icon>mdi-star-outline</v-icon>
+                  お気に入りに追加
+                </v-btn>
+     
+                <v-btn
+                v-else
+                color="amber accent-3"
+                @click="deleteFromFavorite"
+                class="favorite-btn">
+                  <v-icon>mdi-star</v-icon>
+                  お気に入りから削除
+                </v-btn>
+             
+              <p><strong>カテゴリー:</strong> チョコ</p>
+              <p><strong>調理時間:</strong> 25分</p>
+              <p><strong>使用商品:</strong> おちゃらけチョコ</p>
+            </div>
+          </v-col>
+        </v-row>
+ 
+        <v-row class="details">
+          <v-col cols="5" class="ingredients">
+            <!-- <div class="details"> -->
+              <!-- <div class="ingredients"> -->
+                <h2>材料</h2>
+                <ul>
+                  <li>板チョコ 2枚</li>
+                  <li>水 30ml</li>
+                  <li>生クリーム</li>
+                  <li>オレンジピール（トッピング）</li>
+                </ul>
+              <!-- </div> -->
+            </v-col>
+         
+ 
+         
+            <v-col cols="7" class="steps">
+              <!-- <div class="steps"> -->
+                <h2>手順</h2>
+                <ol>
+                  <ul>板チョコを耐熱容器に入れ、水を加えて電子レンジで30秒加熱する。</ul>
+                  <ul>溶けたチョコをよく混ぜる。</ul>
+                  <ul>氷水にあてながら素早く混ぜる。</ul>
+                  <ul>もったりしてきたら容器に移し、冷蔵庫で固める。</ul>
+                </ol>
+              <!-- </div> -->
+            </v-col>
+          </v-row>
+      <!-- </div> -->
+ 
+        <!-- <v-container>
+          <v-icon
+          v-if="!isFavorite"
+          color="amber accent-3"
+          large
+          @click="addToFavorite">
+            mdi-star-outline
+          </v-icon>
+ 
+          <v-icon
+          v-else
+          color="amber accent-3"
+          @click="deleteFromFavorite">
+            mdi-star
+          </v-icon>
+        </v-container> -->
+ 
+        <v-col cols="12" class="btn-col">
+          <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+        </v-col>
+      </div>
+    </v-app>
   </div>
-
-  <div class="details">
-    <div class="ingredients">
-      <h2>材料</h2>
-      <ul>
-        <li>板チョコ 2枚</li>
-        <li>水 30ml</li>
-        <li>生クリーム</li>
-        <li>オレンジピール（トッピング）</li>
-      </ul>
-    </div>
-
-    <div class="steps">
-      <h2>手順</h2>
-      <ol>
-        <ul>板チョコを耐熱容器に入れ、水を加えて電子レンジで30秒加熱する。</ul>
-        <ul>溶けたチョコをよく混ぜる。</ul>
-        <ul>氷水にあてながら素早く混ぜる。</ul>
-        <ul>もったりしてきたら容器に移し、冷蔵庫で固める。</ul>
-      </ol>
-    </div>
-  </div>
-
-  <div style="text-align: center; margin-top: 30px;">
-    <a href="home.html">戻る</a>
-  </div>
-
-</body>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data() {
+          return {
+            isFavorite: false, // 初期状態はお気に入りでない
+            nextId: null
+          };
+        },
+ 
+        async mounted() {
+          await this.checkIfFavorite();
+        },
+ 
+        methods: {
+          // セッションのuser_nameからuser_idをとってくる
+          async getUserId() {
+            const user_name = sessionStorage.getItem('user_name');
+            if (user_name) {
+              try {
+                const loginResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT?user_name=${user_name}`);
+                const userIds = await loginResponse.json();
+                if (userIds.length === 0) {
+                  console.error('ユーザーが見つかりませんでした。');
+                  return null;
+                }
+                const user_id = userIds[0];
+                return user_id;
+              } catch (error) {
+                console.error('エラーが発生しました:', error);
+                return null;
+              }
+            } else {
+              console.error('セッションにuser_nameが保存されていません。');
+              return null;
+            }
+          },
+ 
+          async readNextFavoriteId() {
+            try {
+              const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEALLSELECT');
+              console.log('Response:', response);
+              console.log('Response data:', response.data);
+              console.log('response.data.List:', response.data.List);
+ 
+              if (response.data && response.data.List) {
+                const ids = response.data.List.map(favoriteid => Number(favoriteid.favorite_id));
+                this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
+                console.log('Next ID:', this.nextId);
+              } else {
+                console.error('Unexpected response format:', response.data);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          },
+ 
+          async addToFavorite() {
+            await this.readNextFavoriteId();
+            const favorite_id = Number(this.nextId);
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+ 
+            const favoritedata = {
+              favorite_id: favorite_id,
+              user_id: user_id,
+              recipe_id: recipe_id
+            }
+ 
+            console.log('User ID :', user_id); // デバッグ用ログ
+            console.log('Recipe ID from sessionStorage:', recipe_id); // デバッグ用ログ
+            console.log('Favorite ID :', favorite_id);
+ 
+            if (user_id && recipe_id) {
+              try {
+                const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEINSERT", favoritedata, {
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                });
+ 
+                if (response.status === 200) {
+                  console.log('お気に入りに追加しました！');
+                  this.isFavorite = true; // 状態を更新
+                } else {
+                  console.error('エラーが発生しました');
+                }
+              } catch (error) {
+                console.error("エラー:", error);
+              }
+            } else {
+              console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+            }
+          },
+ 
+          async deleteFromFavorite() {
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+           
+            console.log('User ID:', user_id); // ユーザーIDを表示
+            console.log('Recipe ID:', recipe_id); // レシピIDを表示
+ 
+            if (user_id && recipe_id) {
+              try {
+                const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEDELETE", {
+                  user_id: user_id,
+                  recipe_id: recipe_id
+                }, {
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                });
+ 
+                if (response.status === 200) {
+                  console.log('お気に入りが解除されました！');
+                  this.isFavorite = false; // 状態を更新
+                  alert('お気に入りが解除されました。');
+                } else {
+                  console.error('エラーが発生しました');
+                  alert('エラーが発生しました。');
+                }
+              } catch (error) {
+                console.error("エラー:", error);
+                alert('エラーが発生しました。');
+              }
+            } else {
+              console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+              alert('ユーザーIDまたはレシピIDが取得できませんでした。');
+            }
+          },
+ 
+          async checkIfFavorite() {
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+           
+            console.log('User ID:', user_id); // ユーザーIDを表示
+            console.log('Recipe ID:', recipe_id); // レシピIDを表示
+ 
+            if (user_id && recipe_id) {
+            try {
+              const response = await axios.get(`https://m3h-kouhei-2010.azurewebsites.net/api/CHECKIFFAVORITE?user_id=${user_id}&recipe_id=${recipe_id}`);
+              const isFavorite = response.data.isFavorite;  // APIレスポンスからisFavoriteを取得              
+             
+              // お気に入り状態に応じてボタンを切り替え
+              this.isFavorite = isFavorite;
+                    console.log('お気に入り状態:', this.isFavorite);
+                  } catch (error) {
+                    console.error('Error checking favorite status:', error);
+                  }
+                } else {
+                  console.error('ユーザーIDまたはレシピIDが取得できませんでした。');
+                }
+              },
+              navigate() {
+              window.location.href = 'home.html';
+            }
+            }
+      });
+    </script>
+  </body>
 </html>
+ 
