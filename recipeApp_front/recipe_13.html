@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>しっとりパンプキンケーキレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>しっとりパンプキンケーキ</h1>
+      <img src="https://images.pexels.com/photos/18973959/pexels-photo-18973959.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> ホットケーキミックス</p>
+      <p><strong>調理時間:</strong> 60分</p>
+      <p><strong>材料:</strong> ホットケーキミックス150g、かぼちゃ150g（皮なし）、牛乳大さじ3、卵1個、砂糖50g、サラダ油大さじ4、クリームチーズ60g、くるみ20g</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>かぼちゃを電子レンジ（600W）で約3分間加熱して熱いうちにつぶし、牛乳を混ぜてペースト状にする</li>
+        <li>ボールに卵を溶きほぐし、砂糖・白ごま油・ペースト状にしたかぼちゃを混ぜ、ホットケーキミックスを加える</li>
+        <li>生地がなめらかになったら、くるみ、クリームチーズを加える</li>
+        <li>20cmの鍋またはフライパンに生地を流し入れ、アルミ箔でふたをする</li>
+        <li>とろ火で30分間焼く</li>
+        <li>火を止め、アルミ箔をしたまま、あら熱が取れるまで蒸らしたら完成</li>
+
+            
+      </ol>
+      <v-container>
+        <v-btn
+          v-if="!isFavorite"
+          color="primary"
+          @click="addToFavorite"
+        >
+          お気に入りに追加
+        </v-btn>
+        <v-btn
+          v-else
+          color="green"
+          @click="deleteFromFavorite"
+        >
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+ 
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    </script>
+  </body>
+</html>
