@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>シュークリームタワーレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>シュークリームタワー</h1>
+      <img src="https://i.pinimg.com/564x/41/2e/0a/412e0a26e689262c712dcb33dc2e9139.jpg" class="recipe_photo"  alt="Image">
+      <p><strong>カテゴリー:</strong> ホットケーキミックス</p>
+      <p><strong>調理時間:</strong> 90分</p>
+      <p><strong>材料:</strong> ホットケーキミックス150g、牛乳240g、バター90g、卵3個
+      【デコレーション】ホイップクリームやカスタードクリーム適量、お好みのシロップ、粉砂糖適量</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>天板にクッキングシートを敷き、オーブンは200℃に予熱する</li>
+        <li>牛乳・バターを耐熱ボールに入れ、電子レンジ500Wで約1分加熱する</li>
+        <li>ホットケーキミックスを加えてよく混ぜ、電子レンジ500Wで約2分半加熱したあと更によく混ぜる</li>
+        <li>さらに電子レンジ500Wで約1分ずつ加熱し、全体がひとかたまりになるまで混ぜ合わせて、加熱を繰り返す</li>
+        <li>3個の卵を割りほぐし、溶き卵を少しずつ加え、ゴムベラで混ぜる <br>
+          ※生地の固さの目安:ゴムベラで生地を持ち上げて少し落とした際に、ゴムベラ側に残った生地が逆三角の形で残る程度</li>
+        <li>シュー生地をスプーンでクッキングシートを敷いた天板の上に落とし、間隔をあけて並べる</li>
+        <li>並べた生地に、たっぷり霧吹きで水分を含ませる</li>
+        <li>予熱しておいた200℃のオーブンで約10分、170℃に下げてさらに約20分焼く</li>
+        <li>シュー生地の底に穴をあけ、中にホイップクリームやカスタードクリームを入れる</li>
+        <li>お好みのシロップをシューに塗り、タワーのように積み上げる</li>
+        <li>クリームや粉砂糖などでデコレーションして完成</li>
+            
+      </ol>
+      <v-container>
+        <v-btn color="primary" @click="addToFavorite">
+          お気に入りに追加
+        </v-btn>
+      </v-container>
+      <v-container>
+        <v-btn color="primary" @click="deleteFromFavorite">
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+ 
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    </script>
+  </body>
+</html>

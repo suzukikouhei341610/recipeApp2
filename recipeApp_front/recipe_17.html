@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>はちみつ大学芋レシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>はちみつ大学芋</h1>
+      <img src="https://i.pinimg.com/564x/54/b0/66/54b066ac31d2e4b693b875cf8a842dfd.jpg" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> はちみつ</p>
+      <p><strong>調理時間:</strong> 20分</p>
+      <p><strong>材料:</strong> さつまいも1本（中/250~300g）、はちみつ45㏄、醤油7.5㏄、みりん5㏄、揚げ油適量、黒ごま少々</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>さつまいもを小さめの乱切りにし、水にさらす</li>
+        <li>揚げ油を熱し、水気をしっかり拭き取ったさつまいもを低温からゆっくりと揚げ始める</li>
+        <li>徐々に火を強めながらしっかり中まで火を通し、表面がうっすら色づきカリッとしたら油を切る</li>
+        <li>フライパンにはちみつ・醤油・みりんを加えて火にかけ、少し煮詰める。</li>
+        <li>油を切ったさつまいもを加えてたれを全体によく絡め和える。</li>
+        <li>仕上げに黒ごまを少々ふる。</li>
+      </ol>
+      <v-container>
+        <v-btn
+          v-if="!isFavorite"
+          color="primary"
+          @click="addToFavorite"
+        >
+          お気に入りに追加
+        </v-btn>
+        <v-btn
+          v-else
+          color="green"
+          @click="deleteFromFavorite"
+        >
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+ 
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    
+    </script>
+  </body>
+</html>
