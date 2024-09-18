@@ -162,6 +162,9 @@
                 
                 const recipeIdsParam = recipeIds.join(",");
                 const favoriteRecipes = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
+                //const favoriteRecipes = await fetch(`http://localhost:7286/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
+                const favoriteRecipe = await favoriteRecipes.json();
+                console.log(favoriteRecipe);
             } else {
                 console.error('ユーザーIDが取得できませんでした。');
             }
