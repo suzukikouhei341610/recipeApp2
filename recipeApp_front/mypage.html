@@ -4,7 +4,7 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="recipe_style.css"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <meta charset="UTF-8">
   <title>recipe app mypage</title>
@@ -155,13 +155,13 @@
                 this.dataList = favorites.List;
                 console.log(favorites.List);
                 console.log(typeof favorites.List);
-                const recipeIds = Object.values(favorites.List).map(favorite => favorite.recipe_id);
-                console.log(recipeIds);
+                const recipe_ids = Object.values(favorites.List).map(favorite => favorite.recipe_id);
+                console.log(recipe_ids);
 
                 //recipe_id
                 
-                const recipeIdsParam = recipeIds.join(",");
-                const favoriteRecipes = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
+                const recipe_idsParam = recipe_ids.join(",");
+                const favoriteRecipes = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN?recipe_ids=${recipe_idsParam}`)
                 //const favoriteRecipes = await fetch(`http://localhost:7286/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
                 const favoriteRecipe = await favoriteRecipes.json();
                 console.log(favoriteRecipe);
