@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta charset="UTF-8">
+    <title>UserRegist</title>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-main>
+                <v-container>
+                    <v-form ref="form" v-model="valid">
+                        <v-row>
+                            <!-- <v-col cols="12">
+                                <v-text-field
+                                    v-model="nextId"
+                                    label="ユーザーID"
+                                    type="number"
+                                    required
+                                    readonly
+                                    class="id-text-field"
+                                ></v-text-field>
+                            </v-col> -->
+                            <v-col cols="12" md="6">
+                                <v-text-field
+                                    v-model="user_name"
+                                    label="ユーザー名（英数字）"
+                                    :rules="userNameRules"
+                                    required
+                                    @input="checkUsername"
+                                ></v-text-field>
+                                <v-alert v-if="usernameError" type="error">{{ usernameError }}</v-alert>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="6">
+                                <v-text-field
+                                    v-model="password"
+                                    :type="showPassword ? 'text' : 'password'"
+                                    label="パスワード　8文字以上で英大小文字・数字を1つ以上含めてください"
+                                    :rules="passwordRules"
+                                    required
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="6">
+                                <v-checkbox
+                                    v-model="showPassword"
+                                    label="パスワードを表示する"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="6">
+                                <v-text-field
+                                    v-model="confirmPassword"
+                                    :type="showConfirmPassword ? 'text' : 'password'"
+                                    label="パスワード（確認用）"
+                                    :rules="confirmPasswordRules"
+                                    required
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="6">
+                                <v-checkbox
+                                    v-model="showConfirmPassword"
+                                    label="パスワードを表示する"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
+                        <v-btn :disabled="isButtonDisabled" color="primary" @click="addData1">
+                            登録
+                        </v-btn>
+                        <!-- <v-btn @click="checkFormValidity"  @mouseover="debugButtonState">
+                            バリデーション確認
+                        </v-btn> -->
+                    </v-form>
+                </v-container>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data() {
+                return {
+                    valid: false,
+                    nextId: null,
+                    user_name: '',
+                    password: '',
+                    confirmPassword: '',
+                    showPassword: false,
+                    showConfirmPassword: false,
+                    usernameError: '',
+                    userNameRules: [
+                        v => !!v || 'ユーザー名は必須です',
+                        v => /^[a-zA-Z0-9]+$/.test(v) || 'ユーザー名は英数字のみを使用してください'
+                    ],
+                    passwordRules: [
+                        v => !!v || 'パスワードは必須です',
+                        v => v.length >= 8 || 'パスワードは8文字以上で入力してください',
+                        v => /[A-Z]/.test(v) || 'パスワードには大文字を1つ以上含めてください',
+                        v => /[0-9]/.test(v) || 'パスワードには数字を1つ以上含めてください'
+                    ],
+                    confirmPasswordRules: [
+                        v => !!v || '確認用パスワードは必須です',
+                        v => v === this.password || 'パスワードが一致しません'
+                    ]
+                };
+            },
+            mounted() {
+                this.readNextUserId();
+            },
+            computed: {
+                isButtonDisabled() {
+                    return !this.valid || this.usernameError !== '';
+                }
+            },
+            methods: {
+                async readNextUserId() {
+                    try {
+                        const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/USERSELECT');
+                        console.log('Response:', response);
+                        console.log('Response data:', response.data);
+
+                        if (response.data && response.data.List) {
+                            console.log('List:', response.data.List);
+                            const ids = response.data.List.map(userid => Number(userid.user_id));
+                            this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
+                            console.log('Next ID:', this.nextId);
+                        } else {
+                            console.error('Unexpected response format:', response.data);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                },
+                async checkUsername() {
+                    console.log('checkUsername 関数が実行されました');
+                    if (this.user_name.length > 0) {
+                        try {
+                            const response = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/USERCHECK?user_name=${encodeURIComponent(this.user_name)}`);
+                            const data = await response.json();
+                            if (data.exists) {
+                                this.usernameError = 'このユーザー名は既に使用されています';
+                            } else {
+                                this.usernameError = '';
+                            }
+                        } catch (error) {
+                            console.error('APIエラー:', error);
+                        }
+                    } else {
+                        this.usernameError = '';
+                    }
+                },
+                async addData1() {
+                    console.log("addData1メソッドが呼び出されました");
+
+                    // 手動でフォームバリデーションをトリガー
+                    const isValid = this.$refs.form.validate();
+                    console.log("フォームバリデーション結果:", isValid);
+
+                    // バリデーションが通っているか確認
+                    if (!isValid || this.usernameError) {
+                        console.log('フォームのバリデーションに失敗しました');
+                        return;
+                    }
+
+                    // nextIdが数値かどうかを確認
+                    if (!this.nextId || isNaN(Number(this.nextId))) {
+                        console.log("IDに数値が入力されていません");
+                        return;
+                    }
+
+                    const param = {
+                        user_id: Number(this.nextId),
+                        user_name: this.user_name,
+                        user_password: this.password,
+                    };
+
+                    try {
+                        const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERINSERT', param);
+                        console.log("データ追加成功:", response.data);
+                        window.location.href = 'userlogin.html';
+                    } catch (error) {
+                        if (error.response) {
+                            // サーバーが応答を返したが、ステータスコードが 2xx 範囲外
+                            console.error('サーバーエラー:', error.response.status);
+                            console.error('エラーメッセージ:', error.response.data);
+                        } else if (error.request) {
+                            // リクエストが送信されたが、応答がない
+                            console.error('リクエストエラー:', error.request);
+                        } else {
+                            // その他のエラー
+                            console.error('エラー:', error.message);
+                        }
+                        console.error('エラー詳細:', error.config);
+                    }
+                },
+                // async checkFormValidity() {
+                //     // 手動でフォームバリデーションをトリガー
+                //     const isValid = this.$refs.form.validate();
+                //     console.log("フォーム全体のバリデーション結果:", isValid);
+                //     console.log("現在のvalidの状態:", this.valid);
+                //     console.log("現在のusernameError:", this.usernameError);
+                // },
+
+                // debugButtonState() {
+                //     console.log("ボタンの有効/無効状態:", !this.valid || this.usernameError);
+                // }
+            }
+        });
+    </script>    
+</body>
+</html>

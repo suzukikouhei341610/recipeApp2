@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta charset="UTF-8">
+    <title>Toppage</title>
+    <style>
+        .v-app-bar {
+            position: fixed; /* ヘッダーを画面上部に固定 */
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* 他の要素より上に表示されるようにする */
+        }
+        .bar {
+            background-color: white !important;
+        }
+        .v-app-bar h1 {
+            margin: 0;
+            font-weight: normal;
+        }
+        .login-btn {  
+            color: #777 !important;
+            background-color: #c6ebc5 !important;
+            position: absolute;
+            right: 16px;
+        }
+        .v-main {
+            padding-top: 64px; /* ヘッダーの高さ分だけ余白を追加 */
+        }
+        .top-image {
+            padding-top: 64px;
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        .message h2 {
+            font-weight: normal;
+            text-align: center;
+        }
+        .highlight {
+            display: inline-block;
+            background: linear-gradient(transparent 60%, #c6ebc5 60%);
+            margin-bottom: 5px;
+        }
+        .highlighted {
+            background: linear-gradient(transparent 60%, #c6ebc5 60%);
+            display: inline-block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            line-height: 1.5;  /* 行の高さを調整して縦幅を小さくする */
+        }
+        .text-subtitle-1 {
+            font-size: 14x;
+        }
+        .v-carousel {
+            padding-top: 29px;
+            width: 50vw;
+            position: relative;
+        }
+        .v-carousel-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .keyword {
+            padding-top: 75px;
+        }
+        .keyword h2 {
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+        .keybtn {
+            background-color: #f5f5f5;
+            color: #555;
+            font-size: 14px;
+            margin: 1px;
+            border-radius: 8px;
+            text-transform: none;
+        }
+
+        /* .keybtn:hover {
+            background-color: #c6ebc5;
+        } */
+
+        footer {
+            background-color: #c6ebc5 !important;
+        }
+        .footer-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
+        }
+        .copyright-text {
+            font-size: 14px;
+            color: #777;
+            margin-right: 400px;
+        }
+        .link-button {
+            font-size: 14px;
+            color: #777 !important;
+            text-decoration: none;
+        }
+        .link-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <header>
+                <v-app-bar class="bar">
+                    <h1>😊おちゃらけ😊</h1>
+                    <v-btn @click="navigate" class="login-btn">ログイン</v-btn>
+                </v-app-bar>
+            </header>
+
+            <v-main>
+                <div class="message">
+                    <img src="images/sweets.jpg" alt="Sweets Image" class="top-image" @click="scrollToCarousel">
+                    <h2>
+                        <span class="highlight">😊期間限定 季節のレシピ大公開😊</span> <br>
+                        お手軽に作れるものからおしゃれなものまでたくさんあります💕 <br>
+                        ぜひお試しください🌟
+                    </h2>
+                </div>
+                <v-container>
+                    <v-row>
+                        <!-- カルーセル部分 -->
+                        <v-col cols="8">
+                            <v-carousel v-model="active" :interval="4000" cycle hide-delimiters id="carousel">
+                                <v-carousel-item v-for="(card, i) in cards" :key="i">
+                                    <v-card :loading="loading" class="mx-auto my-12" max-width="374" @click="navigateTo(card.url)">
+                                        <v-img :src="card.img" height="250"></v-img>
+                                        <v-card-title>{{ card.title }}</v-card-title>
+                                        <v-card-text>
+                                            <div class="my-4 text-subtitle-1">
+                                                <span class="highlighted">調理時間</span> {{ card.category }}
+                                            </div>
+                                            <div class="text-subtitle-1">
+                                                <span class="highlighted">キーワード</span> {{ card.description }}
+                                            </div>
+                                        </v-card-text>
+                                        <v-divider class="mx-4"></v-divider>
+                                    </v-card>
+                                </v-carousel-item>
+                            </v-carousel>
+                        </v-col>
+            
+                        <!-- 人気のキーワード部分 -->
+                        <v-col cols="4">
+                            <div class="keyword">
+                                <h2 class="highlight">人気のキーワード</h2>
+                                <v-row>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>カフェ気分</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>パーティー</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>親子で作る</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>時短レシピ</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>おしゃれ</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>チョコレート</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>キャラメル</v-btn>
+                                    </v-col>
+                                    <v-col cols="auto">
+                                        <v-btn class="keybtn" outlined>はちみつ</v-btn>
+                                    </v-col>
+                                </v-row>
+                            </div>
+                        </v-col>
+                        
+                    </v-row>
+                    <div class="recomend">
+                        <p>マカロン</p>
+                    </div>
+                </v-container>
+            </v-main>
+            <v-footer>
+                <v-row class="footer-row">
+                    <v-col class="text-right" cols="12">
+                        <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                        <a href="employeelogin.html" class="link-button">従業員用</a>
+                    </v-col>
+                </v-row>
+            </v-footer>                                           
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data() {
+                return {
+                    active: 0,
+                    loading: false,
+                    cards: [
+                        {
+                            img: 'images/image000.jpg',
+                            title: 'ガトーショコラ',
+                            // rating: 4.5,
+                            // reviews: 413,
+                            category: '　　60分',
+                            description: '　パーティー お祝い クリスマス',
+                            url: 'recipe_20.html'
+                        },
+                        {
+                            img: 'images/image001.jpg',
+                            title: 'スモア風 マシュマロサンドクッキー',
+                            // rating: 4.0,
+                            // reviews: 120,
+                            category: '　　5分',
+                            description: '　親子で作る 時短レシピ',
+                            url: 'recipe_21.html'
+                        },
+                        {
+                            img: 'images/image002.jpg',
+                            title: '丸ごと焼きりんご',
+                            // rating: 4.8,
+                            // reviews: 250,
+                            category: '　　70分',
+                            description: '　おしゃれ',
+                            url: 'recipe_22.html'
+                        },
+                        {
+                            img: 'images/image003.jpg',
+                            title: 'キャラメルポップコーン',
+                            // rating: 4.3,
+                            // reviews: 340,
+                            category: '　　20分',
+                            description: '　パーティー ハロウィン 時短レシピ',
+                            url: 'recipe_23.html'
+                        },
+                        {
+                            img: 'images/image004.jpg',
+                            title: 'メープルチュロス',
+                            // rating: 4.6,
+                            // reviews: 290,
+                            category: '　　20分',
+                            description: '　親子で作る 時短レシピ',
+                            url: 'recipe_24.html'
+                        },
+                        {
+                            img: 'images/image005.jpg',
+                            title: 'カステラ',
+                            // rating: 4.9,
+                            // reviews: 500,
+                            category: '　　75分',
+                            description: '　パーティー',
+                            url: 'recipe_25.html'
+                        }
+                    ]
+                }
+            },
+            methods: {
+                navigateTo(url) {
+                    window.location.href = url;
+                },
+                navigate() {
+                    window.location.href = 'userlogin.html';
+                },
+                scrollToCarousel() {
+                    const carouselElement = document.getElementById('carousel');
+                    if (carouselElement) {
+                        carouselElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
