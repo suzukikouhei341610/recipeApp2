@@ -58,6 +58,7 @@ h1 {
   max-width: 100%;
 }
  
+ 
 .recipe-info {
   flex: 1;
   /* max-width: 400px; */
@@ -169,3 +170,39 @@ a:hover {
 .btn-col{
   text-align: center !important;
 }
+ 
+/* 余白を削除するためのスタイル調整 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+#app, .v-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+ 
+.v-app {
+  margin: 0 !important;  /* Vuetifyのデフォルトの余白を無効化 */
+  padding: 0 !important;
+}
+ 
+/* .containerや.rowの余白も確認して、余白を最小限に */
+.container, .v-row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+ 
+.btn-col {
+  margin-bottom: 0 !important;  /* 戻るボタンの余白を調整 */
+}
+ 
+/* 必要な最小限の余白調整 */
+footer {
+  margin-bottom: 0 !important;
+}
+ 
+ 
