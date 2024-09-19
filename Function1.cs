@@ -676,10 +676,12 @@ namespace FunctionAPIApp
             try
             {
                 // クエリパラメータからuser_idとrecipe_idを取得
-                int userId = int.Parse(req.Query["user_id"]);
-                int recipeId = int.Parse(req.Query["recipe_id"]);
+                if (!int.TryParse(req.Query["user_id"], out int userId) || !int.TryParse(req.Query["recipe_id"], out int recipeId))
+                {
+                    return new BadRequestObjectResult("無効な user_id または recipe_id が指定されました。");
+                }
 
-                if (userId <= 0 || recipeId <= 0)
+                if (userId <= 0 || recipeId < 0)
                 {
                     return new BadRequestObjectResult("無効な user_id または recipe_id が指定されました。");
                 }
@@ -710,22 +712,21 @@ namespace FunctionAPIApp
 
                         bool isFavorite = count > 0;
 
-                        responseMessage = JsonConvert.SerializeObject(new { isFavorite });
+                        // オブジェクト形式で返す
+                        return new OkObjectResult(new { isFavorite });
                     }
                 }
             }
             catch (SqlException e)
             {
-                log.LogError(e.ToString());
-                responseMessage = "データベース接続エラーが発生しました。";
+                log.LogError($"SQLエラー: {e.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             catch (Exception e)
             {
-                log.LogError(e.ToString());
-                responseMessage = "予期しないエラーが発生しました。";
+                log.LogError($"エラー: {e.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
-            return new OkObjectResult(responseMessage);
         }
 
 
