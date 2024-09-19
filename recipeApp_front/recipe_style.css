@@ -48,14 +48,14 @@ h1 {
 }
 
 .recipe-photo {
-  width: 600px !important;
-  height: 400px !important;
+  max-width: 600px !important;
+  max-height: 400px !important;
   object-fit: cover; /* 画像の比率を保ちながら、枠に収まるように表示 */
   padding: 20px 20px;
   border-radius: 10px !important; /* 角丸にする */
   width: 100%;
   height: auto;
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 
 .recipe-info {

@@ -38,6 +38,10 @@
         padding: 16px;
     }
 
+    .footer-col{
+        text-align: center;
+    }
+
     .copyright-text {
         font-size: 14px;
         color: #777;

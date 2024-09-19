@@ -1,40 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
-  <title>シュークリームタワーレシピ詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>シュークリームタワー | お菓子メーカー</title>
 </head>
+
 <body>
   <div id="app">
     <v-app>
-      <h1>シュークリームタワー</h1>
-      <img src="https://i.pinimg.com/564x/41/2e/0a/412e0a26e689262c712dcb33dc2e9139.jpg" class="recipe_photo"  alt="Image">
-      <p><strong>カテゴリー:</strong> ホットケーキミックス</p>
-      <p><strong>調理時間:</strong> 90分</p>
-      <p><strong>材料:</strong> ホットケーキミックス150g、牛乳240g、バター90g、卵3個
-      【デコレーション】ホイップクリームやカスタードクリーム適量、お好みのシロップ、粉砂糖適量</p>
-      <p><strong>手順:</strong></p>
-      <ol>
-        <li>天板にクッキングシートを敷き、オーブンは200℃に予熱する</li>
-        <li>牛乳・バターを耐熱ボールに入れ、電子レンジ500Wで約1分加熱する</li>
-        <li>ホットケーキミックスを加えてよく混ぜ、電子レンジ500Wで約2分半加熱したあと更によく混ぜる</li>
-        <li>さらに電子レンジ500Wで約1分ずつ加熱し、全体がひとかたまりになるまで混ぜ合わせて、加熱を繰り返す</li>
-        <li>3個の卵を割りほぐし、溶き卵を少しずつ加え、ゴムベラで混ぜる <br>
-          ※生地の固さの目安:ゴムベラで生地を持ち上げて少し落とした際に、ゴムベラ側に残った生地が逆三角の形で残る程度</li>
-        <li>シュー生地をスプーンでクッキングシートを敷いた天板の上に落とし、間隔をあけて並べる</li>
-        <li>並べた生地に、たっぷり霧吹きで水分を含ませる</li>
-        <li>予熱しておいた200℃のオーブンで約10分、170℃に下げてさらに約20分焼く</li>
-        <li>シュー生地の底に穴をあけ、中にホイップクリームやカスタードクリームを入れる</li>
-        <li>お好みのシロップをシューに塗り、タワーのように積み上げる</li>
-        <li>クリームや粉砂糖などでデコレーションして完成</li>
-            
-      </ol>
-      <v-container>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>シュークリームタワー</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img src="https://i.pinimg.com/564x/41/2e/0a/412e0a26e689262c712dcb33dc2e9139.jpg" class="recipe-photo"  alt="シュークリームタワーの画像">
+        </v-col>
+
+        <v-col cols="5">
+          <div class="recipe-info">
+           
+              <v-btn
+              v-if="!isFavorite"
+              color="amber accent-3"
+              @click="addToFavorite"
+              class="favorite-btn">
+                <v-icon>mdi-star-outline</v-icon>
+                お気に入りに追加
+              </v-btn>
+   
+              <v-btn
+              v-else
+              color="amber accent-3"
+              @click="deleteFromFavorite"
+              class="favorite-btn">
+                <v-icon>mdi-star</v-icon>
+                お気に入りから削除
+              </v-btn>
+
+            <p><strong>カテゴリー:</strong> ホットケーキミックス</p>
+            <p><strong>調理時間:</strong> 90分</p>
+            <p><strong>使用商品:</strong> おちゃらけホットケーキミックス</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料:</h2>
+          <ul>
+            <li>ホットケーキミックス150g</li>
+            <li>牛乳240g</li>
+            <li>バター90g</li>
+            <li>卵3個</li>
+            <li>【デコレーション】<br>ホイップクリームやカスタードクリーム適量、お好みのシロップ、粉砂糖適量</li>
+          </ul>
+        </v-col>
+      
+        <v-col cols="7" class="steps">
+          <h2>手順:</h2>
+          <ol>
+            <ul>天板にクッキングシートを敷き、オーブンは200℃に予熱する。</ul>
+            <ul>牛乳・バターを耐熱ボールに入れ、電子レンジ500Wで約1分加熱する。</ul>
+            <ul>ホットケーキミックスを加えてよく混ぜ、電子レンジ500Wで約2分半加熱したあと更によく混ぜる。</ul>
+            <ul>さらに電子レンジ500Wで約1分ずつ加熱し、全体がひとかたまりになるまで混ぜ合わせて、加熱を繰り返す。</ul>
+            <ul>3個の卵を割りほぐし、溶き卵を少しずつ加え、ゴムベラで混ぜる。<br>
+              ※生地の固さの目安:ゴムベラで生地を持ち上げて少し落とした際に、<br>　　　　　　　　　 ゴムベラ側に残った生地が逆三角の形で残る程度</ul>
+            <ul>シュー生地をスプーンでクッキングシートを敷いた天板の上に落とし、間隔をあけて並べる。</ul>
+            <ul>並べた生地に、たっぷり霧吹きで水分を含ませる。</ul>
+            <ul>予熱しておいた200℃のオーブンで約10分、170℃に下げてさらに約20分焼く。</ul>
+            <ul>シュー生地の底に穴をあけ、中にホイップクリームやカスタードクリームを入れる。</ul>
+            <ul>お好みのシロップをシューに塗り、タワーのように積み上げる。</ul>
+            <ul>クリームや粉砂糖などでデコレーションして完成。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+      <!-- <v-container>
         <v-btn color="primary" @click="addToFavorite">
           お気に入りに追加
         </v-btn>
@@ -43,9 +91,11 @@
         <v-btn color="primary" @click="deleteFromFavorite">
           お気に入りから削除
         </v-btn>
-      </v-container>
+      </v-container> -->
  
-      <a href="home.html">戻る</a>
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
     </v-app>
   </div>
  
@@ -54,6 +104,164 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
  
   <script>
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data() {
+          return {
+            isFavorite: false, // 初期状態はお気に入りでない
+            nextId: null
+          };
+        },
+ 
+        async mounted() {
+          await this.checkIfFavorite();
+        },
+ 
+        methods: {
+          // セッションのuser_nameからuser_idをとってくる
+          async getUserId() {
+            const user_name = sessionStorage.getItem('user_name');
+            if (user_name) {
+              try {
+                const loginResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT?user_name=${user_name}`);
+                const userIds = await loginResponse.json();
+                if (userIds.length === 0) {
+                  console.error('ユーザーが見つかりませんでした。');
+                  return null;
+                }
+                const user_id = userIds[0];
+                return user_id;
+              } catch (error) {
+                console.error('エラーが発生しました:', error);
+                return null;
+              }
+            } else {
+              console.error('セッションにuser_nameが保存されていません。');
+              return null;
+            }
+          },
+ 
+          async readNextFavoriteId() {
+            try {
+              const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEALLSELECT');
+              console.log('Response:', response);
+              console.log('Response data:', response.data);
+              console.log('response.data.List:', response.data.List);
+ 
+              if (response.data && response.data.List) {
+                const ids = response.data.List.map(favoriteid => Number(favoriteid.favorite_id));
+                this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
+                console.log('Next ID:', this.nextId);
+              } else {
+                console.error('Unexpected response format:', response.data);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          },
+ 
+          async addToFavorite() {
+            await this.readNextFavoriteId();
+            const favorite_id = Number(this.nextId);
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+ 
+            const favoritedata = {
+              favorite_id: favorite_id,
+              user_id: user_id,
+              recipe_id: recipe_id
+            }
+ 
+            console.log('User ID :', user_id); // デバッグ用ログ
+            console.log('Recipe ID from sessionStorage:', recipe_id); // デバッグ用ログ
+            console.log('Favorite ID :', favorite_id);
+ 
+            if (user_id && recipe_id) {
+              try {
+                const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEINSERT", favoritedata, {
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                });
+ 
+                if (response.status === 200) {
+                  console.log('お気に入りに追加しました！');
+                  this.isFavorite = true; // 状態を更新
+                } else {
+                  console.error('エラーが発生しました');
+                }
+              } catch (error) {
+                console.error("エラー:", error);
+              }
+            } else {
+              console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+            }
+          },
+ 
+          async deleteFromFavorite() {
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+           
+            console.log('User ID:', user_id); // ユーザーIDを表示
+            console.log('Recipe ID:', recipe_id); // レシピIDを表示
+ 
+            if (user_id && recipe_id) {
+              try {
+                const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEDELETE", {
+                  user_id: user_id,
+                  recipe_id: recipe_id
+                }, {
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                });
+ 
+                if (response.status === 200) {
+                  console.log('お気に入りが解除されました！');
+                  this.isFavorite = false; // 状態を更新
+                  alert('お気に入りが解除されました。');
+                } else {
+                  console.error('エラーが発生しました');
+                  alert('エラーが発生しました。');
+                }
+              } catch (error) {
+                console.error("エラー:", error);
+                alert('エラーが発生しました。');
+              }
+            } else {
+              console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+              alert('ユーザーIDまたはレシピIDが取得できませんでした。');
+            }
+          },
+ 
+          async checkIfFavorite() {
+            const user_id = await this.getUserId();
+            const recipe_id = sessionStorage.getItem("recipe_id");
+           
+            console.log('User ID:', user_id); // ユーザーIDを表示
+            console.log('Recipe ID:', recipe_id); // レシピIDを表示
+ 
+            if (user_id && recipe_id) {
+            try {
+              const response = await axios.get(`https://m3h-kouhei-2010.azurewebsites.net/api/CHECKIFFAVORITE?user_id=${user_id}&recipe_id=${recipe_id}`);
+              const isFavorite = response.data.isFavorite;  // APIレスポンスからisFavoriteを取得              
+             
+              // お気に入り状態に応じてボタンを切り替え
+              this.isFavorite = isFavorite;
+                    console.log('お気に入り状態:', this.isFavorite);
+                  } catch (error) {
+                    console.error('Error checking favorite status:', error);
+                  }
+                } else {
+                  console.error('ユーザーIDまたはレシピIDが取得できませんでした。');
+                }
+              },
+              navigate() {
+              window.location.href = 'home.html';
+            }
+            }
+      });
     </script>
   </body>
 </html>

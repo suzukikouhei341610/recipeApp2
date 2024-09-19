@@ -1,28 +1,226 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
-  <title>レシピ詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トリュフチョコレート | お菓子メーカー</title>
 </head>
 <body>
-  <h1>トリュフチョコレート</h1>
-  <img class="recipe_photo" src="https://plus.unsplash.com/premium_photo-1700072294901-bd776f350909?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image">
-  <p><strong>カテゴリー:</strong>チョコ、はちみつ</p>
-  <p><strong>調理時間:</strong> 10分</p>
-  <p><strong>材料:</strong>
-    ミルクチョコレート50g(板チョコ1枚)、ココアパウダー30g、生おから80g、きなこ30g、はちみつ15ml <br>
-    ☆仕上げ用パウダー…ココアパウダー10g、純ココア10g
-    </p>
-  <p><strong>手順:</strong></p>
-  <ol>
-    <li>ミルクチョコレートをきざむ。</li>
-    <li>電子レンジ対応ボウルに、1とココアパウダー、生おから、きなこを入れ、ラップをかけずレンジ500Wで1分30秒加熱する。</li>
-    <li>2を混ぜ、ひと固まりの生地にする。</li>
-    <li>あら熱がとれたら、はちみつを加えて混ぜる。</li>
-    <li>4を15等分にして1個ずつ丸める。</li>
-    <li>仕上げ用パウダーの材料をまぜあわせ、5にまぶして出来上がり。</li>
-  </ol>
-  <a href="home.html">戻る</a>
+  <div id="app">
+    <v-app>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>トリュフチョコレート</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img class="recipe-photo" src="https://plus.unsplash.com/premium_photo-1700072294901-bd776f350909?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="トリュフチョコレートの画像">
+        </v-col>
+        <v-col cols="5">
+          <div class="recipe-info">
+            <v-btn
+              v-if="!isFavorite"
+              color="amber accent-3"
+              @click="addToFavorite"
+              class="favorite-btn">
+              <v-icon>mdi-star-outline</v-icon>
+              お気に入りに追加
+            </v-btn>
+     
+            <v-btn
+              v-else
+              color="amber accent-3"
+              @click="deleteFromFavorite"
+              class="favorite-btn">
+              <v-icon>mdi-star</v-icon>
+              お気に入りから削除
+            </v-btn>
+            <p><strong>カテゴリー:</strong> チョコ、はちみつ</p>
+            <p><strong>調理時間:</strong> 10分</p>
+            <p><strong>使用商品:</strong> おちゃらけチョコ（ミルク）、おちゃらけはちみつ</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料</h2>
+          <ul>
+            <li>ミルクチョコレート50g(板チョコ1枚)</li>
+            <li>ココアパウダー30g</li>
+            <li>生おから80g</li>
+            <li>きなこ30g</li>
+            <li>はちみつ15ml</li>
+          </ul>
+          <p><strong>☆仕上げ用パウダー:</strong> ココアパウダー10g、純ココア10g</p>
+        </v-col>
+        
+        <v-col cols="7" class="steps">
+          <h2>手順</h2>
+          <ol>
+            <ul>ミルクチョコレートをきざむ。</ul>
+            <ul>電子レンジ対応ボウルに、1とココアパウダー、生おから、きなこを入れ、ラップをかけずレンジ500Wで1分30秒加熱する。</ul>
+            <ul>2を混ぜ、ひと固まりの生地にする。</ul>
+            <ul>あら熱がとれたら、はちみつを加えて混ぜる。</ul>
+            <ul>4を15等分にして1個ずつ丸める。</ul>
+            <ul>仕上げ用パウダーの材料をまぜあわせ、5にまぶして出来上がり。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          isFavorite: false,
+          nextId: null
+        };
+      },
+      async mounted() {
+        await this.checkIfFavorite();
+      },
+      methods: {
+        async getUserId() {
+          const user_name = sessionStorage.getItem('user_name');
+          if (user_name) {
+            try {
+              const loginResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT?user_name=${user_name}`);
+              const userIds = await loginResponse.json();
+              if (userIds.length === 0) {
+                console.error('ユーザーが見つかりませんでした。');
+                return null;
+              }
+              const user_id = userIds[0];
+              return user_id;
+            } catch (error) {
+              console.error('エラーが発生しました:', error);
+              return null;
+            }
+          } else {
+            console.error('セッションにuser_nameが保存されていません。');
+            return null;
+          }
+        },
+
+        async readNextFavoriteId() {
+          try {
+            const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEALLSELECT');
+            if (response.data && response.data.List) {
+              const ids = response.data.List.map(favoriteid => Number(favoriteid.favorite_id));
+              this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
+            } else {
+              console.error('Unexpected response format:', response.data);
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        },
+
+        async addToFavorite() {
+          await this.readNextFavoriteId();
+          const favorite_id = Number(this.nextId);
+          const user_id = await this.getUserId();
+          const recipe_id = sessionStorage.getItem("recipe_id");
+
+          const favoritedata = {
+            favorite_id: favorite_id,
+            user_id: user_id,
+            recipe_id: recipe_id
+          }
+
+          if (user_id && recipe_id) {
+            try {
+              const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEINSERT", favoritedata, {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+              });
+
+              if (response.status === 200) {
+                this.isFavorite = true; // 状態を更新
+              } else {
+                console.error('エラーが発生しました');
+              }
+            } catch (error) {
+              console.error("エラー:", error);
+            }
+          } else {
+            console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+          }
+        },
+
+        async deleteFromFavorite() {
+          const user_id = await this.getUserId();
+          const recipe_id = sessionStorage.getItem("recipe_id");
+
+          if (user_id && recipe_id) {
+            try {
+              const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEDELETE", {
+                user_id: user_id,
+                recipe_id: recipe_id
+              }, {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+              });
+
+              if (response.status === 200) {
+                this.isFavorite = false; // 状態を更新
+                alert('お気に入りが解除されました。');
+              } else {
+                console.error('エラーが発生しました');
+                alert('エラーが発生しました。');
+              }
+            } catch (error) {
+              console.error("エラー:", error);
+              alert('エラーが発生しました。');
+            }
+          } else {
+            console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
+            alert('ユーザーIDまたはレシピIDが取得できませんでした。');
+          }
+        },
+
+        async checkIfFavorite() {
+          const user_id = await this.getUserId();
+          const recipe_id = sessionStorage.getItem("recipe_id");
+
+          if (user_id && recipe_id) {
+            try {
+              const response = await axios.get(`https://m3h-kouhei-2010.azurewebsites.net/api/CHECKIFFAVORITE?user_id=${user_id}&recipe_id=${recipe_id}`);
+
+              if (response.data.length > 0) {
+                this.isFavorite = true;
+              }
+            } catch (error) {
+              console.error("Error:", error);
+            }
+          }
+        },
+
+        navigate() {
+          window.location.href = 'home.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

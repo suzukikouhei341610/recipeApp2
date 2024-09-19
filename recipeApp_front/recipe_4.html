@@ -1,6 +1,110 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<<<<<<< HEAD
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クッキーサンド | レシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <header>🍪レシピ詳細ページ🍪</header>
+
+      <div class="title-container">
+        <h1>クッキーサンド</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img class="recipe-photo" src="https://i.pinimg.com/564x/f4/e7/78/f4e7785663c91d028a6e32fecc9b710a.jpg" alt="クッキーサンドの画像">
+        </v-col>
+        <v-col cols="5">
+          <div class="recipe-info">
+            <v-btn
+              v-if="!isFavorite"
+              color="amber accent-3"
+              @click="toggleFavorite"
+              class="favorite-btn">
+              <v-icon>mdi-star-outline</v-icon>
+              お気に入りに追加
+            </v-btn>
+
+            <v-btn
+              v-else
+              color="amber accent-3"
+              @click="toggleFavorite"
+              class="favorite-btn">
+              <v-icon>mdi-star</v-icon>
+              お気に入りから削除
+            </v-btn>
+
+            <p><strong>カテゴリー:</strong> クッキー</p>
+            <p><strong>調理時間:</strong> 90分</p>
+            <p><strong>使用商品:</strong> クッキー</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料</h2>
+          <ul>
+            <li>バター100g</li>
+            <li>砂糖45g</li>
+            <li>卵1個</li>
+            <li>生クリーム100ml</li>
+            <li>レモン汁5ml</li>
+            <li>薄力粉15g</li>
+            <li>塩少々</li>
+            <li>クッキー12枚</li>
+          </ul>
+        </v-col>
+
+        <v-col cols="7" class="steps">
+          <h2>手順</h2>
+          <ol>
+            <ul>バターと砂糖を混ぜる。</ul>
+            <ul>卵、生クリーム、レモン汁を加える。</ul>
+            <ul>レンジで加熱し、冷やす。</ul>
+            <ul>クッキーを並べ、生地を挟む。</ul>
+            <ul>冷蔵庫で冷やす。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          isFavorite: false
+        };
+      },
+      methods: {
+        toggleFavorite() {
+          this.isFavorite = !this.isFavorite;
+        },
+        navigate() {
+          window.location.href = 'home.html';
+        }
+      }
+    });
+  </script>
+=======
   <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,5 +159,6 @@
     <a href="home.html">戻る</a>
   </div>
   
+>>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
 </body>
 </html>

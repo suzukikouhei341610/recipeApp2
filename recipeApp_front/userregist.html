@@ -137,7 +137,6 @@
             data() {
                 return {
                     valid: false,
-                    nextId: null,
                     user_name: '',
                     password: '',
                     confirmPassword: '',
@@ -160,14 +159,6 @@
                     ]
                 };
             },
-            mounted() {
-                this.readNextUserId();
-            },
-            computed: {
-                isButtonDisabled() {
-                    return !this.valid || this.usernameError !== '';
-                }
-            },
             methods: {
                 async readNextUserId() {
                     try {
@@ -188,7 +179,6 @@
                     }
                 },
                 async checkUsername() {
-                    console.log('checkUsername 関数が実行されました');
                     if (this.user_name.length > 0) {
                         try {
                             const response = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/USERCHECK?user_name=${encodeURIComponent(this.user_name)}`);
@@ -225,14 +215,12 @@
                     }
  
                     const param = {
-                        user_id: Number(this.nextId),
                         user_name: this.user_name,
                         user_password: this.password,
                     };
  
                     try {
-                        const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERINSERT', param);
-                        console.log("データ追加成功:", response.data);
+                        await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERINSERT', param);
                         window.location.href = 'userlogin.html';
                     } catch (error) {
                         if (error.response) {
@@ -262,6 +250,6 @@
                 // }
             }
         });
-    </script>    
+    </script>
 </body>
 </html>
