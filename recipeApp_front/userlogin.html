@@ -4,76 +4,85 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="recipe_style.css">
+        <link rel="stylesheet" href="headerfooter.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
         <meta charset="UTF-8">
         <title>User Login</title>
         <style>
-          body {
-            margin: 0;
-            padding: 0;
-            background-image: url('https://th.bing.com/th/id/OIP.gQUYX3QqXXynQkeQl4MWWAHaHr?rs=1&pid=ImgDetMain');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-          }
-
-          .v-application {
-            background-color: rgba(255, 255, 255, 0.8);
-          }
-
-          .v-main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-          }
-
-          .login-container {
-            max-width: 400px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          }
-
-          h3 {
-            text-align: center;
-            color: #4CAF50;
-          }
-
-          .v-btn {
-            background-color: #4CAF50;
-            color: #fff;
-            margin-top: 20px;
-          }
-
-          .v-btn:hover {
-            background-color: #388E3C;
-          }
-
-          .v-alert {
-            margin-top: 20px;
-          }
-
-          .v-text-field label {
-            color: #388E3C;
-          }
+            body {
+                margin: 0;
+                padding: 0;
+                /* background-image: url('https://th.bing.com/th/id/OIP.gQUYX3QqXXynQkeQl4MWWAHaHr?rs=1&pid=ImgDetMain'); */
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+   
+            .v-application {
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+   
+            .v-main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+   
+            .login-container {
+                max-width: 400px;
+                padding: 20px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+   
+            h3 {
+                text-align: center;
+                color: #4CAF50;
+            }
+   
+            .v-btn {
+                background-color: #4CAF50;
+                color: #fff;
+                margin-top: 20px;
+            }
+   
+            .v-btn:hover {
+                background-color: #388E3C;
+            }
+   
+            .v-alert {
+                margin-top: 20px;
+            }
+   
+            .v-text-field label {
+                color: #388E3C;
+            }
         </style>
     </head>
-    
+   
     <body>
         <div id="app">
             <v-app>
+                <v-app-bar app>
+                    <h1>😊おちゃらけ😊</h1>
+                    <v-spacer></v-spacer>
+                        <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
+                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
+                        <v-btn @click="logout()">logout</v-btn> -->
+                </v-app-bar>
+ 
                 <v-main>
                     <v-container class="login-container">
-                        <h3>ログインページ</h3>
+                        <h3>ユーザーログイン</h3>
                         <v-form ref="form">
-                            <v-text-field 
+                            <v-text-field
                             v-model="user_name"
                             label="ユーザ名"
                             :rules="[rules.required]"
+                            color="#1b5e20"
                             required
                             ></v-text-field>
                             <v-text-field
@@ -81,17 +90,27 @@
                             label="パスワード"
                             type="password"
                             :rules="[rules.required]"
+                            color="#1b5e20"
                             required
                             ></v-text-field>
                             <v-btn @click="login">ログイン</v-btn>
                         </v-form>
-                        <v-btn @click="navigate">新規会員登録はこちら</v-btn>
-                        <v-alert v-if="errorMessage" type="error">{{ errorMessage }} エラーコード:{{ errorCode }}</v-alert>
+                        <v-btn @click="navigate">新規会員登録はこちら</v-btn><br>
+                        <v-btn @click="toIndex">戻る</v-btn>
+                        <v-alert v-if="errorMessage" type="error">{{ errorMessage }}</v-alert>
                     </v-container>
                 </v-main>
+ 
+                <v-footer>
+                    <v-row class="footer-row justify-center align-center">
+                        <v-col class="text-center" cols="12">
+                            <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                        </v-col>
+                    </v-row>
+                </v-footer>
             </v-app>
         </div>
-
+ 
         <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -111,11 +130,11 @@
                     }
                 },
                 methods: {
-                    async login() { 
+                    async login() {
                         const user_name = this.user_name;
                         const user_password = this.user_password;
                         const loginData = { user_name, user_password };
-
+ 
                         if (this.$refs.form.validate()) {
                             try {
                                 const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERLOGIN', loginData, {
@@ -123,13 +142,10 @@
                                         'Content-Type': 'application/json'
                                     }
                                 });
-
+ 
                                 if (response.status === 200 && response.data === 'Login successful') {
-                                //if (response.status === 200 && token) {
-                                    console.log('Login successful:', user_name, user_password);
-                                    sessionStorage.setItem('user_name', user_name); // ユーザー名をセッションストレージに保存
-                                    console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                                    window.location.href = './home.html';
+                                    sessionStorage.setItem('user_name', user_name);
+                                    window.location.href = 'home.html';
                                 } else {
                                     this.errorMessage = 'ユーザ名もしくはパスワードが間違っています。';
                                 }
@@ -146,9 +162,14 @@
                     },
                     navigate() {
                         window.location.href = 'userregist.html';
+                    },
+ 
+                    toIndex(){
+                        window.location.href = 'index.html';
                     }
                 }
             });
         </script>
     </body>
 </html>
+ 

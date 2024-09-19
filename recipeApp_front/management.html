@@ -7,93 +7,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <meta charset="UTF-8">
     <title>Management</title>
+    <style>
+        .main {
+            background-color: #eef8ee;
+        }
+        .detail {
+            max-width: 800px;
+            display: block;
+            margin: 0 auto;
+        }
+        footer {
+            background-color: #c6ebc5 !important;
+            height: 68px;
+        }
+        .footer-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
+        }
+    
+        .copyright-text {
+            font-size: 14px;
+            color: #777;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <v-app>
-            <v-main>
-                <v-container>
-                    <v-card v-if="selectedRecipe" class="mb-5">
-                        <v-card-title>レシピ詳細</v-card-title>
-                        <v-card-text>
-                            <v-row>
-                                <v-col cols="12" md="6">
-                                    <div>
-                                        <p v-if="selectedRecipe.recipe_id">ID: {{ selectedRecipe.recipe_id }}</p>
-                                        <p v-if="selectedRecipe.recipe_name">レシピ名: {{ selectedRecipe.recipe_name }}</p>
-                                        <p v-if="selectedRecipe.recipe_category1">カテゴリー1: {{ selectedRecipe.recipe_category1 }}</p>
-                                        <p v-if="selectedRecipe.recipe_category2">カテゴリー2: {{ selectedRecipe.recipe_category2 }}</p>
-                                        <p v-if="selectedRecipe.recipe_category3">カテゴリー3: {{ selectedRecipe.recipe_category3 }}</p>
-                                        <p v-if="selectedRecipe.recipe_time">調理時間: {{ selectedRecipe.recipe_time }} 分</p>
-                                        <p v-if="selectedRecipe.recipe_scene1">シーン1: {{ selectedRecipe.recipe_scene1 }}</p>
-                                        <p v-if="selectedRecipe.recipe_scene2">シーン2: {{ selectedRecipe.recipe_scene2 }}</p>
-                                        <p v-if="selectedRecipe.recipe_scene3">シーン3: {{ selectedRecipe.recipe_scene3 }}</p>
-                                        <p v-if="selectedRecipe.recipe_item1">商品1: {{ selectedRecipe.recipe_item1 }}</p>
-                                        <p v-if="selectedRecipe.recipe_item2">商品2: {{ selectedRecipe.recipe_item2 }}</p>
-                                        <p v-if="selectedRecipe.recipe_item3">商品3: {{ selectedRecipe.recipe_item3 }}</p>
-                                    </div>
-                                </v-col>
-                                <v-col cols="12" md="3">
-                                    <v-img v-if="selectedRecipe.recipe_photo" :src="selectedRecipe.recipe_photo" alt="レシピ写真" max-width="100%"></v-img>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn color="blue" @click="goBack">戻る</v-btn>
-                            <v-btn color="red" @click="confirmDelete(selectedRecipe)">削除</v-btn>
-                        </v-card-actions>
-                    </v-card>
-
-                    <v-dialog v-model="showMessageDialog" max-width="400">
-                        <v-card>
-                            <v-card-title class="headline">通知</v-card-title>
-                            <v-card-text>
-                                {{ message }}
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue" text @click="closeMessageDialog">閉じる</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                    
-                    <v-card v-if="!selectedRecipe">
-                        <v-card-title>レシピ管理</v-card-title>
-                        <v-card-text>
-                            <v-data-table
-                                :headers="headers"
-                                :items="recipes"
-                                item-key="recipe_id"
-                                class="elevation-1"
-                                @click:row="selectRecipe"
-                            >
-                                <template v-slot:item.recipe_photo="{ item }">
-                                    <v-img :src="item.recipe_photo" max-width="100" contain></v-img>
-                                </template>
-                                <template v-slot:item.actions="{ item }">
-                                    <v-btn color="red" @click="confirmDelete(item)">削除</v-btn>
-                                </template>
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
-
-                    <v-dialog v-model="dialog" max-width="500px">
-                        <v-card>
-                            <v-card-title>削除確認</v-card-title>
-                            <v-card-text>
-                                本当にこのレシピを削除しますか？<br>
-                                削除したレシピは完全に消去されます。
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="dialog = false">キャンセル</v-btn>
-                                <v-btn color="red" text @click="deleteRecipe">削除</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+            <v-main class="main">
+                <v-container class="fill-height">
+                    <v-row align="center" justify="center">
+                        <v-col cols="12" md="10">
+                            <v-card v-if="!selectedRecipe">
+                                <v-card-title>レシピ管理
+                                    <v-spacer></v-spacer>
+                                    <v-btn color=#c6ebc5 @click="logout">Logout</v-btn>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-data-table
+                                        :headers="headers"
+                                        :items="recipes"
+                                        item-key="recipe_id"
+                                        class="elevation-1"
+                                        @click:row="selectRecipe"
+                                    >
+                                        <template v-slot:item.recipe_photo="{ item }">
+                                            <v-img :src="item.recipe_photo" max-width="100" contain></v-img>
+                                        </template>
+                                        <template v-slot:item.actions="{ item }">
+                                            <v-btn color="red" @click="confirmDelete(item)">削除</v-btn>
+                                        </template>
+                                    </v-data-table>
+                                </v-card-text>
+                            </v-card>
+        
+                            <v-card v-if="selectedRecipe" class="detail mb-5">
+                                <v-card-title>レシピ詳細</v-card-title>
+                                <v-card-text>
+                                    <v-row>
+                                        <v-col cols="12" md="6">
+                                            <div>
+                                                <p v-if="selectedRecipe.recipe_id">ID: {{ selectedRecipe.recipe_id }}</p>
+                                                <p v-if="selectedRecipe.recipe_name">レシピ名: {{ selectedRecipe.recipe_name }}</p>
+                                                <p v-if="selectedRecipe.recipe_category1">カテゴリー1: {{ selectedRecipe.recipe_category1 }}</p>
+                                                <p v-if="selectedRecipe.recipe_category2">カテゴリー2: {{ selectedRecipe.recipe_category2 }}</p>
+                                                <p v-if="selectedRecipe.recipe_category3">カテゴリー3: {{ selectedRecipe.recipe_category3 }}</p>
+                                                <p v-if="selectedRecipe.recipe_time">調理時間: {{ selectedRecipe.recipe_time }} 分</p>
+                                                <p v-if="selectedRecipe.recipe_scene1">シーン1: {{ selectedRecipe.recipe_scene1 }}</p>
+                                                <p v-if="selectedRecipe.recipe_scene2">シーン2: {{ selectedRecipe.recipe_scene2 }}</p>
+                                                <p v-if="selectedRecipe.recipe_scene3">シーン3: {{ selectedRecipe.recipe_scene3 }}</p>
+                                                <p v-if="selectedRecipe.recipe_item1">商品1: {{ selectedRecipe.recipe_item1 }}</p>
+                                                <p v-if="selectedRecipe.recipe_item2">商品2: {{ selectedRecipe.recipe_item2 }}</p>
+                                                <p v-if="selectedRecipe.recipe_item3">商品3: {{ selectedRecipe.recipe_item3 }}</p>
+                                            </div>
+                                        </v-col>
+                                        <v-col cols="12" md="4" align-self="center"> <!-- ここでalign-selfを追加 -->
+                                            <v-img v-if="selectedRecipe.recipe_photo" :src="selectedRecipe.recipe_photo" alt="レシピ写真" max-width="100%"></v-img>
+                                        </v-col>
+                                    </v-row>
+                                    
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-btn @click="goBack">戻る</v-btn>
+                                    <v-btn color=#ff7b7b @click="confirmDelete(selectedRecipe)">削除</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                 </v-container>
+        
+                <v-footer v-if="!selectedRecipe">
+                    <v-row class="footer-row justify-center align-center">
+                        <v-col class="text-center" cols="12">
+                            <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                        </v-col>
+                    </v-row>
+                </v-footer>
             </v-main>
         </v-app>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
@@ -174,6 +190,9 @@
                 },
                 goBack() {
                     this.selectedRecipe = null; // 戻る際に選択したレシピをクリア
+                },
+                logout() {
+                    window.location.href = 'index.html';
                 }
             }
         });
