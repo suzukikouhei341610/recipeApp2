@@ -1,51 +1,62 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <!-- <link rel="stylesheet" href="recipe_style.css"> -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-  <meta charset="UTF-8">
-  <title>recipe app mypage</title>
-
-    <!-- <v-toolbar-title>recipe app</v-toolbar-title>
-    <v-spacer></v-spacer>    
-    <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
-    <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
-    <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
-
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="recipe_style.css"> -->
+    <link rel="stylesheet" href="headerfooter.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta charset="UTF-8">
+    <title>recipe app mypage</title>
+    <style>
+      .v-card:hover {
+        cursor: pointer !important;
+        background-color: #f5f5f5 !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; 
+        transition: background-color 0.3s, box-shadow 0.3s !important;
+      }
+    </style>
   </head>
     
   <body>
   <div id="app">
       <v-app>
-        <v-app-bar>
+        <v-app-bar app>
           <v-toolbar-title>recipe app</v-toolbar-title>
           <v-spacer></v-spacer>
               <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
-              <!-- <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> -->
+              <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
               <v-btn @click="logout()">logout</v-btn>
-              <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
         </v-app-bar>
           <v-main>
               <v-container>
-                  <div>こんにちは、</div>
+                <h1>MY PAGE</h1>
+                <h3>こんにちは、{{ user_name }}さん😊</h3>
+                <hr class="custom-line">
+                <h3>お気に入り一覧</h3>
 
-                  <v-tabs v-model="tab">
+                  <!-- <v-tabs v-model="tab">
                     <v-tab>お気に入り一覧</v-tab>
                     <v-tab>検索履歴</v-tab>
-                  </v-tabs>
+                  </v-tabs> -->
               
-                  <v-tabs-items v-model="tab">
+                  <!-- <v-tabs-items v-model="tab"> -->
                     <!-- お気に入り一覧 -->
-                    <v-tab-item>
+                    <!-- <v-tab-item> -->
+
+                      <div v-if="dataList.length === 0">
+                        お気に入りレシピが登録されていません。
+                      </div>
+
                       <v-row>
                           <v-col v-for="item in dataList" :key="item.recipe_id" cols="12" sm="6" md="4">
                             <v-card 
                             class="mx-auto" 
                             max-width="400" 
-                            outlined>
+                            outlined
+                            @click="goToDetail(item.recipe_id)"
+                            >
 
                               <!-- <v-img
                                 class="white--text align-end"
@@ -53,43 +64,45 @@
                                 :src="encodeURI(recipe.recipe_photo) || 'recipeApp2\\recipeApp_front\\images\\no image.jpg'"
                                 alt="Recipe Image">
                               </v-img> -->
+
+                              <v-img
+                                class="white--text align-end"
+                                height="200px"
+                                :src="item.recipe_photo || 'recipeApp2/recipeApp_front/images/no_image.jpg'"
+                                alt="Recipe Image">
+                              </v-img>
                         
                               <v-card-subtitle class="card-subtitle">
                                 {{ item.recipe_name }}
                               </v-card-subtitle>
                         
                               <v-card-text class="card-recipe-time">                          
-                                <div>調理時間: {{ item.recipe_time }}</div>
+                                <div>調理時間: {{ item.recipe_time }}分</div>
                               </v-card-text>
-                        
-                              <!-- <v-card-actions>
-                                <v-btn @click="saveToSessionStorage('recipe_id', 'user_id')"
-                                  color="orange"
-                                  text
-                                >
-                                  favorite
-                                </v-btn>
-                              </v-card-actions> -->
                           </v-card>
                         </v-col>
                       </v-row>
-                    </v-tab-item>
+                    <!-- </v-tab-item> -->
               
                     <!-- 検索履歴 -->
-                    <v-tab-item>
+                    <!-- <v-tab-item>
                       <v-card flat>
                         <v-card-title>検索履歴</v-card-title>
                         <v-card-text>
                           検索履歴のコンテンツをここに追加
                         </v-card-text>
                       </v-card>
-                    </v-tab-item>
-                  </v-tabs-items>
+                    </v-tab-item> -->
+                  <!-- </v-tabs-items> -->
                 </v-container>
-              
-
-
           </v-main>
+          <v-footer>
+            <v-row class="footer-row">
+                <v-col class="text-right" cols="12">
+                    <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                </v-col>
+            </v-row>
+        </v-footer> 
       </v-app>
   </div>
 
@@ -102,87 +115,104 @@
       vuetify: new Vuetify(),
       data() {
         return {
-          tab: 0, // 初期タブのインデックス
+          //tab: 0, 
           dataList: [], // データ表示用配列
           // searchHistory: ['', '', ''], // サンプルデータ
-          recipe: ''
+          recipe: '',
+          user_name: ''
         };
       },
 
       mounted() {
         this.fetchFavorites();   
         const user_name = sessionStorage.getItem('user_name');
+        this.user_name = user_name;
       },
       
       methods: {
+        async fetchFavorites() {   
+          try {
+            // getUserId メソッドを呼び出して user_id を取得
+            const user_id = await this.getUserId(); 
+            console.log('user_id:', user_id);
+
+            // user_id を引数に、getRecipeIds メソッドを呼び出して、recipe_ids を取得
+            const recipe_ids = await this.getRecipeIds(user_id);
+            console.log('recipe_ids:', recipe_ids);
+
+            const recipe_idsParam = recipe_ids.join(",");
+            console.log('recipe_idsParam:', recipe_idsParam);
+            const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN', { recipe_ids: recipe_ids });
+            console.log('レスポンス全体:', response.data); 
+
+            const favoriteRecipe = response.data;
+            console.log('レスポンス result:', favoriteRecipe.result); 
+            this.dataList = favoriteRecipe.result.List;
+            console.log('dataList:', this.dataList); 
+
+          } catch (error) {
+            console.error('エラーが発生しました:', error);
+          }
+        },
+
         //セッションのuser_nameからuser_idをとってくる
         async getUserId() {
           const user_name = sessionStorage.getItem('user_name');
           if (user_name) {
             try {
-                const loginResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT?user_name=${user_name}`);
-                const userIds = await loginResponse.json();
-              // user_idが取得できたか確認
+              const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/LOGINIDSELECT', { user_name: user_name });
+              const userIds = response.data;
+              
               if (userIds.length === 0) {
-                  console.error('ユーザーが見つかりませんでした。');
-                  return null;
+                console.error('ユーザーが見つかりませんでした。');
+                return null;
               }
 
-              const user_id = userIds[0]; // 最初のuser_idを取得
+              const user_id = userIds[0];
               return user_id;
 
             } catch (error) {
-                console.error('エラーが発生しました:', error);
-                return null; // または適切なエラーハンドリングを行う
+              console.error('エラーが発生しました:', error);
+              return null;
             }
           } else {
-              console.error('セッションにuser_nameが保存されていません。');
-              return null; // または適切なエラーハンドリングを行う
+            console.error('セッションにuser_nameが保存されていません。');
+            return null;
           }
         },
 
-        //お気に入り一覧を表示する
-        async fetchFavorites() {   
-          try {
-            // getUserId メソッドを呼び出して user_id を取得
-            const user_id = await this.getUserId(); 
-            console.log(user_id);
-
-            if (user_id) {
-                // user_idを指定してfavorite_table内のrecipe_idを取得
-                const favoriteResponse = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITESELECT?user_id=${user_id}`);
-                const favorites = await favoriteResponse.json();
-                this.dataList = favorites.List;
-                console.log(favorites.List);
-                console.log(typeof favorites.List);
-                const recipe_ids = Object.values(favorites.List).map(favorite => favorite.recipe_id);
-                console.log(recipe_ids);
-
-                //recipe_id
-                
-                const recipe_idsParam = recipe_ids.join(",");
-                const favoriteRecipes = await fetch(`https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEJOIN?recipe_ids=${recipe_idsParam}`)
-                //const favoriteRecipes = await fetch(`http://localhost:7286/api/RECIPEJOIN?recipe_ids=${recipeIdsParam}`)
-                const favoriteRecipe = await favoriteRecipes.json();
-                console.log(favoriteRecipe);
-            } else {
-                console.error('ユーザーIDが取得できませんでした。');
-            }
-          } catch (error) {
+        //お気に入り追加されているrecipe_id(複数)を取ってくる
+        async getRecipeIds(user_id) {
+          if (user_id) {
+            try {
+              // axios.post を使用してデータを取得
+              const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITESELECT', { user_id });
+              const favorites = response.data;
+              console.log('favorites:', favorites);
+              this.dataList = favorites.List;
+              console.log('this.dataList:', this.dataList);
+              const recipe_ids = this.dataList.map(favorite => favorite.recipe_id);
+              console.log('recipe_ids:', recipe_ids);
+              return recipe_ids;
+            } catch (error) {
               console.error('エラーが発生しました:', error);
+            }
+          } else {
+            console.error('ユーザーIDが取得できませんでした。');
           }
+        },
+
+        goToDetail(recipe_id){
+          const url = `recipe_${recipe_id}.html`;
+          window.location.href = url;
         },
 
         logout(){
-                  //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                  sessionStorage.removeItem('user_name');
-                  //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                  window.location.href = 'index.html';
-                    }
-        //お気に入り登録
-        // async saveToSessionStorafavorites.Listge(key, value) {
-        //     sessionStorage.setItem('recipe_id', 'user_id');
-        // }
+          //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+          sessionStorage.removeItem('user_name');
+          //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+          window.location.href = 'index.html';
+        }
       }
     }
   )

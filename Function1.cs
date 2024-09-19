@@ -710,8 +710,10 @@ namespace FunctionAPIApp
             }
         }
 
-            //水谷
-            [FunctionName("USERINSERT")]
+
+
+        //水谷
+        [FunctionName("USERINSERT")]
         public static async Task<IActionResult> UserInsert(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
@@ -988,38 +990,64 @@ namespace FunctionAPIApp
 
                     using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                     {
-                        string sql = "DELETE FROM favorite_table WHERE user_id = @user_id AND recipe_id = @recipe_id";
+                        await connection.OpenAsync();
 
-                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        // favorite_idをすべて取得するクエリ
+                        string selectSql = "SELECT favorite_id FROM favorite_table WHERE user_id = @user_id AND recipe_id = @recipe_id";
+                        List<int> favoriteIds = new List<int>();
+
+                        using (SqlCommand selectCommand = new SqlCommand(selectSql, connection))
                         {
-                            command.Parameters.AddWithValue("@user_id", userId);
-                            command.Parameters.AddWithValue("@recipe_id", recipeId);
+                            selectCommand.Parameters.AddWithValue("@user_id", userId);
+                            selectCommand.Parameters.AddWithValue("@recipe_id", recipeId);
 
-                            connection.Open();
+                            using (SqlDataReader reader = await selectCommand.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    favoriteIds.Add(reader.GetInt32(0)); // favorite_idをリストに追加
+                                }
+                            }
+                        }
 
-                            int result = command.ExecuteNonQuery();
+                        if (favoriteIds.Count > 0)
+                        {
+                            // 取得したすべてのfavorite_idを削除
+                            foreach (int favoriteId in favoriteIds)
+                            {
+                                string deleteSql = "DELETE FROM favorite_table WHERE favorite_id = @favorite_id";
 
-                            responseMessage = result > 0 ? "お気に入りが解除されました。" : "該当のお気に入りが見つかりません。";
+                                using (SqlCommand deleteCommand = new SqlCommand(deleteSql, connection))
+                                {
+                                    deleteCommand.Parameters.AddWithValue("@favorite_id", favoriteId);
+                                    await deleteCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            return new OkObjectResult("お気に入りがすべて解除されました。");
+                        }
+                        else
+                        {
+                            return new OkObjectResult("該当のお気に入りが見つかりません。");
                         }
                     }
                 }
                 catch (SqlException e)
                 {
                     log.LogError($"SQL Exception: {e.Message}");
-                    responseMessage = $"エラーが発生しました: {e.Message}";
+                    return new OkObjectResult($"エラーが発生しました: {e.Message}");
                 }
                 catch (Exception e)
                 {
                     log.LogError($"Exception: {e.Message}");
-                    responseMessage = $"予期しないエラーが発生しました: {e.Message}";
+                    return new OkObjectResult($"予期しないエラーが発生しました: {e.Message}");
                 }
             }
             else
             {
-                responseMessage = "有効なユーザーIDまたはレシピIDが提供されていません。";
+                return new OkObjectResult("有効なユーザーIDまたはレシピIDが提供されていません。");
             }
-
-            return new OkObjectResult(responseMessage);
         }
+
     }
 }

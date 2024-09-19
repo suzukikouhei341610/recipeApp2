@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>ハニーマスタードチキンレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>ハニーマスタードチキン</h1>
+      <img src="https://i.pinimg.com/564x/e2/13/df/e213df3037c2069811b7cc88b43761f5.jpg" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> はちみつ</p>
+      <p><strong>調理時間:</strong> 15分</p>
+      <p><strong>材料:</strong> 鶏もも肉1枚（250g）、塩こしょう少々、薄力粉適量、サラダ油大さじ1、
+        【ハニーマスタードソース】はちみつ大さじ2、粒マスタード大さじ1/2、水小さじ1、しょうゆ小さじ1</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>鶏肉はしっかりめに塩こしょうをふり、薄力粉を全体にまぶす</li>
+        <li>ボウルに、はちみつ・粒マスタード・水・しょうゆを入れて混ぜる（ハニーマスタードソース）</li>
+        <li>フライパンにサラダ油を入れて中火で熱し、鶏肉の皮目を下にしてしっかり焼き目をつける</li>
+        <li>フライパンにはちみつ・醤油・みりんを加えて火にかけ、少し煮詰める。</li>
+        <li>焼き目がついたら、裏返してふたをし、5分蒸し焼きにする</li>
+        <li>鶏肉に火が通ったら、ハニーマスタードソースを加えて絡める</li>
+      </ol>
+  <v-container>
+    <v-btn
+      v-if="!isFavorite"
+      color="primary"
+      @click="addToFavorite"
+    >
+      お気に入りに追加
+    </v-btn>
+    <v-btn
+      v-else
+      color="green"
+      @click="deleteFromFavorite"
+    >
+      お気に入りから削除
+    </v-btn>
+  </v-container>
+
+  <a href="home.html">戻る</a>
+</v-app>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    </script>
+  </body>
+</html>

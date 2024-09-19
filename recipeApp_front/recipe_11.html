@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta charset="UTF-8">
+  <title>キャラメルアイスレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>キャラメルアイス</h1>
+      <img src="https://images.pexels.com/photos/9227720/pexels-photo-9227720.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> キャラメル</p>
+      <p><strong>調理時間:</strong> 300分</p>
+      <p><strong>材料:</strong> キャラメル50g、牛乳100ml、生クリーム200ml、ナッツやくるみ（無塩/ロースト）20g、お好みでキャラメルソースなど適量
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>キャラメルを粗みじん切りにする</li>
+        <li>鍋に牛乳、生クリーム、粗みじん切りにしたキャラメルを入れて耐熱性のゴムベラで混ぜながら弱火で加熱する</li>
+        <li>キャラメルが溶けたら火から下ろす</li>
+        <li>バットに移して粗熱を取ります</li>
+        <li>ナッツやくるみを散らし、冷凍庫で4時間ほど冷やす <br>
+        <li>固まったら、器に盛りつけてお好みでキャラメルソースなどをかけて完成</li>
+      </ol>
+      <v-container>
+        <v-btn color="primary" @click="addToFavorite">
+          お気に入りに追加
+        </v-btn>
+      </v-container>
+      <v-container>
+        <v-btn color="primary" @click="deleteFromFavorite">
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>メープルチュロスレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>メープルチュロス</h1>
+      <img src="https://images.unsplash.com/photo-1615915848347-5ad361d3e9fd?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> ホットケーキミックス</p>
+      <p><strong>調理時間:</strong> 20分</p>
+      <p><strong>材料:</strong> ホットケーキミックス150g、水1・1/2カップ、牛乳1/2カップ、メープルシロップ大さじ1、バター20g。サラダ油適量、グラニュー糖適量</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>鍋に水・牛乳・メープルシロップ・バターを入れて火にかける</li>
+        <li>沸騰したら火を止めてすぐにホットケーキミックスを加える</li>
+        <li>ゴムベラでひとかたまりになるまでしっかりと素早く練り混ぜ、人肌程度に冷ます</li>
+        <li>星型の口金をつけた絞り袋に生地を入れ、クッキングシートの上に15cm長さの棒状にしぼり出す</li>
+        <li>オーブントースター（700W）で10分焼く</li>
+        <li>フライパンに2cm高さまで油を入れて 180℃に熱し、5.をきつね色になるまで揚げる</li>
+        <li>仕上げにグラニュー糖をまぶす。</li>
+
+            
+      </ol>
+      <v-container>
+        <v-btn
+          v-if="!isFavorite"
+          color="primary"
+          @click="addToFavorite"
+        >
+          お気に入りに追加
+        </v-btn>
+        <v-btn
+          v-else
+          color="green"
+          @click="deleteFromFavorite"
+        >
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+ 
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    </script>
+  </body>
+</html>
