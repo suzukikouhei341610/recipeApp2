@@ -57,8 +57,9 @@
             font-size: 14x;
         }
         .v-carousel {
-            padding-top: 29px;
+            padding-top: 48px;
             width: 50vw;
+            min-height: 520px;
             position: relative;
         }
         .v-carousel-item {
@@ -67,7 +68,7 @@
             align-items: center;
         }
         .keyword {
-            padding-top: 75px;
+            padding-top: 90px;
         }
         .keyword h2 {
             font-weight: normal;
@@ -92,6 +93,16 @@
 
         .recommend h2 {
             font-weight: normal;
+        }
+        .upper-recommend {
+            max-height: 480px;
+        }
+        .lower-recommend {
+            max-height: 520px;
+        }
+        .lower-image {
+            display: block;
+            margin: 0 auto;
         }
         .dialog p {
             font-size: 18px;
@@ -137,7 +148,7 @@
 
             <v-main>
                 <div class="message">
-                    <img src="images/sweets.jpg" alt="Sweets Image" class="top-image" @click="scrollToCarousel">
+                    <img src="images/upper-sweets.jpg" alt="Sweets Image" class="top-image" @click="scrollToCarousel">
                     <h2>
                         <span class="highlight">😊期間限定 季節のレシピ大公開😊</span> <br>
                         お手軽に作れるものからおしゃれなものまでたくさんあります💕 <br>
@@ -299,7 +310,7 @@
                         <v-col cols="4">
                             <v-card :loading="false" class="mx-auto my-12" max-width="374" @click="showDialog = true">
                                 <v-img src="images/image011.jpg" height="250"></v-img>
-                                <v-card-title>はちみつ大学</v-card-title>
+                                <v-card-title>はちみつ大学芋</v-card-title>
                                 <v-card-text>
                                     <div class="my-4 text-subtitle-1">
                                         <span class="highlighted">調理時間</span> 　　20分
@@ -331,6 +342,10 @@
                           </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <div class="image">
+                        <img src="images/lower-sweets.jpg" alt="Sweets Image" class="lower-image">
+                    </div>
                 </v-container>
             </v-main>
             <v-footer>
