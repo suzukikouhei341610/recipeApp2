@@ -4,16 +4,46 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="recipe_style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <meta charset="UTF-8">
     <title>UserRegist</title>
+    <style>
+        .userresist-card {
+  width: 700px;  /* カードの最大幅 */
+  margin: 40px auto; /* カードの上下左右に余白を持たせ、中央揃え */
+  padding: 50px;     /* カード内の余白 */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* カードに影を追加して強調 */
+  border-radius: 12px; /* カードの角を丸くする */
+}
+ 
+.userresist-card .v-form {
+  display: flex;
+  flex-direction: column; /* 縦に並べる */
+  gap: 1px ; /* 要素間の間隔を調整 */
+}
+ 
+.resist_btn {
+  text-align: center;
+  background-color: #c6ebc5 !important ;
+  color: white !important ;
+}
+ 
+.pass-display {
+  margin: 0 !important ;             /* マージンを完全にゼロにする */
+  padding: 0 ;           /* パディングをゼロにする */
+  padding-bottom: 50px;
+  height: 20px !important ;
+}
+    </style>
 </head>
 <body>
     <div id="app">
         <v-app>
             <v-main>
                 <v-container>
+                    <v-card class="userresist-card">
+                    </v-card-text>
                     <v-form ref="form" v-model="valid">
                         <v-row>
                             <!-- <v-col cols="12">
@@ -26,10 +56,11 @@
                                     class="id-text-field"
                                 ></v-text-field>
                             </v-col> -->
-                            <v-col cols="12" md="6">
+                            <v-col cols="12">
                                 <v-text-field
                                     v-model="user_name"
                                     label="ユーザー名（英数字）"
+                                    color="#1b5e20"
                                     :rules="userNameRules"
                                     required
                                     @input="checkUsername"
@@ -38,51 +69,64 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="12" md="6">
+                            <v-col cols="12">
                                 <v-text-field
                                     v-model="password"
                                     :type="showPassword ? 'text' : 'password'"
                                     label="パスワード　8文字以上で英大小文字・数字を1つ以上含めてください"
+                                    class="pass-textbox"
+                                    color="#1b5e20"
                                     :rules="passwordRules"
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col cols="12" class="pass-display">
                                 <v-checkbox
                                     v-model="showPassword"
                                     label="パスワードを表示する"
+                                    color="#1b5e20"
+                                    dense
                                 ></v-checkbox>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="12" md="6">
+                            <v-col cols="12">
                                 <v-text-field
                                     v-model="confirmPassword"
                                     :type="showConfirmPassword ? 'text' : 'password'"
+                                    class="mb-1"
                                     label="パスワード（確認用）"
+                                    color="#1b5e20"
                                     :rules="confirmPasswordRules"
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" md="6">
+ 
+                            <v-col cols="12" class="pass-display">
                                 <v-checkbox
                                     v-model="showConfirmPassword"
                                     label="パスワードを表示する"
+                                    color="#1b5e20"
+                                    dense
                                 ></v-checkbox>
                             </v-col>
                         </v-row>
-                        <v-btn :disabled="isButtonDisabled" color="primary" @click="addData1">
+                        <v-col cols="12" class="btn-col"></v-col>
+                        <v-btn :disabled="isButtonDisabled" class="resist_btn" @click="addData1">
                             登録
                         </v-btn>
+                        </v-col>
                         <!-- <v-btn @click="checkFormValidity"  @mouseover="debugButtonState">
                             バリデーション確認
                         </v-btn> -->
                     </v-form>
+                    </v-card-text>
+                    </v-card>
                 </v-container>
             </v-main>
         </v-app>
     </div>
-
+ 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -130,7 +174,7 @@
                         const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/USERSELECT');
                         console.log('Response:', response);
                         console.log('Response data:', response.data);
-
+ 
                         if (response.data && response.data.List) {
                             console.log('List:', response.data.List);
                             const ids = response.data.List.map(userid => Number(userid.user_id));
@@ -163,29 +207,29 @@
                 },
                 async addData1() {
                     console.log("addData1メソッドが呼び出されました");
-
+ 
                     // 手動でフォームバリデーションをトリガー
                     const isValid = this.$refs.form.validate();
                     console.log("フォームバリデーション結果:", isValid);
-
+ 
                     // バリデーションが通っているか確認
                     if (!isValid || this.usernameError) {
                         console.log('フォームのバリデーションに失敗しました');
                         return;
                     }
-
+ 
                     // nextIdが数値かどうかを確認
                     if (!this.nextId || isNaN(Number(this.nextId))) {
                         console.log("IDに数値が入力されていません");
                         return;
                     }
-
+ 
                     const param = {
                         user_id: Number(this.nextId),
                         user_name: this.user_name,
                         user_password: this.password,
                     };
-
+ 
                     try {
                         const response = await axios.post('https://m3h-kouhei-2010.azurewebsites.net/api/USERINSERT', param);
                         console.log("データ追加成功:", response.data);
@@ -212,7 +256,7 @@
                 //     console.log("現在のvalidの状態:", this.valid);
                 //     console.log("現在のusernameError:", this.usernameError);
                 // },
-
+ 
                 // debugButtonState() {
                 //     console.log("ボタンの有効/無効状態:", !this.valid || this.usernameError);
                 // }

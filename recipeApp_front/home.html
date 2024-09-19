@@ -10,8 +10,26 @@
         <meta charset="UTF-8">
         <title>Home</title>
         <style>
+            .search-app{
+                padding-top: 50px;
+            }
             .search-card{
-                margin: 50px;
+                margin: 70px;
+            }
+
+            .search-card h2{
+                padding-bottom: 20px; 
+            }
+            
+            .v-card:hover {
+                cursor: pointer !important;
+                background-color: #f5f5f5 !important;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; 
+                transition: background-color 0.3s, box-shadow 0.3s !important;
+            }
+
+            .itemlist{
+                margin: 0 50px 20px 50px !important;
             }
         </style>
     </head>
@@ -20,7 +38,7 @@
         <v-app>
             <div id="app">
                 <v-app-bar app>
-                    <v-toolbar-title>recipe app</v-toolbar-title>
+                    <h1>😊おちゃらけ😊</h1>
                     <v-spacer></v-spacer>
                         <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
                         <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
@@ -36,7 +54,8 @@
                     <v-form @submit.prevent="searchRecipes">
                         <v-container>
                             <v-col cols="12">
-                                <h3>レシピカテゴリーを選択</h3>
+                                <h2>条件でレシピを検索</h2>
+                                <h5>レシピカテゴリーを選択</h5>
                                 <v-radio-group v-model="recipe_category" row>
                                     <v-radio
                                     v-for="(category, index) in categories"
@@ -49,7 +68,7 @@
                             </v-col>
 
                             <v-col cols="12">
-                                <h3>シーンを選択</h3>
+                                <h5>シーンを選択</h5>
                                     <v-radio-group v-model="recipe_scene" row>
                                         <v-radio
                                         v-for="(scene, index) in scenes"
@@ -71,11 +90,11 @@
                     </v-card>
                 </div>
 
-                <div v-if="recipes.length > 0">
+                <div v-if="recipes.length > 0" class="itemlist">
                 <h2>レシピ一覧</h2>
                     <v-row>
                         <v-col v-for="recipe in recipes" :key="recipe.recipe_id" cols="12" sm="6" md="4">
-                            <v-card class="mx-auto" max-width="400" outlined>
+                            <v-card class="mx-auto" max-width="400" outlined @click="goToDetail(recipe.recipe_id)">
                                 <v-img
                                 class="white--text align-end"
                                 height="200px"
@@ -92,9 +111,9 @@
                                 <div>調理時間: {{ recipe.recipe_time }} 分</div>
                                 </v-card-text>
                                 
-                                <v-card-actions>
+                                <!-- <v-card-actions>
                                     <v-btn text @click="goToDetail(recipe.recipe_id)">詳細を見る</v-btn>
-                                </v-card-actions>
+                                </v-card-actions> -->
                             </v-card>
                         </v-col>
                     </v-row>
@@ -102,6 +121,14 @@
                 <div v-else>
                 <p>検索結果がありません。</p>
                 </div>
+
+                <v-footer>
+                    <v-row class="footer-row justify-center align-center">
+                        <v-col class="text-center" cols="12">
+                            <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                        </v-col>
+                    </v-row>
+                </v-footer> 
             </div>
         </v-app>
         

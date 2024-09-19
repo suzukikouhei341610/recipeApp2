@@ -1,11 +1,7 @@
 #app{
   background-color: #f0f8f5 !important;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -13,11 +9,7 @@ body {
   /* background-color: #a3cebe !important; */
   color: #333;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 header {
   background-color: #fddbb0; /* よりはっきりした肌色 */
   padding: 20px;
@@ -29,30 +21,18 @@ header {
   margin: 0; /* マージンをリセット */
   box-sizing: border-box; /* パディングを含めた幅の計算 */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .title-container {
   text-align: center;
   margin: 40px 0 10px 0;
   /* background-color: #a3cebe !important; */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 h1 {
   font-size: 36px;
   color: #333;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .container {
   display: flex;
   justify-content: center;
@@ -61,69 +41,35 @@ h1 {
   max-width: 1200px;
   /* background-color: #a3cebe !important; */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .outline{
   margin: 0 50px;
   margin-bottom: 30px;
 }
-<<<<<<< HEAD
 
-.recipe-photo {
-  width: 600px !important; 
-  height: 400px !important; 
-  object-fit: cover; /* 画像の比率を保ちながら、枠に収まるように表示 */
-  padding: 20px 20px; 
-=======
- 
 .recipe-photo {
   width: 600px !important;
   height: 400px !important;
   object-fit: cover; /* 画像の比率を保ちながら、枠に収まるように表示 */
   padding: 20px 20px;
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
   border-radius: 10px !important; /* 角丸にする */
   width: 100%;
   height: auto;
   max-width: 100%;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .recipe-info {
   flex: 1;
   /* max-width: 400px; */
   padding: 20px;
   /* background-color: #a3cebe !important; */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .recipe-info p {
   font-size: 20px; /* 文字サイズを大きく */
   margin: 10px 0;
 }
-<<<<<<< HEAD
 
-/* .details {
-  display: block;
-  justify-content: space-between; 
-  max-width: 900px; 
-  margin: 0 auto; 
-  margin-top: 20px;
-  gap: 60px; 
-  background-color: #a3cebe !important;
-} */
-
-=======
- 
 /* .details {
   display: block;
   justify-content: space-between;
@@ -133,76 +79,47 @@ h1 {
   gap: 60px;
   background-color: #a3cebe !important;
 } */
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
+
 .ingredients {
   /* width: 30%; */
   padding: 20px 40px;
   padding-left: 100px;
   /* background-color: #a3cebe !important; */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .steps {
   padding: 20px 40px;
   /* width: 65%; */
   /* background-color: #a3cebe !important; */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .ingredients h2, .steps h2 {
   font-size: 24px !important; /* タイトルの文字サイズを大きく */
   color: #2e7d32; /* 深緑 */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .ingredients ul {
   list-style-type: disc;
   padding-left: 20px;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .steps ol {
   padding-left: 0;
   counter-reset: step-counter; /* ステップ番号のカウンターをリセット */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .ingredients li{
   font-size: 18px;
   margin-bottom: 10px;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .steps ol ul {
   position: relative;
   font-size: 18px; /* 文字サイズを大きく */
   margin-bottom: 10px;
   padding-left: 50px; /* 番号と文字の間隔を広く */
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .steps ol ul::before {
   content: counter(step-counter); /* ステップ番号をカウンターから取得 */
   counter-increment: step-counter; /* ステップ番号のカウントアップ */
@@ -219,19 +136,11 @@ h1 {
   font-weight: bold;
   border-radius: 50%; /* 円形のボタン風に */
 }
-<<<<<<< HEAD
 
 .ingredients, .steps {
   margin-bottom: 20px; /* 材料と手順の間隔を追加 */
 }
 
-=======
- 
-.ingredients, .steps {
-  margin-bottom: 20px; /* 材料と手順の間隔を追加 */
-}
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 a {
   display: inline-block;
   margin-top: 30px;
@@ -241,41 +150,58 @@ a {
   text-decoration: none;
   border-radius: 5px;
 }
-<<<<<<< HEAD
 
 a:hover {
   background-color: #1b5e20; /* ホバー時の色 */
 }
 
-=======
- 
-a:hover {
-  background-color: #1b5e20; /* ホバー時の色 */
-}
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .recipe_btn {
   text-align: center !important;
   margin: 30px  !important;
   background-color: #2e7d32 !important;
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
 .favorite-btn{
   margin: 50px 0;
   padding: 10px;
 }
-<<<<<<< HEAD
 
 .btn-col{
   text-align: center !important;
 }
-=======
- 
-.btn-col{
-  text-align: center !important;
+
+/* 余白を削除するためのスタイル調整 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
->>>>>>> 2f3f25cec536d8b49ad55512f2d94cf08c22503e
+
+#app, .v-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.v-app {
+  margin: 0 !important;  /* Vuetifyのデフォルトの余白を無効化 */
+  padding: 0 !important;
+}
+
+/* .containerや.rowの余白も確認して、余白を最小限に */
+.container, .v-row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.btn-col {
+  margin-bottom: 0 !important;  /* 戻るボタンの余白を調整 */
+}
+
+/* 必要な最小限の余白調整 */
+footer {
+  margin-bottom: 0 !important;
+}
+
+

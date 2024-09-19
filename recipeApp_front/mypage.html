@@ -16,6 +16,16 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; 
         transition: background-color 0.3s, box-shadow 0.3s !important;
       }
+
+      .custom-line {
+        border: 0; /* デフォルトの線を無効にする */
+        border-top: 1px solid gray; /* グレーの線を作成 */
+        margin: 50px 0; /* 上下の余白を追加 */
+        padding: 0; /* 内側の余白を無効にする */
+        width: calc(100% - 20px); /* 両側に余白を作る */
+        margin-left: auto; /* 左右の中央揃え */
+        margin-right: auto;
+    }
     </style>
   </head>
     
@@ -23,7 +33,7 @@
   <div id="app">
       <v-app>
         <v-app-bar app>
-          <v-toolbar-title>recipe app</v-toolbar-title>
+          <h1>😊おちゃらけ😊</h1>
           <v-spacer></v-spacer>
               <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
               <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
@@ -48,7 +58,7 @@
                       <div v-if="dataList.length === 0">
                         お気に入りレシピが登録されていません。
                       </div>
-
+                      
                       <v-row>
                           <v-col v-for="item in dataList" :key="item.recipe_id" cols="12" sm="6" md="4">
                             <v-card 
@@ -97,8 +107,8 @@
                 </v-container>
           </v-main>
           <v-footer>
-            <v-row class="footer-row">
-                <v-col class="text-right" cols="12">
+            <v-row class="footer-row justify-center align-center">
+                <v-col class="text-center" cols="12">
                     <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
                 </v-col>
             </v-row>
