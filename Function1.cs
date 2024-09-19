@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Collections.Generic;
 using recipeApp2;
+using System.Linq;
 
 
 namespace FunctionAPIApp
@@ -410,7 +411,7 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table WHERE user_id = @userId";
+                    string sql = "SELECT recipe_id FROM favorite_table WHERE user_id = @userId";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -429,9 +430,9 @@ namespace FunctionAPIApp
                             {
                                 resultList.List.Add(new favorite_tableRow
                                 {
-                                    favorite_id = reader.GetInt32(0), //("favorite_id"),
-                                    user_id = reader.GetInt32(1), //("user_id"),
-                                    recipe_id = reader.GetInt32(2), //("recipe_id"),
+                                    //favorite_id = reader.GetInt32(0), //("favorite_id"),
+                                    //user_id = reader.GetInt32(1), //("user_id"),
+                                    recipe_id = reader.GetInt32(0), //("recipe_id"),
                                 });
                             }
 
@@ -615,127 +616,34 @@ namespace FunctionAPIApp
 
         [FunctionName("RECIPEJOIN")]
         public static async Task<IActionResult> RecipeJoin(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
-            ILogger log)
+       [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+       ILogger log)
+
         {
+            //string responseMessage = "SQL RESULT:";
+            var responseMessage = new { result = "", error = "" };
+            List<int> recipe_ids = new List<int>();
 
-            string connectionString = "Server=tcp:m3hkouhei2010.database.windows.net,1433;Initial Catalog=m3h-kouhei-0726;Persist Security Info=False;User ID=kouhei0726;Password=Battlefield341610;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=100;";
-
-            List<YourDataModel> result = new List<YourDataModel>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            if (req.Query.ContainsKey("recipe_ids"))
             {
-                conn.Open();
-                string query = @"
-                 SELECT
-                    recipe_table.recipe_name,
-                    recipe_table.recipe_time,
-                    recipe_table.recipe_photo
-                        
-                FROM 
-                    recipe_table
-                JOIN 
-                    favorite_table
-                ON recipe_table.recipe_id=favorite_table.recipe_id;";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                var recipe_idsQuery = req.Query["recipe_ids"];
+                recipe_ids = recipe_idsQuery.ToString().Split(',').Select(int.Parse).ToList();
+            }
+            else
+            {
+                // リクエストボディから recipe_ids を取得（POSTメソッドの場合）
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                if (data?.recipe_ids != null)
                 {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var data = new YourDataModel
-                            {
-                                recipe_name = reader.GetString(0),
-                                recipe_time = reader.GetInt32(1),
-                                recipe_photo = reader.GetString(2)
-                            };
-                            result.Add(data);
-                        }
-                    }
+                    recipe_ids = ((IEnumerable<dynamic>)data.recipe_ids).Select(recipe_ids => (int)recipe_ids).ToList();
                 }
             }
 
-            return new OkObjectResult(result);
-        }
-
-        public class YourDataModel
-        {
-            public string recipe_name { get; set; }
-            public int recipe_time { get; set; }
-            public string recipe_photo { get; set; }
-        }
-
-        [FunctionName("CHECKIFFAVORITE")]
-        public static async Task<IActionResult> CheckIfFavorite(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
-        {
-            string responseMessage = "チェック結果: ";
-
-            try
+            if (recipe_ids.Count == 0)
             {
-                // クエリパラメータからuser_idとrecipe_idを取得
-                if (!int.TryParse(req.Query["user_id"], out int userId) || !int.TryParse(req.Query["recipe_id"], out int recipeId))
-                {
-                    return new BadRequestObjectResult("無効な user_id または recipe_id が指定されました。");
-                }
-
-                if (userId <= 0 || recipeId < 0)
-                {
-                    return new BadRequestObjectResult("無効な user_id または recipe_id が指定されました。");
-                }
-
-                // データベース接続の設定
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
-                {
-                    DataSource = "m3hkouhei2010.database.windows.net",
-                    UserID = "kouhei0726",
-                    Password = "Battlefield341610",
-                    InitialCatalog = "m3h-kouhei-0726"
-                };
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    string sql = "SELECT COUNT(*) FROM favorite_table WHERE user_id = @userId AND recipe_id = @recipeId";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        // パラメータの追加
-                        command.Parameters.AddWithValue("@userId", userId);
-                        command.Parameters.AddWithValue("@recipeId", recipeId);
-
-                        connection.Open();
-
-                        // クエリを実行し、結果を取得
-                        int count = (int)await command.ExecuteScalarAsync();
-
-                        bool isFavorite = count > 0;
-
-                        // オブジェクト形式で返す
-                        return new OkObjectResult(new { isFavorite });
-                    }
-                }
+                return new BadRequestObjectResult("recipe_ids が指定されていません。");
             }
-            catch (SqlException e)
-            {
-                log.LogError($"SQLエラー: {e.Message}");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-            catch (Exception e)
-            {
-                log.LogError($"エラー: {e.Message}");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-
-        [FunctionName("FAVORITEALLSELECT")]
-        public static async Task<IActionResult> FavoriteAllSelect(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
-        {
-            string responseMessage = "SQL RESULT:";
 
             try
             {
@@ -749,7 +657,11 @@ namespace FunctionAPIApp
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    string sql = "SELECT favorite_id, user_id, recipe_id FROM favorite_table";
+                    // `recipe_ids` をカンマ区切りの文字列に変換
+                    string recipe_idsParam = string.Join(",", recipe_ids);
+
+                    // SQL クエリを作成
+                    string sql = $"SELECT recipe_name, recipe_time, recipe_photo FROM favorite_table WHERE recipe_id IN ({recipe_idsParam})";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -757,36 +669,47 @@ namespace FunctionAPIApp
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            favoriteif_tableList resultList = new favoriteif_tableList();
+                            var recipeList = new recipe_tableList();
 
                             while (reader.Read())
                             {
-                                resultList.List.Add(new favoriteif_tableRow
+                                var recipeRow = new recipe_tableRow
                                 {
-                                    favorite_id = reader.GetInt32(0), //("favorite_id"),
-                                    user_id = reader.GetInt32(1), //("user_id"),
-                                    recipe_id = reader.GetInt32(2), //("recipe_id"),
-                                });
+                                   
+                                    recipe_name = reader.GetString(0),
+                                    recipe_time = reader.GetInt32(1),
+                                    recipe_photo = reader.GetString(2)
+
+                                };
+                                recipeList.List.Add(recipeRow);
                             }
 
-                            responseMessage = JsonConvert.SerializeObject(resultList);
+                            return new OkObjectResult(new { result = recipeList, error = "" });
+                            //responseMessage = JsonConvert.SerializeObject(recipeList);
+                            //responseMessage = new { result = resultList, error = "" };
+
                         }
                     }
                 }
             }
             catch (SqlException e)
             {
-                Console.WriteLine(e.ToString());
-                responseMessage = "データベース接続エラーが発生しました。";
+                log.LogError(e.ToString());
+                //responseMessage = "データベース接続エラーが発生しました。";
+                //responseMessage = new { result = "", error = "データベース接続エラーが発生しました。" };
+                return new OkObjectResult(new { result = "", error = "データベース接続エラーが発生しました。" });
+
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                responseMessage = "予期しないエラーが発生しました。";
-            }
+                log.LogError(e.ToString());
+                //responseMessage = "予期しないエラーが発生しました。";
+                //responseMessage = new { result = "", error = "予期しないエラーが発生しました。" };
+                return new OkObjectResult(new { result = "", error = "予期しないエラーが発生しました。" });
 
-            return new OkObjectResult(responseMessage);
+            }
         }
+
 
 
         //水谷

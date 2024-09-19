@@ -8,17 +8,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>チョコレートムース | お菓子メーカー</title>
- 
+
 </head>
 <body>
   <div id="app">
     <v-app>
       <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
- 
+  
       <div class="title-container">
         <h1>チョコレートムース</h1>
       </div>
- 
+  
       <!-- <div class="container"> -->
         <v-row class="outline">
           <v-col cols="7" class="recipe-photo">
@@ -26,7 +26,7 @@
           </v-col>
           <v-col cols="5">
             <div class="recipe-info">
-             
+              
                 <v-btn
                 v-if="!isFavorite"
                 color="amber accent-3"
@@ -35,7 +35,7 @@
                   <v-icon>mdi-star-outline</v-icon>
                   お気に入りに追加
                 </v-btn>
-     
+      
                 <v-btn
                 v-else
                 color="amber accent-3"
@@ -44,14 +44,14 @@
                   <v-icon>mdi-star</v-icon>
                   お気に入りから削除
                 </v-btn>
-             
+              
               <p><strong>カテゴリー:</strong> チョコ</p>
               <p><strong>調理時間:</strong> 25分</p>
               <p><strong>使用商品:</strong> おちゃらけチョコ</p>
             </div>
           </v-col>
         </v-row>
- 
+
         <v-row class="details">
           <v-col cols="5" class="ingredients">
             <!-- <div class="details"> -->
@@ -65,9 +65,9 @@
                 </ul>
               <!-- </div> -->
             </v-col>
-         
- 
-         
+          
+
+          
             <v-col cols="7" class="steps">
               <!-- <div class="steps"> -->
                 <h2>手順</h2>
@@ -78,10 +78,10 @@
                   <ul>もったりしてきたら容器に移し、冷蔵庫で固める。</ul>
                 </ol>
               <!-- </div> -->
-            </v-col>
+            </v-col> 
           </v-row>
       <!-- </div> -->
- 
+
         <!-- <v-container>
           <v-icon
           v-if="!isFavorite"
@@ -90,7 +90,7 @@
           @click="addToFavorite">
             mdi-star-outline
           </v-icon>
- 
+
           <v-icon
           v-else
           color="amber accent-3"
@@ -98,18 +98,18 @@
             mdi-star
           </v-icon>
         </v-container> -->
- 
+
         <v-col cols="12" class="btn-col">
           <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
         </v-col>
       </div>
     </v-app>
   </div>
- 
+
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
- 
+
   <script>
     new Vue({
         el: '#app',
@@ -120,11 +120,11 @@
             nextId: null
           };
         },
- 
+
         async mounted() {
           await this.checkIfFavorite();
         },
- 
+
         methods: {
           // セッションのuser_nameからuser_idをとってくる
           async getUserId() {
@@ -148,14 +148,14 @@
               return null;
             }
           },
- 
+
           async readNextFavoriteId() {
             try {
               const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEALLSELECT');
               console.log('Response:', response);
               console.log('Response data:', response.data);
               console.log('response.data.List:', response.data.List);
- 
+
               if (response.data && response.data.List) {
                 const ids = response.data.List.map(favoriteid => Number(favoriteid.favorite_id));
                 this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
@@ -167,23 +167,23 @@
               console.error('Error fetching data:', error);
             }
           },
- 
+
           async addToFavorite() {
             await this.readNextFavoriteId();
             const favorite_id = Number(this.nextId);
             const user_id = await this.getUserId();
             const recipe_id = sessionStorage.getItem("recipe_id");
- 
+
             const favoritedata = {
               favorite_id: favorite_id,
               user_id: user_id,
               recipe_id: recipe_id
             }
- 
+
             console.log('User ID :', user_id); // デバッグ用ログ
             console.log('Recipe ID from sessionStorage:', recipe_id); // デバッグ用ログ
             console.log('Favorite ID :', favorite_id);
- 
+
             if (user_id && recipe_id) {
               try {
                 const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEINSERT", favoritedata, {
@@ -191,7 +191,7 @@
                     "Content-Type": "application/json"
                   }
                 });
- 
+
                 if (response.status === 200) {
                   console.log('お気に入りに追加しました！');
                   this.isFavorite = true; // 状態を更新
@@ -267,13 +267,8 @@
               navigate() {
               window.location.href = 'home.html';
             }
-            }
+          }
       });
     </script>
   </body>
-<<<<<<< HEAD
 </html>
- 
-=======
-</html>
->>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
