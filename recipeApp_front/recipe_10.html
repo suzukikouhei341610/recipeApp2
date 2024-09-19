@@ -1,32 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <!-- MIMEタイプエラーを回避するため、style.cssを一旦コメントアウト -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <meta charset="UTF-8">
-  <title>キャラメルポップコーンレシピ詳細</title>
+  <title>キャラメルポップコーン | お菓子メーカー</title>
 </head>
+
 <body>
   <div id="app">
     <v-app>
-      <h1>キャラメルポップコーン</h1>
-      <img src="https://plus.unsplash.com/premium_photo-1695865414376-451436dfeba0?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="recipe_photo" alt="Image">
-      <p><strong>カテゴリー:</strong> キャラメル</p>
-      <p><strong>調理時間:</strong> 20分</p>
-      <p><strong>材料:</strong> キャラメル90g、グラニュー糖40g、水大さじ1、サラダ油小さじ1、ポップコーン50g</p>
-      <p><strong>手順:</strong></p>
-      <ol>
-        <li>フライパンにキャラメル・グラニュー糖・水・サラダ油を入れ、弱火～中火にかけて混ぜ溶かす</li>
-        <li>溶けたら、焦がさないようにゴムベラで混ぜながら、さらに煮詰めて水分を飛ばす<br>point: しっかりと水分を飛ばすことで、カリカリの食感になる</li>
-        <li>とろみがつき、全体に細かい泡が立ってきたら火を止め、ポップコーンを加えてゴムベラで混ぜる</li>
-        <li>バットに広げてあら熱をとる</li>
-        <li>温かいうちに手でほぐし完成</li>
-      </ol>
-        <v-container>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>キャラメルポップコーン</h1>
+      </div>
+
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img src="https://plus.unsplash.com/premium_photo-1695865414376-451436dfeba0?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="recipe-photo" alt="キャラメルポップコーンの画像">
+        </v-col>
+
+        <v-col cols="5">
+          <div class="recipe-info">
+           
+              <v-btn
+              v-if="!isFavorite"
+              color="amber accent-3"
+              @click="addToFavorite"
+              class="favorite-btn">
+                <v-icon>mdi-star-outline</v-icon>
+                お気に入りに追加
+              </v-btn>
+   
+              <v-btn
+              v-else
+              color="amber accent-3"
+              @click="deleteFromFavorite"
+              class="favorite-btn">
+                <v-icon>mdi-star</v-icon>
+                お気に入りから削除
+              </v-btn>
+
+
+            <p><strong>カテゴリー:</strong> キャラメル</p>
+            <p><strong>調理時間:</strong> 20分</p>
+            <p><strong>使用商品:</strong> おちゃらけキャラメル</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料:</h2> 
+          <ul>
+            <li>キャラメル90g</li>
+            <li>グラニュー糖40g</li>
+            <li>水大さじ1</li>
+            <li>サラダ油小さじ1</li>
+            <li>ポップコーン50g</li>
+          </ul>
+        </v-col>
+        
+        <v-col cols="7" class="steps">
+          <h2>手順:</h2>
+          <ol>
+            <ul>フライパンにキャラメル・グラニュー糖・水・サラダ油を入れ、弱火～中火にかけて混ぜ溶かす。</ul>
+            <ul>溶けたら、焦がさないようにゴムベラで混ぜながら、さらに煮詰めて水分を飛ばす。<br>point: しっかりと水分を飛ばすことで、カリカリの食感になる。</ul>
+            <ul>とろみがつき、全体に細かい泡が立ってきたら火を止め、ポップコーンを加えてゴムベラで混ぜる。</ul>
+            <ul>バットに広げてあら熱をとる。</ul>
+            <ul>温かいうちに手でほぐし完成。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+        <!-- <v-container>
         <v-btn
           v-if="!isFavorite"
           color="primary"
@@ -41,9 +92,11 @@
         >
           お気に入りから削除
         </v-btn>
-      </v-container>
+      </v-container> -->
  
-      <a href="home.html">戻る</a>
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
     </v-app>
   </div>
  
@@ -61,11 +114,11 @@
             nextId: null
           };
         },
-
+ 
         async mounted() {
           await this.checkIfFavorite();
         },
-
+ 
         methods: {
           // セッションのuser_nameからuser_idをとってくる
           async getUserId() {
@@ -89,14 +142,14 @@
               return null;
             }
           },
-
+ 
           async readNextFavoriteId() {
             try {
               const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEALLSELECT');
               console.log('Response:', response);
               console.log('Response data:', response.data);
               console.log('response.data.List:', response.data.List);
-              
+ 
               if (response.data && response.data.List) {
                 const ids = response.data.List.map(favoriteid => Number(favoriteid.favorite_id));
                 this.nextId = ids.length ? Number(Math.max(...ids) + 1) : 1;
@@ -108,23 +161,23 @@
               console.error('Error fetching data:', error);
             }
           },
-
+ 
           async addToFavorite() {
             await this.readNextFavoriteId();
             const favorite_id = Number(this.nextId);
             const user_id = await this.getUserId();
             const recipe_id = sessionStorage.getItem("recipe_id");
-
+ 
             const favoritedata = {
               favorite_id: favorite_id,
               user_id: user_id,
               recipe_id: recipe_id
             }
-
+ 
             console.log('User ID :', user_id); // デバッグ用ログ
             console.log('Recipe ID from sessionStorage:', recipe_id); // デバッグ用ログ
             console.log('Favorite ID :', favorite_id);
-
+ 
             if (user_id && recipe_id) {
               try {
                 const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEINSERT", favoritedata, {
@@ -132,7 +185,7 @@
                     "Content-Type": "application/json"
                   }
                 });
-
+ 
                 if (response.status === 200) {
                   console.log('お気に入りに追加しました！');
                   this.isFavorite = true; // 状態を更新
@@ -146,14 +199,14 @@
               console.error("ユーザーIDまたはレシピIDが取得できませんでした。");
             }
           },
-
+ 
           async deleteFromFavorite() {
             const user_id = await this.getUserId();
             const recipe_id = sessionStorage.getItem("recipe_id");
-            
+           
             console.log('User ID:', user_id); // ユーザーIDを表示
             console.log('Recipe ID:', recipe_id); // レシピIDを表示
-
+ 
             if (user_id && recipe_id) {
               try {
                 const response = await axios.post("https://m3h-kouhei-2010.azurewebsites.net/api/FAVORITEDELETE", {
@@ -164,7 +217,7 @@
                     "Content-Type": "application/json"
                   }
                 });
-
+ 
                 if (response.status === 200) {
                   console.log('お気に入りが解除されました！');
                   this.isFavorite = false; // 状態を更新
@@ -182,19 +235,19 @@
               alert('ユーザーIDまたはレシピIDが取得できませんでした。');
             }
           },
-
+ 
           async checkIfFavorite() {
             const user_id = await this.getUserId();
             const recipe_id = sessionStorage.getItem("recipe_id");
-            
+           
             console.log('User ID:', user_id); // ユーザーIDを表示
             console.log('Recipe ID:', recipe_id); // レシピIDを表示
-
+ 
             if (user_id && recipe_id) {
             try {
               const response = await axios.get(`https://m3h-kouhei-2010.azurewebsites.net/api/CHECKIFFAVORITE?user_id=${user_id}&recipe_id=${recipe_id}`);
               const isFavorite = response.data.isFavorite;  // APIレスポンスからisFavoriteを取得              
-              
+             
               // お気に入り状態に応じてボタンを切り替え
               this.isFavorite = isFavorite;
                     console.log('お気に入り状態:', this.isFavorite);
@@ -204,7 +257,10 @@
                 } else {
                   console.error('ユーザーIDまたはレシピIDが取得できませんでした。');
                 }
-              }
+              },
+              navigate() {
+              window.location.href = 'home.html';
+            }
             }
       });
     </script>

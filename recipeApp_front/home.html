@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -17,6 +18,34 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+=======
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="recipe_style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <meta charset="UTF-8">
+        <title>Home</title>
+        <style>
+            .search-card{
+                margin: 50px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <v-app>
+            <div id="app">
+                <v-app-bar>
+                    <v-toolbar-title>recipe app</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                        <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> | -->
+                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn>
+                        <v-btn @click="logout()">logout</v-btn>
+                        <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
+                </v-app-bar>
+>>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
 
         .search-card {
             margin: 50px;
@@ -178,6 +207,7 @@
                 this.allRecipes();
             },
 
+<<<<<<< HEAD
             methods: {
                 async allRecipes() {
                     try {
@@ -186,6 +216,61 @@
                         this.recipes = data.List;
                     } catch (error) {
                         console.error('エラーが発生しました:', error);
+=======
+                methods: {
+                    //レシピ全表示
+                    async allRecipes(){
+                        try {
+                            const response = await fetch('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
+                            const data = await response.json();
+                            this.recipes = data.List; 
+                        } catch (error) {
+                            console.error('エラーが発生しました:', error);
+                        }
+                    },
+
+                    //レシピ検索
+                    async searchRecipes() {
+                        this.recipes = [];
+                        try {
+                            const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
+                                params: {
+                                    recipe_category: this.recipe_category,
+                                    recipe_scene: this.recipe_scene
+                                    // recipe_category: this.selectedCategories.join(','), 
+                                    // recipe_scene: this.selectedScenes.join(',')  
+                                }
+                            });
+                            //console.log('API Response:', response.data);//デバック用
+                            //console.log('First Recipe Data:', response.data[0]);//デバック用
+                            this.recipes = response.data;
+                        } catch (error) {
+                            console.error("検索中にエラーが発生しました:", error);
+                            alert("検索中にエラーが発生しました。");
+                        }
+                    },
+                    
+                    //詳細ページへ
+                    goToDetail(recipe_id){
+                        sessionStorage.setItem("recipe_id", recipe_id);
+                        const url = `recipe_${recipe_id}.html`;
+                        window.location.href = url;
+                    },
+
+                    clearCategory(){
+                        this.recipe_category = '';
+                    },
+
+                    clearScene(){
+                        this.recipe_scene = '';
+                    },
+
+                    logout(){
+                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                        sessionStorage.removeItem('user_name');
+                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                        window.location.href = 'index.html';
+>>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
                     }
                 },
 
