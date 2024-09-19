@@ -1,31 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
-  <title>レシピ詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ガトーショコラ | お菓子メーカー</title>
 </head>
 <body>
-  <h1>ガトーショコラ</h1>
-  <img class="recipe_photo" src="https://i.pinimg.com/564x/f9/66/56/f966563a77c15638c20d186af26a2a3b.jpg" alt="Image">
-  <p><strong>カテゴリー:</strong>チョコ</p>
-  <p><strong>調理時間:</strong> 60分</p>
-  <p><strong>材料:</strong>
-    チョコレート100g(板チョコ2枚)、バター100g、ココアパウダー40g <br>
-    A. 卵黄3個分、砂糖40g <br>
-    B. 卵白3個分、砂糖40g <br>
-    </p>
-  <p><strong>手順:</strong></p>
-  <ol>
-    <li>チョコレートを細かく切ってボウルに入れ、湯せんにかける。</li>
-    <li>1が溶けたら、室温で柔らかくしたバターを入れ、混ぜる。</li>
-    <li>2にココアパウダーをふるって入れ、さらに混ぜる。</li>
-    <li>Aの材料を合わせ、少し白っぽくなるまで混ぜる。</li>
-    <li>Bの卵白を泡立て、砂糖を2~3回に分けて入れ、さらに泡立ててメレンゲを作る。</li>
-    <li>3に4と5を交互に入れ、メレンゲの泡をつぶさないように、さっくり混ぜ込む。</li>
-    <li>直径18cm丸型の底と側面にクッキングペーパーを敷き、6を流し入れる。</li>
-    <li>7を160℃のオーブンに入れて40分ほど焼き、冷めてから切り分ける。</li>
-  </ol>
-  <a href="home.html">戻る</a>
+  <div id="app">
+    <v-app>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>ガトーショコラ</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img class="recipe-photo" src="https://i.pinimg.com/564x/f9/66/56/f966563a77c15638c20d186af26a2a3b.jpg" alt="ガトーショコラの画像">
+        </v-col>
+        <v-col cols="5">
+          <div class="recipe-info">
+            <p><strong>カテゴリー:</strong> チョコ</p>
+            <p><strong>調理時間:</strong> 60分</p>
+            <p><strong>使用商品:</strong>おちゃらけチョコ</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料</h2>
+          <ul>
+            <li>チョコレート100g(板チョコ2枚)</li>
+            <li>バター100g</li>
+            <li>ココアパウダー40g</li>
+            <li>A. 卵黄3個分、砂糖40g</li>
+            <li>B. 卵白3個分、砂糖40g</li>
+          </ul>
+        </v-col>
+
+        <v-col cols="7" class="steps">
+          <h2>手順</h2>
+          <ol>
+            <ul>チョコレートを細かく切ってボウルに入れ、湯せんにかける。</ul>
+            <ul>1が溶けたら、室温で柔らかくしたバターを入れ、混ぜる。</ul>
+            <ul>2にココアパウダーをふるって入れ、さらに混ぜる。</ul>
+            <ul>Aの材料を合わせ、少し白っぽくなるまで混ぜる。</ul>
+            <ul>Bの卵白を泡立て、砂糖を2~3回に分けて入れ、さらに泡立ててメレンゲを作る。</ul>
+            <ul>3に4と5を交互に入れ、メレンゲの泡をつぶさないように、さっくり混ぜ込む。</ul>
+            <ul>直径18cm丸型の底と側面にクッキングペーパーを敷き、6を流し入れる。</ul>
+            <ul>7を160℃のオーブンに入れて40分ほど焼き、冷めてから切り分ける。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      methods: {
+        navigate() {
+          window.location.href = 'home.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

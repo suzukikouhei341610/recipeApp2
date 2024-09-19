@@ -1,24 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
-  <title>レシピ詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スモア風 マシュマロサンドクッキー | レシピ詳細</title>
 </head>
 <body>
-  <h1>スモア風 マシュマロサンドクッキー</h1>
-  <img class="recipe_photo" src="https://images.unsplash.com/photo-1633997455043-434ee7ca3e1a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image">
-  <p><strong>カテゴリー:</strong>クッキー</p>
-  <p><strong>調理時間:</strong> 5分</p>
-  <p><strong>材料:</strong>
-    クッキー6枚、マシュマロ(直径2cm程度の大きさのもの)3個
-  </p>
-  <p><strong>手順:</strong></p>
-  <ol>
-    <li>クッキー3枚を耐熱皿に並べ、その上にマシュマロを1個ずつ置く。</li>
-    <li>1を電子レンジに入れ、10秒から15秒程度、マシュマロが膨らむまで加熱する。</li>
-    <li>2の上にすぐに残りのクッキーを1枚ずつ乗せて上から軽く押す。</li>
-  </ol>
-  <a href="home.html">戻る</a>
+  <div id="app">
+    <v-app>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>スモア風 マシュマロサンドクッキー</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img class="recipe-photo" src="https://images.unsplash.com/photo-1633997455043-434ee7ca3e1a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="スモア風マシュマロサンドクッキーの画像">
+        </v-col>
+        <v-col cols="5">
+          <div class="recipe-info">
+            <p><strong>カテゴリー:</strong> クッキー</p>
+            <p><strong>調理時間:</strong> 5分</p>
+            <p><strong>使用商品:</strong> おちゃらけクッキー</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料</h2>
+          <ul>
+            <li>クッキー 6枚</li>
+            <li>マシュマロ 3個 (直径2cm程度)</li>
+          </ul>
+        </v-col>
+
+        <v-col cols="7" class="steps">
+          <h2>手順</h2>
+          <ol>
+            <ul>クッキー3枚を耐熱皿に並べ、その上にマシュマロを1個ずつ置く。</ul>
+            <ul>電子レンジで10～15秒程度、マシュマロが膨らむまで加熱する。</ul>
+            <ul>残りのクッキーを上に乗せて、軽く押す。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      methods: {
+        navigate() {
+          window.location.href = 'index.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

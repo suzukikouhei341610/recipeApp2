@@ -1,25 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-    <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="recipe_style.css">
   <meta charset="UTF-8">
-  <title>レシピ詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>丸ごと焼きリンゴ | レシピ詳細</title>
 </head>
 <body>
-  <h1>丸ごと焼きリンゴ</h1>
-  <img class="recipe_photo" src="https://i.pinimg.com/564x/20/43/df/2043df5a667ea2a96e6aed1664d39d33.jpg" alt="Image">
-  <p><strong>カテゴリー:</strong>キャンディ</p>
-  <p><strong>調理時間:</strong> 70分</p>
-  <p><strong>材料:</strong>
-    りんご2個 <br>
-    A. キャンディ4個、バター30g、レーズン10g、シナモンスティック2本
-  </p>
-  <p><strong>手順:</strong></p>
-  <ol>
-    <li>りんごは芯の周りに切り込みを入れ、スプーンで芯を取る。</li>
-    <li>りんごの穴にＡをそれぞれ半量ずつ詰める。</li>
-    <li>アルミホイルで二重に包み耐熱容器にのせ、オーブン200度で40分~1時間ほど焼く。</li>
-  </ol>
-  <a href="home.html">戻る</a>
+  <div id="app">
+    <v-app>
+      <header>🍰おちゃらけ天使のお菓子レシピ🎂</header>
+
+      <div class="title-container">
+        <h1>丸ごと焼きリンゴ</h1>
+      </div>
+
+      <v-row class="outline">
+        <v-col cols="7" class="recipe-photo">
+          <img class="recipe-photo" src="https://i.pinimg.com/564x/20/43/df/2043df5a667ea2a96e6aed1664d39d33.jpg" alt="丸ごと焼きリンゴの画像">
+        </v-col>
+        <v-col cols="5">
+          <div class="recipe-info">
+            <p><strong>カテゴリー:</strong> キャンディ</p>
+            <p><strong>調理時間:</strong> 70分</p>
+            <p><strong>材料:</strong></p>
+            <ul>
+              <li>りんご 2個</li>
+              <li>A. キャンディ 4個</li>
+              <li>バター 30g</li>
+              <li>レーズン 10g</li>
+              <li>シナモンスティック 2本</li>
+            </ul>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="details">
+        <v-col cols="5" class="ingredients">
+          <h2>材料</h2>
+          <ul>
+            <li>りんご 2個</li>
+            <li>キャンディ 4個</li>
+            <li>バター 30g</li>
+            <li>レーズン 10g</li>
+            <li>シナモンスティック 2本</li>
+          </ul>
+        </v-col>
+
+        <v-col cols="7" class="steps">
+          <h2>手順</h2>
+          <ol>
+            <ul>りんごは芯の周りに切り込みを入れ、スプーンで芯を取る。</ul>
+            <ul>りんごの穴にAをそれぞれ半量ずつ詰める。</ul>
+            <ul>アルミホイルで二重に包み耐熱容器にのせ、オーブン200度で40分～1時間ほど焼く。</ul>
+          </ol>
+        </v-col>
+      </v-row>
+
+      <v-col cols="12" class="btn-col">
+        <v-btn @click="navigate()" class="recipe_btn btn">戻る</v-btn>
+      </v-col>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      methods: {
+        navigate() {
+          window.location.href = 'home.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

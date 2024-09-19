@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>カステラレシピ詳細</title>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <h1>カステラ</h1>
+      <img src="https://i.pinimg.com/564x/30/28/87/3028874066174875255299e70aaccc0b.jpg" class="recipe_photo" alt="Image">
+      <p><strong>カテゴリー:</strong> はちみつ</p>
+      <p><strong>調理時間:</strong> 75分</p>
+      <p><strong>材料:</strong> はちみつ大さじ2、牛乳大さじ1、みりん大さじ1、強力粉80g、卵2個、砂糖80g、ザラメ糖大さじ2</p>
+      <p><strong>手順:</strong></p>
+      <ol>
+        <li>型にオーブンシートを敷いて、ザラメを敷きつめておく</li>
+        <li>強力粉をふるっておく</li>
+        <li>はちみつ・牛乳・みりんを合わせて混ぜ、電子レンジ（500W）で10秒間加熱</li>
+        <li>ボウルに卵を入れ、50℃程度の湯煎にかけながら、その都度よく泡立てる</li>
+        <li> 2.で加熱した材料を加えてさらによく泡立てる</li>
+        <li>ふるっておいた強力粉を一気に加え、ヘラで切るように混ぜる</li>
+        <li>型に流し入れ、2〜3回テーブルに軽くうちつけて空気を抜く</li>
+        <li>80℃に予熱したオーブンでまず10分間、その後150℃に下げて20分間焼く</li>
+        <li>竹串で刺してみて、生地がついてこなければ焼き上がり</li>
+        <li>型から出してオーブンシートがついたままラップで包み、焼き目を下にして常温で1日寝かせたら完成</li>
+
+            
+      </ol>
+      <v-container>
+        <v-btn
+          v-if="!isFavorite"
+          color="primary"
+          @click="addToFavorite"
+        >
+          お気に入りに追加
+        </v-btn>
+        <v-btn
+          v-else
+          color="green"
+          @click="deleteFromFavorite"
+        >
+          お気に入りから削除
+        </v-btn>
+      </v-container>
+ 
+      <a href="home.html">戻る</a>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ 
+  <script>
+    </script>
+  </body>
+</html>
