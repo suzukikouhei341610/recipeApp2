@@ -1,24 +1,5 @@
 <!DOCTYPE html>
 <html>
-<<<<<<< HEAD
-<head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('https://th.bing.com/th/id/R.8befeefcdbee9a04dea2f89fce4c2b1f?rik=gPajNBBNugNGKg&riu=http%3a%2f%2fimg.doooor.com%2fimg%2fforum%2f201212%2f26%2f103752stu4mqqag98u9qga.jpg&ehk=uYP7Zp59UxkfoInCABBWvQH7V9S4eUp7dXosYbuzKWw%3d&risl=&pid=ImgRaw&r=0');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-=======
     <head>
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -28,26 +9,7 @@
         <meta charset="UTF-8">
         <title>Home</title>
         <style>
-            .search-card{
-                margin: 50px;
-            }
-        </style>
-    </head>
-    
-    <body>
-        <v-app>
-            <div id="app">
-                <v-app-bar>
-                    <v-toolbar-title>recipe app</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                        <!-- <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> | -->
-                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn>
-                        <v-btn @click="logout()">logout</v-btn>
-                        <!-- <v-btn onclick="window.location.href = 'index.html';">logout</v-btn> -->
-                </v-app-bar>
->>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
-
-        .search-card {
+            .search-card {
             margin: 50px;
             background-color: rgba(255, 255, 255, 0.8);
         }
@@ -115,9 +77,9 @@
         .btn-search:hover {
             background-color: #388E3C;
         }
-    </style>
-</head>
-
+        </style>
+    </head>
+    
 <body>
     <v-app>
         <div id="app">
@@ -207,16 +169,6 @@
                 this.allRecipes();
             },
 
-<<<<<<< HEAD
-            methods: {
-                async allRecipes() {
-                    try {
-                        const response = await fetch('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
-                        const data = await response.json();
-                        this.recipes = data.List;
-                    } catch (error) {
-                        console.error('エラーが発生しました:', error);
-=======
                 methods: {
                     //レシピ全表示
                     async allRecipes(){
@@ -270,7 +222,6 @@
                         sessionStorage.removeItem('user_name');
                         //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
                         window.location.href = 'index.html';
->>>>>>> d6705fcb53dd3c714aba566c279949474a1fdca9
                     }
                 },
 
@@ -308,8 +259,8 @@
                     sessionStorage.removeItem('user_name');
                     window.location.href = 'index.html';
                 }
-            },
-        });
+            }
+        );
     </script>
 </body>
 </html>
