@@ -16,9 +16,16 @@
             display: block;
             margin: 0 auto;
         }
+        .delete-title {
+            font-size: 18px !important;
+        }
+        .delete-text {
+            font-size: 15px;
+            text-align: center;
+        }
         footer {
             background-color: #c6ebc5 !important;
-            height: 68px;
+            height: 80px;
         }
         .footer-row {
             display: flex;
@@ -89,7 +96,6 @@
                                             <v-img v-if="selectedRecipe.recipe_photo" :src="selectedRecipe.recipe_photo" alt="レシピ写真" max-width="100%"></v-img>
                                         </v-col>
                                     </v-row>
-                                    
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-btn @click="goBack">戻る</v-btn>
@@ -98,6 +104,35 @@
                             </v-card>
                         </v-col>
                     </v-row>
+
+                    <v-dialog v-model="dialog" max-width="500px">
+                        <v-card>
+                            <v-card-title class="delete-title">レシピ削除確認</v-card-title>
+                            <v-card-text class="delete-text">
+                                本当にこのレシピを削除しますか？<br>
+                                削除したレシピは完全に消去されます。
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="dialog = false">キャンセル</v-btn>
+                                <v-btn color="red" text @click="deleteRecipe">削除</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+        
+                    <v-dialog v-model="showMessageDialog" max-width="400">
+                        <v-card>
+                            <v-card-title class="delete-title">通知</v-card-title>
+                            <v-card-text class="delete-text">
+                                {{ message }}
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn text @click="closeMessageDialog">閉じる</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
                 </v-container>
         
                 <v-footer v-if="!selectedRecipe">
@@ -144,7 +179,6 @@
                         const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
                         console.log('APIレスポンス:', response.data);
 
-                        // response.data.List が配列かどうかを確認して処理を行う
                         if (response.data && Array.isArray(response.data.List)) {
                             this.recipes = response.data.List;
                         } else {
@@ -158,21 +192,17 @@
                     if (!this.selectedRecipe) return;
 
                     try {
-                        // GETリクエストを送信してレシピを削除
                         const response = await axios.get('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPEDELETE', {
                             params: {
-                        // クエリパラメータでrecipe_idを渡す
                                 recipe_id: this.selectedRecipe.recipe_id
                             }
                         });
 
-                        // 成功メッセージを設定してダイアログを表示
                         this.message = '削除されました';
-                        this.showMessageDialog = true;  // 成功メッセージダイアログを開く
-                        this.dialog = false;  // 削除確認ダイアログを閉じる
+                        this.showMessageDialog = true;
+                        this.dialog = false;
 
                     } catch (error) {
-                        // エラーメッセージを確認
                         console.error('レシピの削除に失敗しました:', error.response ? error.response.data : error.message);
                     }
                 },
@@ -184,12 +214,12 @@
                     this.dialog = true;
                 },
                 async closeMessageDialog() {
-                    this.showMessageDialog = false;  // メッセージダイアログを閉じる
+                    this.showMessageDialog = false;
                     this.selectedRecipe = null;
-                    await this.selectRecipes();  // レシピ一覧を再取得して管理画面に戻る
+                    await this.selectRecipes();
                 },
                 goBack() {
-                    this.selectedRecipe = null; // 戻る際に選択したレシピをクリア
+                    this.selectedRecipe = null;
                 },
                 logout() {
                     window.location.href = 'index.html';
