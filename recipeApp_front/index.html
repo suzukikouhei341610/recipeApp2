@@ -4,15 +4,16 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="headerfooter.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <meta charset="UTF-8">
     <title>Toppage</title>
     <style>
         .v-app-bar {
-            position: fixed; /* ヘッダーを画面上部に固定 */
+            position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000; /* 他の要素より上に表示されるようにする */
+            z-index: 1000;
         }
         .bar {
             background-color: #c6ebc5 !important;
@@ -29,7 +30,7 @@
             right: 16px;
         }
         .v-main {
-            padding-top: 64px; /* ヘッダーの高さ分だけ余白を追加 */
+            padding-top: 64px;
         }
         .top-image {
             padding-top: 64px;
@@ -51,7 +52,7 @@
             display: inline-block;
             margin-bottom: 5px;
             font-size: 14px;
-            line-height: 1.5;  /* 行の高さを調整して縦幅を小さくする */
+            line-height: 1.5;
         }
         .text-subtitle-1 {
             font-size: 14x;
@@ -157,7 +158,6 @@
                 </div>
                 <v-container>
                     <v-row>
-                        <!-- カルーセル部分 -->
                         <v-col cols="7">
                             <v-carousel v-model="active" :interval="4000" cycle hide-delimiters id="carousel">
                                 <v-carousel-item v-for="(card, i) in cards" :key="i">
@@ -177,7 +177,6 @@
                             </v-carousel>
                         </v-col>
             
-                        <!-- 人気のキーワード部分 -->
                         <v-col cols="5">
                             <div class="keyword">
                                 <h2 class="highlight">人気のキーワード</h2>

@@ -4,98 +4,54 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="recipe_style.css">
+        <!-- <link rel="stylesheet" href="recipe_style.css"> -->
+        <link rel="stylesheet" href="headerfooter.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
         <meta charset="UTF-8">
         <title>Home</title>
         <style>
-            .search-card {
-            margin: 50px;
-            background-color: rgba(255, 255, 255, 0.8);
-        }
+            .search-app{
+                padding-top: 50px;
+            }
+            .search-card{
+                margin: 70px;
+            }
 
-        .v-app-bar {
-            background-color: #4CAF50;
-        }
+            .search-card h2{
+                padding-bottom: 20px; 
+            }
 
-        .v-toolbar-title {
-            color: #fff;
-        }
+            .itemlist{
+                margin: 0 50px 20px 50px !important;
+            }
 
-        .v-btn {
-            background-color: #4CAF50;
-            color: #fff;
-        }
-
-        .v-btn:hover {
-            background-color: #388E3C;
-        }
-
-        .clear-btn {
-            background-color: rgba(255, 255, 255, 0.6);
-            border: 1px solid #4CAF50;
-            color: #4CAF50;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .clear-btn:hover {
-            background-color: rgba(76, 175, 80, 0.2);
-            color: #388E3C;
-        }
-
-        h3 {
-            color: #2E7D32;
-        }
-
-        .card-subtitle {
-            font-weight: bold;
-            color: #2E7D32;
-        }
-
-        .card-recipe-time {
-            color: #1B5E20;
-        }
-
-        .v-card-actions .v-btn {
-            color: #4CAF50;
-        }
-
-        h2 {
-            color: #2E7D32;
-        }
-
-        p {
-            color: #1B5E20;
-        }
-
-        .btn-search {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .btn-search:hover {
-            background-color: #388E3C;
-        }
+            .itemlist .v-card:hover {
+                cursor: pointer !important;
+                background-color: #f5f5f5 !important;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; 
+                transition: background-color 0.3s, box-shadow 0.3s !important;
+            }
         </style>
     </head>
     
-<body>
-    <v-app>
-        <div id="app">
-            <v-app-bar>
-                <v-toolbar-title>recipe app</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn>
-                <v-btn @click="logout()">logout</v-btn>
-            </v-app-bar>
+    <body>
+        <v-app>
+            <div id="app">
+                <v-app-bar app>
+                    <h1>😊おちゃらけ😊</h1>
+                    <v-spacer></v-spacer>
+                        <v-btn onclick="window.location.href = 'home.html';">Home</v-btn> |
+                        <v-btn onclick="window.location.href = 'mypage.html';">my page</v-btn> |
+                        <v-btn @click="logout()">logout</v-btn>
+                </v-app-bar>
 
             <div class="search-app">
                 <v-card class="mx-auto search-card" outlined elevation="2" tile>
                     <v-form @submit.prevent="searchRecipes">
                         <v-container>
                             <v-col cols="12">
-                                <h3>レシピカテゴリーを選択</h3>
+                                <h2>条件でレシピを検索</h2>
+                                <h5>レシピカテゴリーを選択してね🥄</h5>
                                 <v-radio-group v-model="recipe_category" row>
                                     <v-radio v-for="(category, index) in categories" :key="index" :label="category" :value="category"></v-radio>
                                 </v-radio-group>
@@ -103,9 +59,14 @@
                             </v-col>
 
                             <v-col cols="12">
-                                <h3>シーンを選択</h3>
-                                <v-radio-group v-model="recipe_scene" row>
-                                    <v-radio v-for="(scene, index) in scenes" :key="index" :label="scene" :value="scene"></v-radio>
+                                <h5>シーンを選択してね🥄</h5>
+                                    <v-radio-group v-model="recipe_scene" row>
+                                        <v-radio
+                                        v-for="(scene, index) in scenes"
+                                        :key="index"
+                                        :label="scene"
+                                        :value="scene"
+                                        ></v-radio>
                                 </v-radio-group>
                                 <v-btn @click="clearScene" class="clear-btn">選択をクリア</v-btn>
                             </v-col>
@@ -118,34 +79,49 @@
                 </v-card>
             </div>
 
-            <div v-if="recipes.length > 0">
+                <div v-if="recipes.length > 0" class="itemlist">
                 <h2>レシピ一覧</h2>
                 <!-- レシピカードを表示するエリア -->
                 <v-container class="px-4"> <!-- 左右にスペースを追加 -->
                     <v-row>
-                        <v-col v-for="recipe in recipes" :key="recipe.recipe_id" cols="12" sm="6" md="4" class="px-2">
-                            <v-card class="mx-auto" max-width="400" outlined>
-                                <v-img class="white--text align-end" height="200px" :src="encodeURI(recipe.recipe_photo) || 'recipeApp2\\recipeApp_front\\images\\no image.jpg'" alt="Recipe Image"></v-img>
-
-                                <v-card-subtitle class="card-subtitle">{{ recipe.recipe_name }}</v-card-subtitle>
-
+                        <v-col v-for="recipe in recipes" :key="recipe.recipe_id" cols="12" sm="6" md="4">
+                            <v-card class="mx-aurecipe-cardto " max-width="400" outlined @click="goToDetail(recipe.recipe_id)">
+                                <v-img
+                                class="white--text align-end"
+                                height="200px"
+                                :src="encodeURI(recipe.recipe_photo) || 'recipeApp2\\recipeApp_front\\images\\no image.jpg'"
+                                alt="Recipe Image"
+                                >
+                                </v-img>
+                
+                                <v-card-subtitle class="card-subtitle">
+                                {{ recipe.recipe_name }}
+                                </v-card-subtitle>
+                
                                 <v-card-text class="card-recipe-time">
                                     <div>調理時間: {{ recipe.recipe_time }} 分</div>
                                 </v-card-text>
-
-                                <v-card-actions>
+                                
+                                <!-- <v-card-actions>
                                     <v-btn text @click="goToDetail(recipe.recipe_id)">詳細を見る</v-btn>
-                                </v-card-actions>
+                                </v-card-actions> -->
                             </v-card>
                         </v-col>
                     </v-row>
-                </v-container> <!-- v-containerで囲むことで左右に余白を追加 -->
-            </div>
-            <div v-else>
+                </div>
+                <div v-else>
                 <p>検索結果がありません。</p>
+                </div>
+
+                <v-footer>
+                    <v-row class="footer-row justify-center align-center">
+                        <v-col class="footer-col text-center" cols="12">
+                            <span class="copyright-text">© 2024 株式会社おちゃらけ All rights reserved</span>
+                        </v-col>
+                    </v-row>
+                </v-footer> 
             </div>
-        </div>
-    </v-app>
+        </v-app>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -157,110 +133,74 @@
             vuetify: new Vuetify(),
             data() {
                 return {
-                    recipe_category: "",
-                    recipe_scene: "",
-                    recipes: [],
-                    categories: ['チョコ', 'クッキー', 'キャンディ', 'キャラメル', 'ホットケーキミックス', 'はちみつ'],
-                    scenes: ['ハロウィン', 'クリスマス', 'お祝い', 'パーティー', 'おしゃれ', '親子で作る', 'カフェ気分', '時短レシピ'],
-                };
-            },
+                recipe_category: "",
+                recipe_scene: "",
+                recipes: [],
+                categories: ['チョコ', 'クッキー', 'キャンディ', 'キャラメル', 'ホットケーキミックス', 'はちみつ'],
+                scenes: ['ハロウィン', 'クリスマス', 'お祝い', 'パーティー', 'おしゃれ', '親子で作る', 'カフェ気分', '時短レシピ'],
+            };
+        },
 
-            mounted() {
-                this.allRecipes();
-            },
+        mounted() {
+            this.allRecipes();
+        },
 
-                methods: {
-                    //レシピ全表示
-                    async allRecipes(){
-                        try {
-                            const response = await fetch('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
-                            const data = await response.json();
-                            this.recipes = data.List; 
-                        } catch (error) {
-                            console.error('エラーが発生しました:', error);
-                        }
-                    },
-
-                    //レシピ検索
-                    async searchRecipes() {
-                        this.recipes = [];
-                        try {
-                            const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
-                                params: {
-                                    recipe_category: this.recipe_category,
-                                    recipe_scene: this.recipe_scene
-                                    // recipe_category: this.selectedCategories.join(','), 
-                                    // recipe_scene: this.selectedScenes.join(',')  
-                                }
-                            });
-                            //console.log('API Response:', response.data);//デバック用
-                            //console.log('First Recipe Data:', response.data[0]);//デバック用
-                            this.recipes = response.data;
-                        } catch (error) {
-                            console.error("検索中にエラーが発生しました:", error);
-                            alert("検索中にエラーが発生しました。");
-                        }
-                    },
-                    
-                    //詳細ページへ
-                    goToDetail(recipe_id){
-                        sessionStorage.setItem("recipe_id", recipe_id);
-                        const url = `recipe_${recipe_id}.html`;
-                        window.location.href = url;
-                    },
-
-                    clearCategory(){
-                        this.recipe_category = '';
-                    },
-
-                    clearScene(){
-                        this.recipe_scene = '';
-                    },
-
-                    logout(){
-                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                        sessionStorage.removeItem('user_name');
-                        //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
-                        window.location.href = 'index.html';
-                    }
-                },
-
-                async searchRecipes() {
-                    this.recipes = [];
-                    try {
-                        const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
-                            params: {
-                                recipe_category: this.recipe_category,
-                                recipe_scene: this.recipe_scene
-                            }
-                        });
-                        this.recipes = response.data;
-                    } catch (error) {
-                        console.error("検索中にエラーが発生しました:", error);
-                        alert("検索中にエラーが発生しました。");
-                    }
-                },
-
-                goToDetail(recipe_id) {
-                    const url = `recipe_${recipe_id}.html`;
-                    sessionStorage.setItem('recipe_id', recipe_id);
-                    window.location.href = url;
-                },
-
-                clearCategory() {
-                    this.recipe_category = '';
-                },
-
-                clearScene() {
-                    this.recipe_scene = '';
-                },
-
-                logout() {
-                    sessionStorage.removeItem('user_name');
-                    window.location.href = 'index.html';
+        methods: {
+            //レシピ全表示
+            async allRecipes(){
+                try {
+                    const response = await fetch('https://m3h-kouhei-2010.azurewebsites.net/api/RECIPESELECT');
+                    const data = await response.json();
+                    this.recipes = data.List; 
+                } catch (error) {
+                    console.error('エラーが発生しました:', error);
                 }
+            },
+
+            //レシピ検索
+            async searchRecipes() {
+                this.recipes = [];
+                try {
+                    const response = await axios.get("https://m3h-kouhei-2010.azurewebsites.net/api/SEARCH", {
+                        params: {
+                            recipe_category: this.recipe_category,
+                            recipe_scene: this.recipe_scene
+                            // recipe_category: this.selectedCategories.join(','), 
+                            // recipe_scene: this.selectedScenes.join(',')  
+                        }
+                    });
+                    //console.log('API Response:', response.data);//デバック用
+                    //console.log('First Recipe Data:', response.data[0]);//デバック用
+                    this.recipes = response.data;
+                } catch (error) {
+                    console.error("検索中にエラーが発生しました:", error);
+                    alert("検索中にエラーが発生しました。");
+                }
+            },
+            
+            //詳細ページへ
+            goToDetail(recipe_id){
+                sessionStorage.setItem("recipe_id", recipe_id);
+                const url = `recipe_${recipe_id}.html`;
+                window.location.href = url;
+            },
+
+            clearCategory(){
+                this.recipe_category = '';
+            },
+
+            clearScene(){
+                this.recipe_scene = '';
+            },
+
+            logout(){
+                //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                sessionStorage.removeItem('user_name');
+                //console.log('User Name saved:', sessionStorage.getItem('user_name'));//デバック用
+                window.location.href = 'index.html';
             }
-        );
+        },
+    });
     </script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+.v-app-bar {
+    background-color: #c6ebc5 !important; /* ヘッダーの背景色 */
+    color: black !important; /* ヘッダー内のテキストの色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important; /* ヘッダーにシャドウを追加 */
+    padding: 0 20px !important; /* ヘッダー内の左右の余白 */
+    }
+    
+    .v-app-bar .v-btn {
+        color: gray !important; /* ボタンのテキストの色 */
+        margin-left: 10px !important; /* ボタンの間隔 */
+        margin-right: 10px !important; /* ボタンの間隔 */
+    }
+    
+    .v-app-bar .v-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important; /* ボタンにホバー時の背景色 */
+    }
+    
+    .v-toolbar-title {
+        font-weight: 500 !important; 
+        font-size: 1.5rem !important; 
+    }
+
+    .v-app-bar h1{
+        font-weight: normal !important;
+    }
+    
+    .v-spacer {
+        margin-left: auto !important; 
+    }
+
+    footer {
+        background-color: #c6ebc5 !important;
+    }
+    .footer-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 16px;
+    }
+
+    .footer-col{
+        text-align: center;
+    }
+
+    .copyright-text {
+        font-size: 14px;
+        color: #777;
+        padding: 0;
+        margin: 0;
+    }
+
+    .link-button {
+        font-size: 14px;
+        color: #777 !important;
+        text-decoration: none;
+    }
+    .link-button:hover {
+        text-decoration: underline;
+    }
