@@ -50,9 +50,9 @@
                     <v-row align="center" justify="center">
                         <v-col cols="12" md="10">
                             <v-card v-if="!selectedRecipe">
-                                <v-card-title>レシピ管理
-                                    <v-spacer></v-spacer>
-                                    <v-btn color=#c6ebc5 @click="logout">Logout</v-btn>
+                                <v-card-title style="position: relative; padding: 30px 24px;">
+                                    <span style="position: absolute; left: 50%; transform: translateX(-50%);">レシピ管理</span>
+                                    <v-btn style="position: absolute; right: 1.7%;" color="#c6ebc5" @click="logout">Logout</v-btn>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-data-table
