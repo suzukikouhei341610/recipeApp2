@@ -87,7 +87,7 @@
 
                                 if (response.status === 200 && response.data === 'Login successful') {
                                     console.log('Login successful:', employee_id, employee_password);
-                                    window.location.href = '/management.html';
+                                    window.location.href = './management.html';
                                 } else {
                                     console.error('Login failed:', response.data);
                                     this.errorMessage = 'IDもしくはパスワードが間違っています。';
